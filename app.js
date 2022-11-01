@@ -37,7 +37,18 @@ const data = [
     },
     position: { lat: 25.04217, lng: 121.55232 },
     item: 'Samsung S7，超棒棒棒棒！！！！！！！！！',
-    image: './images/bear.png',
+    image: './images/cat.png',
+  },
+  {
+    title: '善導寺捷運站',
+    address: {
+      label: '台灣100台北市中正區忠孝東路一段善導寺捷運站',
+      city: '台北市',
+      district: '中正區',
+    },
+    position: { lat: 25.0449, lng: 121.52323 },
+    item: 'DELL螢幕',
+    image: './images/fox.png',
   },
 ];
 

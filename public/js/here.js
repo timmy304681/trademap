@@ -36,7 +36,7 @@ const options = {
   // 定義 EasyAutocomplete 的選取項目來源
   url: function (phrase) {
     return `
-        https://autosuggest.search.hereapi.com/v1/autosuggest?at=${CENTER_LOCATION.lat},${CENTER_LOCATION.lng}&limit=${LIMIT}&lang=zh-TW&q=${phrase}&apikey=${HERE_API_KEY}`;
+        https://discover.search.hereapi.com/v1/discover?at=${CENTER_LOCATION.lat},${CENTER_LOCATION.lng}&limit=${LIMIT}&lang=zh-TW&q=${phrase}&apikey=${HERE_API_KEY}`;
   },
   listLocation: 'items', // 使用回傳的 item 作為選取清單
   getValue: 'title', // 在選取清單中顯示 title
@@ -116,9 +116,10 @@ $.getJSON('/data', (tradeList) => {
 
 function markerClick(e) {
   const { address, item, image, title, position } = e.target.myData;
+  map2.flyTo(L.latLng(position), 15);
   const imagePath = `http://localhost:3000/${image}`;
   $('#product').html(`
-  <image src=${imagePath}>
+  <image src=${imagePath} style="height: 200px">
   <div>${address.label}</div> 
   <div>${item}</div>
   `);
