@@ -1,27 +1,21 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
-const { MONGODB_URL, MONGODB_USER, MONGODB_PASSWORD, SERVER_PORT } = process.env;
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
+const mongo = require('../util/mongodb');
 const http = require('http');
-const server = http.createServer(app);
+
 const { Server } = require('socket.io');
 
-const io = new Server(server, {
-  cors: {
-    origin: '*',
-  },
-});
+const io = (server) => {
+  const io = new Server(server, {
+    cors: {
+      origin: '*',
+    },
+  });
 
-async function main() {
-  const client = new MongoClient(
-    `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/?retryWrites=true&w=majority`
-  );
-  await client.connect();
-  console.log('Mongo db Connected');
   // 監聽 連線狀態
-  const db = client.db('mongoChat');
+  const db = mongo.db('mongoChat');
   const chat = db.collection('chats');
 
   io.on('connection', async (socket) => {
@@ -61,8 +55,8 @@ async function main() {
       socket.emit('cleared');
     });
   });
-}
-main();
+};
+
 async function mangooseConn() {
   await mongoose.connect(
     `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/?retryWrites=true&w=majority`
@@ -83,7 +77,4 @@ async function mangooseConn() {
   process.exit();
 }
 
-//set port to 3000
-server.listen(SERVER_PORT, () => {
-  console.log(`Server running on port ${SERVER_PORT}`);
-});
+module.exports = io;
