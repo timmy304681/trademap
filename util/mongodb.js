@@ -8,6 +8,7 @@ const mongo = new MongoClient(
 );
 
 mongo.connect();
+
 console.log('Mongo db Connected');
 
 module.exports = mongo;

@@ -21,7 +21,11 @@
           </h1>
           <div id="status"></div>
           <div id="chat"></div>
-          <input type="text" id="username" class="form-control" placeholder="Enter your name." />
+          <select name="user" id="username">
+            <option value="Timmy">Timmy</option>
+            <option value="Michelle">Michelle</option>
+          </select>
+          <!-- <input type="text" id="username" class="form-control" placeholder="Enter your name." /> -->
           <br />
           <div class="card"><div id="messages" class="card-block"></div></div>
           <br />
@@ -35,13 +39,13 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      (function () {
+      (async function () {
         const element = function (id) {
           return document.getElementById(id);
         };
         //get elements
         const status = element('status');
-        const messages = element('messages');
+        const messagesEle = element('messages');
         const textarea = element('textarea');
         const username = element('username');
         const clearBtn = element('clear');
@@ -59,23 +63,28 @@
           }
         };
         //connect to socket.io
-        const socket = io.connect();
-
+        const socket = await io.connect();
+        console.log(socket.connected);
         //check for connect
-        if (socket.connected == true) {
-          console.log('Connected to socket');
-        }
+
+        console.log('Connected to socket');
+        socket.emit('chatRoom', {
+          user1: 'Timmy',
+          user2: 'Michelle',
+        });
 
         // Handle Output
         socket.on('output', function (data) {
           console.log(data);
-          if (data.length) {
-            for (let i = 0; i < data.length; i++) {
+          const messages = data[0].messages;
+          console.log(messages);
+          if (messages.length) {
+            for (let i = 0; i < messages.length; i++) {
               // Build out message div
-              const message = document.createElement('div');
-              message.setAttribute('class', 'chat-message');
-              message.textContent = data[i].sender + ': ' + data[i].message;
-              messages.appendChild(message);
+              const messageEle = document.createElement('div');
+              messageEle.setAttribute('class', 'chat-message');
+              messageEle.textContent = messages[i].sender + ': ' + messages[i].message;
+              messagesEle.appendChild(messageEle);
             }
           }
         });
@@ -94,8 +103,8 @@
           if (e.which == 13) {
             //Emit to server input
             socket.emit('input', {
-              user1: '12',
-              user2: '35',
+              user1: 'Timmy',
+              user2: 'Michelle',
               sender: username.value,
               message: textarea.value,
               timeStamp: Date.now(),

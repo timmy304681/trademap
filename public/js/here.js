@@ -23,7 +23,7 @@ L.control
 
 // 設定圖資來源，來源為here
 L.tileLayer(
-  `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
+  `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
   {
     // attribution: '© 2020 HERE',
     subdomains: [1, 2, 3, 4],
@@ -96,7 +96,7 @@ const map2 = L.map('map2', {
 });
 
 L.tileLayer(
-  `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
+  `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
   {
     // attribution: '© 2020 HERE',
     subdomains: [1, 2, 3, 4],
@@ -117,10 +117,11 @@ $.getJSON('/data', (tradeList) => {
 function markerClick(e) {
   const { address, item, image, title, position } = e.target.myData;
   map2.flyTo(L.latLng(position), 15);
-  const imagePath = `http://localhost:3000/${image}`;
+  const imagePath = `${image}`;
   $('#product').html(`
   <image src=${imagePath} style="height: 200px">
-  <div>${address.label}</div> 
-  <div>${item}</div>
+  <div>商品： ${item}</div>
+  <div>面交地點： ${title}</div> 
+  <div>詳細地址： ${address.label}</div> 
   `);
 }

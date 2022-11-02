@@ -26,27 +26,36 @@ const io = (server) => {
       socket.emit('status', s);
     };
     // Get chats from mongo collection
-    const chats = await chat.find().limit(100).sort({ _id: 1 }).toArray();
-    socket.emit('output', chats);
+    socket.on('chatRoom', async function (data) {
+      const { user1, user2 } = data;
+      const chats = await chat
+        .find({ $or: [{ user: [user1, user2] }, { user: [user2, user1] }] })
+        .toArray();
+      socket.emit('output', chats);
+    });
     //Hand input events
     socket.on('input', function (data) {
       console.log('server recieve ');
-      let name = data.name;
-      let message = data.message;
+      const { user1, user2, sender, message, timeStamp } = data;
 
       // check for name and message
-      if (name == '' || message == '') {
+      if (sender == '' || message == '') {
         //send error status
         sendStatus('Please enter a name and message');
-      } else {
-        // Insert message
-        chat.insertOne(data);
-        io.emit('output', [data]);
-        // send status object
-        sendStatus({ message: 'Message sent', clear: true });
       }
+
+      // Insert message
+      chat.updateOne(
+        { user: [user1, user2] },
+        { $push: { messages: { sender, message, timeStamp } } },
+        { upsert: true } //若無資料，可建立
+      );
+      // chat.insertOne(data);
+      io.emit('output', [{ messages: [data] }]);
+      // send status object
+      sendStatus({ message: 'Message sent', clear: true });
     });
-    //Handle  clear
+    //Handle clear
     socket.on('clear', function (data) {
       console.log('server recieve clear ');
       //Remove all chats from collection
