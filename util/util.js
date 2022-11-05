@@ -20,10 +20,12 @@ const upload = multer({
   // 原本直接存server路徑
   storage: multer.diskStorage({
     destination: (req, file, callback) => {
-      callback(null, './images');
+      callback(null, 'images');
     },
     filename: (req, file, callback) => {
-      callback(null, `${uuid()}-${file.originalname}`);
+      const fileExtension = file.originalname.split('.').slice(-1)[0];
+      callback(null, `${uuid()}.${fileExtension}`);
+      // callback(null, `${file.originalname}`);
     },
   }),
   //S3

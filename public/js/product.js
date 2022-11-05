@@ -30,7 +30,7 @@ L.tileLayer(
   }
 ).addTo(map);
 
-// Autosuggest
+// Auto complete and click
 let marker;
 const options = {
   // 定義 EasyAutocomplete 的選取項目來源
@@ -43,7 +43,7 @@ const options = {
   list: {
     onClickEvent: (e) => {
       // 按下選取項目之後的動作
-      const data = $('#inputbox').getSelectedItemData();
+      const data = $('#place').getSelectedItemData();
       console.log(data);
       if (marker != undefined) {
         map.removeLayer(marker);
@@ -52,25 +52,27 @@ const options = {
       marker = L.marker([`${data.position.lat}`, `${data.position.lng}`]).addTo(map);
       map.flyTo(L.latLng(data.position), 18); // 把地圖移動到選取項目
       $('#place-select').html(`地點確認： ${data.address.label}`);
+      // save data in hidden input value
+      $('#place-result').val(JSON.stringify(data));
     },
   },
   requestDelay: 300, // 延遲 300 毫秒再送出請求,api只允許 5  Requests Per Second (RPS)
   placeholder: '搜尋地點', // 預設顯示的字串
 };
-$('#inputbox').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
+$('#place').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
 
 // keytype enter
-$('#inputbox').on('keypress', (e) => {
+$('#place').on('keypress', (e) => {
   // 監聽使用者是否按下「Enter」
   if (e.which == 13) {
     e.preventDefault();
-    const phrase = $('#inputbox').val(); // 取得使用者輸入的字串
+    const phrase = $('#place').val(); // 取得使用者輸入的字串
     $.getJSON(
       `
     https://discover.search.hereapi.com/v1/discover?at=${CENTER_LOCATION.lat},${CENTER_LOCATION.lng}&limit=1&lang=zh-TW&q=${phrase}&apikey=${HERE_API_KEY}`,
       (value) => {
         //  雖只限定回傳一筆，但因為value.items出來是arr所以用arr fuction解析
-        console.log(value);
+
         value.items.forEach((data) => {
           if (marker != undefined) {
             map.removeLayer(marker);
@@ -79,8 +81,39 @@ $('#inputbox').on('keypress', (e) => {
           marker = L.marker([`${data.position.lat}`, `${data.position.lng}`]).addTo(map);
           map.flyTo(L.latLng(data.position), 18);
           $('#place-select').html(`地點確認： ${data.address.label}`);
+          // save data in hidden input value
+          $('#place-result').val(JSON.stringify(data));
         });
       }
     );
+  }
+});
+
+// submit form
+const title = $('');
+
+$('#btn-submit').on('click', async (e) => {
+  e.preventDefault();
+  //   const postData = { title: $('#title').value ,};
+  //   const postData = $('form').serializeArray();
+  //   postData.push(productLocation);
+  const postData = new FormData(form);
+
+  const params = {
+    headers: {
+      'content-type': 'multipart/form-data',
+      //   authorization: authorizationToken,
+    },
+  };
+  console.log('before axios');
+  const response = await axios.post('/api/1.0/products', postData);
+  console.log(response);
+});
+
+// only allow 10 images
+$('#images').on('change', (e) => {
+  if ($('#images')[0].files.length > 10) {
+    alert('You can select only 10 images');
+    e.preventDefault();
   }
 });

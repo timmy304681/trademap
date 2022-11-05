@@ -40,7 +40,7 @@ module.exports = {
       },
       place: {
         allowNull: false,
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING(100),
       },
       address: {
         allowNull: false,

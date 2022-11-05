@@ -6,10 +6,10 @@
   <div class="align-items-center">
     <form name="form" enctype="multipart/form-data" id="form-summit">
       <div>
-        <label>商品名稱： <input type="text" /></label>
+        <label>商品名稱： <input name="title" id="title" type="text" /></label>
       </div>
       <div>
-        <label>商品價錢： <input type="text" /></label>
+        <label>商品價錢： <input name="price" id="price" type="text" /></label>
       </div>
       <div>
         <label
@@ -17,18 +17,27 @@
         </label>
       </div>
       <div>
+        <label>交易時間：<input name="time" id="time" type="datetime-local" /></label>
+      </div>
+      <div>
         <label
           >地點：
           <div id="place-select"></div
         ></label>
-        <div class="position-fixed" style="z-index: 10000">
-          <input id="inputbox" />
+        <div class="position-relative" style="z-index: 10000">
+          <input name="place" id="place" />
+          <input name="place-result" id="place-result" type="hidden" />
         </div>
         <div id="map" style="width: 100%; height: 400px"></div>
       </div>
+      <div>
+        <label
+          >商品照片：<input name="images" id="images" type="file" multiple accept="image/*"
+        /></label>
+      </div>
 
       <div>
-        <button>確定送出商品</button>
+        <button type="submit" id="btn-submit">確定送出商品</button>
       </div>
     </form>
   </div>
