@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "aws-sdk": "^2.1246.0",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
+    "ejs-locals": "^1.0.2",
     "express": "^4.18.2",
     "mangodb": "^1.0.0",
     "mongoose": "^6.7.0",
@@ -9,7 +11,8 @@
     "mysql2": "^2.3.3",
     "sequelize": "^6.25.3",
     "sequelize-cli": "^6.5.2",
-    "socket.io": "^4.5.3"
+    "socket.io": "^4.5.3",
+    "uuid": "^9.0.0"
   },
   "name": "trademap",
   "description": "",

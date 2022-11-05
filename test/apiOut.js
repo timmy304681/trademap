@@ -33,5 +33,4 @@ const data = [
     image: '/images/fox.png',
   },
 ];
-
 module.exports = data;

@@ -25,7 +25,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.MEDIUMINT.UNSIGNED,
       },
-      descrition: {
+      description: {
         allowNull: false,
         type: Sequelize.TEXT,
       },
@@ -35,6 +35,7 @@ module.exports = {
       },
       status: {
         allowNull: false,
+        defaultValue: 0,
         type: Sequelize.TINYINT.UNSIGNED,
       },
       place: {
@@ -53,7 +54,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DECIMAL(10, 6),
       },
-      country: {
+      county: {
         allowNull: false,
         type: Sequelize.STRING(10),
       },
@@ -62,8 +63,8 @@ module.exports = {
         type: Sequelize.STRING(10),
       },
       create_time: {
-        allowNull: false,
-        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP(3)'),
+        type: Sequelize.DATE(3),
       },
     });
     await queryInterface.createTable('image', {

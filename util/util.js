@@ -1,8 +1,10 @@
 require('dotenv').config();
 const crypto = require('crypto');
 const fs = require('fs');
-const multer = require('multer');
 const path = require('path');
+const multer = require('multer');
+const { S3 } = require('aws-sdk');
+const uuid = require('uuid').v4;
 
 // reference: https://thecodebarbarian.com/80-20-guide-to-express-error-handling
 const wrapAsync = (fn) => {
@@ -14,22 +16,37 @@ const wrapAsync = (fn) => {
 };
 
 const upload = multer({
+  // multer setting
+  // 原本直接存server路徑
   storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      const productId = req.body.product_id;
-      const imagePath = path.join(__dirname, `../public/assets/${productId}`);
-      if (!fs.existsSync(imagePath)) {
-        fs.mkdirSync(imagePath);
-      }
-      cb(null, imagePath);
+    destination: (req, file, callback) => {
+      callback(null, './images');
     },
-    filename: (req, file, cb) => {
-      const customFileName = crypto.randomBytes(18).toString('hex').substr(0, 8);
-      const fileExtension = file.mimetype.split('/')[1]; // get file extension from original file name
-      cb(null, customFileName + '.' + fileExtension);
+    filename: (req, file, callback) => {
+      callback(null, `${uuid()}-${file.originalname}`);
     },
   }),
+  //S3
+  // return multer({
+  //   storage:  multer.memoryStorage(),
+  // });
 });
+
+const s3UploadFiles = async (files) => {
+  //  automatically detects AWS credentials set as variables in .env
+  const s3 = new S3();
+
+  const params = files.map((file) => {
+    return {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: `images/${uuid()}-${file.originalname}`,
+      Body: file.buffer,
+      ContentType: 'image/jpg',
+    };
+  });
+  //   return await s3.upload(param).promise();
+  return Promise.all(params.map((param) => s3.upload(param).promise()));
+};
 
 const authentication = (roleId) => {
   return async function (req, res, next) {
@@ -76,4 +93,6 @@ const authentication = (roleId) => {
 module.exports = {
   wrapAsync,
   authentication,
+  s3UploadFiles,
+  upload,
 };
