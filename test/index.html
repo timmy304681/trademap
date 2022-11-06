@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../public/styles/bootstrap.css" rel="stylesheet" />
+    <title>MongoChat</title>
+    <style>
+      #messages {
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 offset-md-3 col-sm-12">
+          <h1 class="text-center">
+            MongoChat <button id="clear" class="btn btn-danger">Clear</button>
+          </h1>
+          <div id="status"></div>
+          <div id="chat"></div>
+          <select name="user" id="username">
+            <option value="Timmy">Timmy</option>
+            <option value="Michelle">Michelle</option>
+          </select>
+          <!-- <input type="text" id="username" class="form-control" placeholder="Enter your name." /> -->
+          <br />
+          <div class="card"><div id="messages" class="card-block"></div></div>
+          <br />
+          <textarea class="form-control" id="textarea" placeholder="Enter messages"></textarea>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.socket.io/4.5.3/socket.io.min.js"
+      integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      (async function () {
+        const element = function (id) {
+          return document.getElementById(id);
+        };
+        //get elements
+        const status = element('status');
+        const messagesEle = element('messages');
+        const textarea = element('textarea');
+        const username = element('username');
+        const clearBtn = element('clear');
+
+        // set default status
+        let statusDefault = status.textContent;
+
+        const setStatus = function (s) {
+          // set status
+          status.textContent = s;
+          if (s !== statusDefault) {
+            const delay = setTimeout(function () {
+              setStatus(statusDefault);
+            }, 4000);
+          }
+        };
+        //connect to socket.io
+        const socket = await io.connect();
+        console.log(socket.connected);
+        //check for connect
+
+        console.log('Connected to socket');
+        socket.emit('chatRoom', {
+          user1: 'Timmy',
+          user2: 'Michelle',
+        });
+
+        // Handle Output
+        socket.on('output', function (data) {
+          console.log(data);
+          const messages = data[0].messages;
+          console.log(messages);
+          if (messages.length) {
+            for (let i = 0; i < messages.length; i++) {
+              // Build out message div
+              const messageEle = document.createElement('div');
+              messageEle.setAttribute('class', 'chat-message');
+              messageEle.textContent = messages[i].sender + ': ' + messages[i].message;
+              messagesEle.appendChild(messageEle);
+            }
+          }
+        });
+        //Get stauts from server
+        socket.on('status', function (data) {
+          //get message status
+          setStatus(typeof data === 'object' ? data.message : data);
+          // IF status is clear , clear text
+          if (data.clear) {
+            textarea.value = '';
+          }
+          //Handle input
+        });
+
+        textarea.addEventListener('keydown', function (e) {
+          if (e.which == 13) {
+            //Emit to server input
+            socket.emit('input', {
+              user1: 'Timmy',
+              user2: 'Michelle',
+              sender: username.value,
+              message: textarea.value,
+              timeStamp: Date.now(),
+            });
+            // prevent default behavier
+            e.preventDefault();
+          }
+        });
+        // Handle Chat Clear
+        clearBtn.addEventListener('click', function () {
+          socket.emit('clear');
+        });
+
+        // Clear Message
+        socket.on('cleared', function () {
+          messages.textContent = '';
+        });
+      })();
+    </script>
+  </body>
+</html>
