@@ -29,7 +29,7 @@ const getProducts = async (req, res) => {
   }
 
   // if search mode, caculate distance
-  if (category === 'search' && !req.query.distance === undefined) {
+  if (category === 'search' && req.query.distance) {
     const { distance, lat, lng } = req.query;
     productsList = productsList.filter((x) => {
       const relativeDistance = getDistance(x.lat, x.lng, lat, lng, 'K');
