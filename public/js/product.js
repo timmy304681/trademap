@@ -111,7 +111,7 @@ $('#btn-submit').on('click', async (e) => {
     await Swal.fire({
       icon: 'success',
       title: '商品上架成功',
-      text: response.id,
+      text: `訂單編號${response.data.number}`,
       footer: '確認後會跳轉至訂單頁面',
     });
     location.href = '/order';
