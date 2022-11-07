@@ -4,7 +4,7 @@ const engine = require('ejs-locals');
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-const io = require('./test/message');
+const io = require('./util/message');
 
 // socket set up
 io(server);
@@ -28,7 +28,10 @@ app.set('view engine', 'ejs');
 app.use(require('./routes/views_route'));
 
 // API route
-app.use('/api/' + API_VERSION, [require('./routes/products_route')]);
+app.use('/api/' + API_VERSION, [
+  require('./routes/products_route'),
+  require('./routes/orders_route'),
+]);
 
 // Page not found
 app.use((req, res, next) => {

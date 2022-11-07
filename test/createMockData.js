@@ -57,7 +57,11 @@ const mockProductsList = [];
 for (let i = 1; i <= mockDataNumber; i++) {
   (product.lat = lat + (Math.random() - 0.5) * 0.1),
     (product.lng = lng + (Math.random() - 0.5) * 0.1),
-    mockProductsList.push({ ...product });
+    (product.title = `
+    ${Math.floor(Math.random() * 10)}成新${
+      ['Macbook', 'iphone', 'ipad'][Math.floor(Math.random() * 2)]
+    }`);
+  mockProductsList.push({ ...product });
 }
 
 const user = [

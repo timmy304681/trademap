@@ -72,7 +72,6 @@ $('#place').on('keypress', (e) => {
     https://discover.search.hereapi.com/v1/discover?at=${CENTER_LOCATION.lat},${CENTER_LOCATION.lng}&limit=1&lang=zh-TW&q=${phrase}&apikey=${HERE_API_KEY}`,
       (value) => {
         //  雖只限定回傳一筆，但因為value.items出來是arr所以用arr fuction解析
-
         value.items.forEach((data) => {
           if (marker != undefined) {
             map.removeLayer(marker);
@@ -106,8 +105,23 @@ $('#btn-submit').on('click', async (e) => {
     },
   };
   console.log('before axios');
-  const response = await axios.post('/api/1.0/products', postData);
-  console.log(response);
+  try {
+    const response = await axios.post('/api/1.0/products', postData);
+    console.log(response);
+    await Swal.fire({
+      icon: 'success',
+      title: '商品上架成功',
+      text: response.id,
+      footer: '確認後會跳轉至訂單頁面',
+    });
+    location.href = '/order';
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: '商品上架失敗',
+      text: err,
+    });
+  }
 });
 
 // only allow 10 images
