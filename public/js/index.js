@@ -49,16 +49,16 @@ function createMap(CENTER_LOCATION) {
     }
   ).addTo(map);
 
-  //   const query = `/products/search?keyword=`;
-  //   $.getJSON(query, (tradeList) => {
-  //     tradeList.forEach((data) => {
-  //       const markerTrade = L.marker([`${data.lat}`, `${data.lng}`])
-  //         .addTo(map)
-  //         .bindPopup(`${data.title}`) //彈出窗口顯示
-  //         .on('click', markerClick); //監控clicks
-  //       markerTrade.myData = data; // 將客製化data加進去marker
-  //     });
-  //   });
+  //add center marker
+  const marker = L.marker([CENTER_LOCATION.lat, CENTER_LOCATION.lng]).addTo(map);
+  marker._icon.classList.add('huechange');
+  /*
+<style>
+  img.huechange {
+    filter: hue-rotate(-90deg);
+  }
+</style>
+*/
 }
 
 // 產生marker
