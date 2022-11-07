@@ -1,6 +1,17 @@
 const pool = require('../util/mysql');
+const yargs = require('yargs');
+// eslint-disable-next-line prefer-destructuring
+const argv = yargs
+  .option('number', {
+    alias: 'n',
+    description: 'number of mock data',
+    type: 'number',
+    default: 100,
+  })
+  .help()
+  .alias('help', 'h').argv;
 
-const mockDataNumber = 100;
+const mockDataNumber = argv.number;
 
 const product = {
   number: '202211031111111111',
@@ -82,7 +93,8 @@ async function main() {
   await pool.query(productSql, [mockProductsList.map((x) => Object.values(x))]);
   // leave process
 
-  console.log('Create mock data successfully');
+  console.log(`Create mock data successfully!! Create ${mockDataNumber} records `);
+
   process.exit();
 }
 
