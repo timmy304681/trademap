@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
-const mongo = require('../util/mongodb');
+const mongo = require('./mongodb');
 const http = require('http');
 
 const { Server } = require('socket.io');

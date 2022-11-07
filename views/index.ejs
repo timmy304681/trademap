@@ -1,0 +1,35 @@
+<% layout('layout') %>
+<!-- 使用vscode 插件 HTML CSS support 以下路徑去抓css -->
+<!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-8">
+      <form action="">
+        <div class="position-relative" style="z-index: 10000">
+          <label
+            >商品搜尋：
+            <input name="keyword" id="keyword" cols="30" rows="10" />
+          </label>
+        </div>
+        <label
+          >方圓：
+          <select name="distance" id="distance">
+            <option value="1">1 km</option>
+            <option value="3">3 km</option>
+            <option value="5">5 km</option>
+            <option value="10">10 km</option>
+          </select>
+        </label>
+        <button id="btn-submit">確認</button>
+      </form>
+      <div id="map" style="width: 100%; height: 800px"></div>
+    </div>
+    <div id="product" class="col-4">Product Info</div>
+  </div>
+</div>
+<script
+  id="map-script"
+  type="module"
+  src="../public/js/index.js"
+  HERE_API_KEY="<%= HERE_API_KEY%>"
+></script>

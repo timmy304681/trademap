@@ -1,7 +1,10 @@
 const pool = require('../util/mysql');
 
-const getProducts = async () => {
-  const [products] = await pool.execute('SELECT * FROM product');
+const getProducts = async (pageSize, paging = 0) => {
+  const [products] = await pool.execute('SELECT * FROM product ORDER by id LIMIT ?,?', [
+    (pageSize * paging).toString(),
+    pageSize.toString(),
+  ]);
   return products;
 };
 
@@ -18,10 +21,24 @@ const searchProducts = async (keyword) => {
   }
 };
 
+const getAutoComplete = async (keyword) => {
+  try {
+    const [products] = await pool.execute('SELECT * FROM product WHERE title like ? limit 10', [
+      `%${keyword}%`,
+    ]);
+
+    return products;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 const createProduct = async (product, number, images) => {
   const conn = await pool.getConnection();
   try {
-    const { user_id, title, price, description, time, place, address, lat, lng, county, district } =
+    await conn.query('START TRANSACTION');
+    const { userId, title, price, description, time, place, address, lat, lng, county, district } =
       product;
     const productSql = `INSERT INTO product ( number,
         user_id,
@@ -39,7 +56,7 @@ const createProduct = async (product, number, images) => {
     // create product in product table
     const [createResult] = await conn.execute(productSql, [
       number,
-      user_id,
+      userId,
       title,
       price,
       description,
@@ -59,10 +76,16 @@ const createProduct = async (product, number, images) => {
         x,
       ]);
     });
-    await conn.execute('COMMIT');
+    // create order info
+    await conn.execute('INSERT INTO `order` (user_id, product_id) VALUES (?,?)', [
+      userId,
+      createResult.insertId,
+    ]);
+
+    await conn.query('COMMIT');
     return { id: createResult.insertId, number };
   } catch (error) {
-    await conn.execute('ROLLBACK');
+    await conn.query('ROLLBACK');
     console.log(error);
     return false;
   } finally {
@@ -70,4 +93,4 @@ const createProduct = async (product, number, images) => {
   }
 };
 
-module.exports = { getProducts, searchProducts, createProduct };
+module.exports = { getProducts, searchProducts, createProduct, getAutoComplete };

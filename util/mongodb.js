@@ -7,8 +7,14 @@ const mongo = new MongoClient(
   `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/?retryWrites=true&w=majority`
 );
 
-mongo.connect();
-
-console.log('Mongo db Connected');
+(async () => {
+  try {
+    await mongo.connect();
+    console.log('Mongo db Connected');
+  } catch (err) {
+    console.log('Mongodb connected failed!!');
+    console.log(err);
+  }
+})();
 
 module.exports = mongo;

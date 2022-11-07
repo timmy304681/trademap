@@ -1,14 +1,21 @@
 const productModel = require('../models/products_model');
+const pageSize = 20;
 
 const getProducts = async (req, res) => {
+  // console.log(req.body);
+  // console.log(req.params);
+  // console.log(req.query);
   const { category } = req.params;
+  const paging = parseInt(req.query.paging) || 0;
 
   async function findProduct(category) {
     // eslint-disable-next-line default-case
     switch (category) {
       case 'all':
-        return productModel.getProducts();
-
+        return productModel.getProducts(pageSize, paging);
+      case 'autoCompleteSearch':
+        const { keyword } = req.query;
+        return productModel.getAutoComplete(keyword);
       case 'search': {
         const { keyword } = req.query;
         if (keyword) {
@@ -42,7 +49,7 @@ const getProducts = async (req, res) => {
 };
 
 const postProduct = async (req, res) => {
-  const userId = 1;
+  const { userId } = req.body;
   const { title, price, description, time } = req.body;
   if (
     title === undefined ||
@@ -75,7 +82,7 @@ const postProduct = async (req, res) => {
 
   const productData = {
     number,
-    user_id: userId,
+    userId,
     title,
     price,
     description,
