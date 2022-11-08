@@ -1,11 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
+const mongo = require('./mongodb');
 const http = require('http');
-const messagesMoodel = require('../models/messages_model');
 
 const { Server } = require('socket.io');
-const { AlexaForBusiness } = require('aws-sdk');
 
 const io = (server) => {
   const io = new Server(server, {
@@ -15,24 +15,27 @@ const io = (server) => {
   });
 
   // 監聽 連線狀態
+  const db = mongo.db('mongoChat');
+  const chat = db.collection('chats');
+
   io.on('connection', async (socket) => {
     console.log('a user connected');
-
+    console.log(socket.handshake.query.roomId);
     // create function to send status
-    const sendStatus = function (s) {
+    const sendStatus = (s) => {
       socket.emit('status', s);
     };
-
     // Get chats from mongo collection
     socket.on('chatRoom', async (data) => {
       console.log(data);
-      const { user1, user2, userId1, userId2 } = data;
-      socket.join(`${userId1}_${userId2}`);
-      const chats = await messagesMoodel.getMessages(user1, user2);
+      const { user1, user2 } = data;
+      const chats = await chat
+        .find({ $or: [{ user: [user1, user2] }, { user: [user2, user1] }] })
+        .toArray();
       socket.emit('output', chats);
     });
     // Hand input events
-    socket.on('input', async (data) => {
+    socket.on('input', (data) => {
       console.log('server recieve ');
       const { user1, user2, sender, message, timeStamp } = data;
 
@@ -43,12 +46,11 @@ const io = (server) => {
       }
 
       // Insert message
-      await messagesMoodel.saveMessages(user1, user2, sender, message, timeStamp);
-      // chat.updateOne(
-      //   { user: [user1, user2] },
-      //   { $push: { messages: { sender, message, timeStamp } } },
-      //   { upsert: true } // 若無資料，可建立
-      // );
+      chat.updateOne(
+        { user: [user1, user2] },
+        { $push: { messages: { sender, message, timeStamp } } },
+        { upsert: true } //若無資料，可建立
+      );
       // chat.insertOne(data);
       io.emit('output', [{ messages: [data] }]);
       // send status object
@@ -64,5 +66,25 @@ const io = (server) => {
     });
   });
 };
+
+async function mangooseConn() {
+  await mongoose.connect(
+    `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/?retryWrites=true&w=majority`
+  );
+
+  const messagesSchema = await mongoose.Schema({
+    name: String,
+    msg: String,
+    time: Number,
+  });
+
+  const message = mongoose.model('Message', messagesSchema);
+  // 將聊天資料轉成資料模型
+  const m = new message({ name: 'Timmy', msg: 'Hello', time: 12123, a: 123 });
+  // 存至資料庫
+  await m.save();
+  console.log('finish');
+  process.exit();
+}
 
 module.exports = io;

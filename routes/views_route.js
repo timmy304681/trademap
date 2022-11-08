@@ -17,6 +17,9 @@ router.get('/product', (req, res) => {
 router.get('/message', (req, res) => {
   res.render('message', { title: '聊天室' });
 });
+router.get('/message2', (req, res) => {
+  res.render('message2', { title: '聊天室' });
+});
 
 router.get('/test', (req, res) => {
   res.render('here', { title: 'Here地圖', HERE_API_KEY: HERE_API_KEY });

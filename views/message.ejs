@@ -52,13 +52,15 @@
     };
     //connect to socket.io
     const socket = await io.connect();
-    console.log(socket.connected);
+    console.log(socket);
     //check for connect
 
     console.log('Connected to socket');
     socket.emit('chatRoom', {
       user1: 'Timmy',
       user2: 'Michelle',
+      userId1: 1,
+      userId2: 2,
     });
 
     // Handle Output
