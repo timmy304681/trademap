@@ -1,114 +1,123 @@
 <% layout('layout') %>
 <!-- 使用vscode 插件 HTML CSS support 以下路徑去抓css -->
 <!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 offset-md-3 col-sm-12">
-      <h1 class="text-center">
-        MongoChat <button id="clear" class="btn btn-danger">Clear</button>
-      </h1>
-      <div id="status"></div>
-      <div id="chat"></div>
-      <select name="user" id="username">
-        <option value="Timmy">Timmy</option>
-        <option value="Michelle">Michelle</option>
-      </select>
-      <!-- <input type="text" id="username" class="form-control" placeholder="Enter your name." /> -->
-      <br />
-      <div class="card"><div id="messages" class="card-block"></div></div>
-      <br />
-      <textarea class="form-control" id="textarea" placeholder="Enter messages"></textarea>
+<link rel="stylesheet" href="../public/styles/message.css" />
+<main class="content">
+  <div class="container p-0">
+    <h1 class="h3 mb-3">Messages</h1>
+    <form>
+      <label>USER ID <input type="text" id="userId" /></label>
+      <button id="btn-submit">確認</button>
+    </form>
+    <div class="card">
+      <div class="row g-0">
+        <div id="chatrooms" class="col-12 col-lg-5 col-xl-3 border-right">
+          <div class="px-4 d-none d-md-block">
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1">
+                <input type="text" class="form-control my-3" placeholder="Search..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- <a href="#" class="list-group-item list-group-item-action border-0">
+            <div class="badge bg-success float-right">5</div>
+            <div class="d-flex align-items-start">
+              <img
+                src="https://bootdey.com/img/Content/avatar/avatar5.png"
+                class="rounded-circle mr-1"
+                alt="Vanessa Tucker"
+                width="40"
+                height="40"
+              />
+              <div class="flex-grow-1 ml-3">
+                Vanessa Tucker
+                <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action border-0">
+            <div class="badge bg-success float-right">2</div>
+            <div class="d-flex align-items-start">
+              <img
+                src="https://bootdey.com/img/Content/avatar/avatar2.png"
+                class="rounded-circle mr-1"
+                alt="William Harris"
+                width="40"
+                height="40"
+              />
+              <div class="flex-grow-1 ml-3">
+                William Harris
+                <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
+              </div>
+            </div>
+          </a> -->
+
+          <hr class="d-block d-lg-none mt-1 mb-0" />
+        </div>
+        <div class="col-12 col-lg-7 col-xl-9">
+          <div class="py-2 px-4 border-bottom d-none d-lg-block">
+            <div id="chatmate-title" class="d-flex align-items-center py-1">
+              <!-- <div class="position-relative">
+                <img
+                  src="https://bootdey.com/img/Content/avatar/avatar3.png"
+                  class="rounded-circle mr-1"
+                  alt="Sharon Lessman"
+                  width="40"
+                  height="40"
+                />
+              </div>
+              <div class="flex-grow-1 pl-3">
+                <div class="text-muted small"><em>Typing...</em></div>
+                <strong>Sharon Lessman</strong>
+              </div> -->
+            </div>
+          </div>
+
+          <div class="position-relative">
+            <div id="chat-messages" class="chat-messages p-4">
+              <!-- <div class="chat-message-right pb-4">
+                <div>
+                  <div class="text-muted small text-nowrap mt-2">2:33 am</div>
+                </div>
+                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                  <div class="font-weight-bold mb-1">You</div>
+                  右邊是本人
+                </div>
+              </div>
+
+              <div class="chat-message-left pb-4">
+                <div>
+                  <div class="text-muted small text-nowrap mt-2">2:34 am</div>
+                </div>
+                <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                  <div class="font-weight-bold mb-1">Sharon Lessman</div>
+                  左邊是對方
+                </div>
+              </div> -->
+            </div>
+          </div>
+
+          <div class="flex-grow-0 py-3 px-4 border-top">
+            <div class="input-group">
+              <input
+                id="message-input"
+                type="text"
+                class="form-control"
+                placeholder="Type your message"
+              />
+              <button id="btn-message-send" class="btn btn-primary">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</main>
+
 <script
   src="https://cdn.socket.io/4.5.3/socket.io.min.js"
   integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi"
   crossorigin="anonymous"
 ></script>
-<script>
-  (async function () {
-    const element = function (id) {
-      return document.getElementById(id);
-    };
-    //get elements
-    const status = element('status');
-    const messagesEle = element('messages');
-    const textarea = element('textarea');
-    const username = element('username');
-    const clearBtn = element('clear');
-
-    // set default status
-    let statusDefault = status.textContent;
-
-    const setStatus = function (s) {
-      // set status
-      status.textContent = s;
-      if (s !== statusDefault) {
-        const delay = setTimeout(function () {
-          setStatus(statusDefault);
-        }, 4000);
-      }
-    };
-    //connect to socket.io
-    const socket = await io.connect();
-    console.log(socket.connected);
-    //check for connect
-
-    console.log('Connected to socket');
-    socket.emit('chatRoom', {
-      user1: 'Timmy',
-      user2: 'Michelle',
-    });
-
-    // Handle Output
-    socket.on('output', function (data) {
-      console.log(data);
-      const messages = data[0].messages;
-      console.log(messages);
-      if (messages.length) {
-        for (let i = 0; i < messages.length; i++) {
-          // Build out message div
-          const messageEle = document.createElement('div');
-          messageEle.setAttribute('class', 'chat-message');
-          messageEle.textContent = messages[i].sender + ': ' + messages[i].message;
-          messagesEle.appendChild(messageEle);
-        }
-      }
-    });
-    //Get stauts from server
-    socket.on('status', function (data) {
-      //get message status
-      setStatus(typeof data === 'object' ? data.message : data);
-      // IF status is clear , clear text
-      if (data.clear) {
-        textarea.value = '';
-      }
-      //Handle input
-    });
-
-    textarea.addEventListener('keydown', function (e) {
-      if (e.which == 13) {
-        //Emit to server input
-        socket.emit('input', {
-          user1: 'Timmy',
-          user2: 'Michelle',
-          sender: username.value,
-          message: textarea.value,
-          timeStamp: Date.now(),
-        });
-        // prevent default behavier
-        e.preventDefault();
-      }
-    });
-    // Handle Chat Clear
-    clearBtn.addEventListener('click', function () {
-      socket.emit('clear');
-    });
-
-    // Clear Message
-    socket.on('cleared', function () {
-      messages.textContent = '';
-    });
-  })();
-</script>
+<script src="../public/js/message.js"></script>

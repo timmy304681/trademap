@@ -3,8 +3,8 @@ const app = express();
 const engine = require('ejs-locals');
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require('socket.io');
 const io = require('./util/message');
+const morganBody = require('morgan-body');
 
 // socket set up
 io(server);
@@ -21,6 +21,8 @@ app.use('/images', express.static(__dirname + '/images'));
 // middileware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// hook morganBody to express app
+// morganBody(app, { logResponseBody: false });
 
 // views
 app.engine('ejs', engine);
@@ -31,11 +33,14 @@ app.use(require('./routes/views_route'));
 app.use('/api/' + API_VERSION, [
   require('./routes/products_route'),
   require('./routes/orders_route'),
+  require('./routes/messages_route'),
+  require('./routes/users_route'),
+  require('./routes/reserve_route'),
 ]);
 
 // Page not found
 app.use((req, res, next) => {
-  res.status(404).render('404.ejs', { title: 'Not Found' });
+  res.status(404).redirect('/404');
 });
 
 // Error handling

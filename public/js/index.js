@@ -64,7 +64,7 @@ function createMap(CENTER_LOCATION) {
 // 產生marker
 function markerClick(e) {
   const { title, price, description, place, address, lat, lng, county, district } = e.target.myData;
-  map.flyTo(L.latLng({ lat, lng }), 15);
+  map.flyTo(L.latLng({ lat, lng }), 18);
   // const imagePath = `${image}`;
   // <image src=${imagePath} style="height: 200px"></image>
   $('#product').html(`
@@ -123,7 +123,7 @@ const options = {
       // 按下選取項目之後的動作
     },
   },
-  requestDelay: 300, // 延遲 300 毫秒再送出請求,api只允許 5  Requests Per Second (RPS)
+  requestDelay: 200, // 延遲 300 毫秒再送出請求,api只允許 5  Requests Per Second (RPS)
   placeholder: '請輸入關鍵字', // 預設顯示的字串
 };
 $('#keyword').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件

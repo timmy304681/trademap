@@ -17,9 +17,20 @@ router.get('/product', (req, res) => {
 router.get('/message', (req, res) => {
   res.render('message', { title: '聊天室' });
 });
+router.get('/message_demo', (req, res) => {
+  res.render('message_demo', { title: '聊天室' });
+});
 
 router.get('/test', (req, res) => {
   res.render('here', { title: 'Here地圖', HERE_API_KEY: HERE_API_KEY });
+});
+
+router.get('/reserve', (req, res) => {
+  res.render('reserve', { title: '商品預約系統' });
+});
+
+router.get('/404', (req, res) => {
+  res.render('404', { title: 'Page not found' });
 });
 
 module.exports = router;

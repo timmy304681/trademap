@@ -1,10 +1,5 @@
 require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const { MongoClient } = require('mongodb');
-const mongo = require('./mongodb');
-const http = require('http');
-
+const messagesMoodel = require('../models/messages_model');
 const { Server } = require('socket.io');
 
 const io = (server) => {
@@ -15,75 +10,49 @@ const io = (server) => {
   });
 
   // 監聽 連線狀態
-  const db = mongo.db('mongoChat');
-  const chat = db.collection('chats');
-
   io.on('connection', async (socket) => {
     console.log('a user connected');
 
-    //create function to send status
-    sendStatus = function (s) {
+    // create function to send status
+    const sendStatus = function (s) {
       socket.emit('status', s);
     };
+
     // Get chats from mongo collection
-    socket.on('chatRoom', async function (data) {
-      const { user1, user2 } = data;
-      const chats = await chat
-        .find({ $or: [{ user: [user1, user2] }, { user: [user2, user1] }] })
-        .toArray();
+    socket.on('chatRoom', async (data) => {
+      console.log(data);
+      const { user1, user2, userId1, userId2 } = data;
+      // 先排序，確保兩個使用者的對話都存在同一個collection
+      const userList = [user1, user2].sort();
+      console.log(userList);
+      socket.join(`${userList[0]}_${userList[1]}`);
+      const chats = await messagesMoodel.getMessages(userList[0], userList[1]);
       socket.emit('output', chats);
     });
-    //Hand input events
-    socket.on('input', function (data) {
+
+    // Hand input events
+    socket.on('input', async (data) => {
       console.log('server recieve ');
       const { user1, user2, sender, message, timeStamp } = data;
 
-      // check for name and message
-      if (sender == '' || message == '') {
-        //send error status
-        sendStatus('Please enter a name and message');
-      }
+      // 先排序，確保兩個使用者的對話都存在同一個collection
+      const userList = [user1, user2].sort();
 
       // Insert message
-      chat.updateOne(
-        { user: [user1, user2] },
-        { $push: { messages: { sender, message, timeStamp } } },
-        { upsert: true } //若無資料，可建立
-      );
-      // chat.insertOne(data);
-      io.emit('output', [{ messages: [data] }]);
-      // send status object
-      sendStatus({ message: 'Message sent', clear: true });
+      await messagesMoodel.saveMessages(userList[0], userList[1], sender, message, timeStamp);
+
+      io.to(`${userList[0]}_${userList[1]}`).emit('output', [{ messages: [data] }]);
     });
-    //Handle clear
-    socket.on('clear', function (data) {
+
+    // Handle clear
+    socket.on('clear', (data) => {
       console.log('server recieve clear ');
-      //Remove all chats from collection
+      // Remove all chats from collection
       chat.deleteMany({});
-      //Emit cleared
+      // Emit cleared
       socket.emit('cleared');
     });
   });
 };
-
-async function mangooseConn() {
-  await mongoose.connect(
-    `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/?retryWrites=true&w=majority`
-  );
-
-  const messagesSchema = await mongoose.Schema({
-    name: String,
-    msg: String,
-    time: Number,
-  });
-
-  const message = mongoose.model('Message', messagesSchema);
-  // 將聊天資料轉成資料模型
-  const m = new message({ name: 'Timmy', msg: 'Hello', time: 12123, a: 123 });
-  // 存至資料庫
-  await m.save();
-  console.log('finish');
-  process.exit();
-}
 
 module.exports = io;

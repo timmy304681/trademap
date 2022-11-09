@@ -34,7 +34,7 @@ const getAutoComplete = async (keyword) => {
   }
 };
 
-const createProduct = async (product, number, images) => {
+const createProduct = async (product, number, images, tags) => {
   const conn = await pool.getConnection();
   try {
     await conn.query('START TRANSACTION');
@@ -68,6 +68,15 @@ const createProduct = async (product, number, images) => {
       county,
       district,
     ]);
+    // create tags info in product_tag table
+    tags.map(async (x) => {
+      if (x != '') {
+        await conn.execute('INSERT INTO product_tag (product_id,tag) VALUES (?,?)', [
+          createResult.insertId,
+          x,
+        ]);
+      }
+    });
 
     // create images info in image table
     images.map(async (x) => {
