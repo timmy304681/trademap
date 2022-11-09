@@ -6,15 +6,14 @@ const { MongoClient } = require('mongodb');
 const mongo = new MongoClient(
   `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/?retryWrites=true&w=majority`
 );
-
-try {
-  mongo.connect();
-  console.log('Mongo db Connected');
-} catch (err) {
-  console.log('Mongodb connected failed!!');
-  console.log(err);
-}
-
-const db = mongo.db(MONGODB_DATABASE);
-const mongoCollection = db.collection(MONGODB_COLLECTION);
-module.exports = mongoCollection;
+(async () => {
+  try {
+    await mongo.connect();
+    console.log('Mongo db Connected');
+  } catch (err) {
+    console.log('Mongodb connected failed!!');
+    console.log(err);
+  }
+})();
+const mongodbCollection = mongo.db(MONGODB_DATABASE).collection(MONGODB_COLLECTION);
+module.exports = mongodbCollection;

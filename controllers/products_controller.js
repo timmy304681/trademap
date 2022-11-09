@@ -50,7 +50,7 @@ const getProducts = async (req, res) => {
 
 const postProduct = async (req, res) => {
   const { userId } = req.body;
-  const { title, price, description, time } = req.body;
+  const { title, price, description, time, tags } = req.body;
   if (
     title === undefined ||
     title === '' ||
@@ -98,7 +98,7 @@ const postProduct = async (req, res) => {
   const images = req.files.map((x) => x.path);
 
   // create product for sell
-  const createResult = await productModel.createProduct(productData, number, images);
+  const createResult = await productModel.createProduct(productData, number, images, tags);
   if (createResult == false) {
     return res.status(400).json({ error: 'Create product failed!' });
   }

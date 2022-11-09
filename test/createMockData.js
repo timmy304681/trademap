@@ -65,8 +65,38 @@ for (let i = 1; i <= mockDataNumber; i++) {
 }
 
 const user = [
-  { email: 'admin_1@test.com', name: 'admin_1', password: 'password', photo: 'photo_path' },
-  { email: 'admin_2@test.com', name: 'admin_2', password: 'password', photo: 'photo_path' },
+  {
+    email: 'admin_1@test.com',
+    name: 'admin_1',
+    password: 'password',
+    photo: '/images/3b36e86f-f2ea-48e3-a0c0-c9d48e5f091d.png',
+  },
+  {
+    email: 'admin_2@test.com',
+    name: 'admin_2',
+    password: 'password',
+    photo: '/images/e2575c9d-4edf-48c3-8785-dad6f5908109.png',
+  },
+  {
+    email: 'admin_3@test.com',
+    name: 'admin_3',
+    password: 'password',
+    photo: '/images/4088fd41-75c6-46b1-a47b-b199eefbe7b0.png',
+  },
+  {
+    email: 'admin_4@test.com',
+    name: 'admin_4',
+    password: 'password',
+    photo: '/images/080b85ba-8407-429c-99ec-5116a2685704.png',
+  },
+];
+const chatrooms = [
+  { user_id: 1, chatmate: 2 },
+  { user_id: 1, chatmate: 3 },
+  { user_id: 1, chatmate: 4 },
+  { user_id: 2, chatmate: 1 },
+  { user_id: 3, chatmate: 1 },
+  { user_id: 4, chatmate: 1 },
 ];
 
 async function main() {
@@ -95,10 +125,15 @@ async function main() {
     county,
     district) VALUES ?`;
   await pool.query(productSql, [mockProductsList.map((x) => Object.values(x))]);
-  // leave process
 
+  // chatrooms
+  await pool.query(`INSERT INTO chat_room (user_id,chatmate) VALUES ?`, [
+    chatrooms.map((x) => Object.values(x)),
+  ]);
+
+  //
   console.log(`Create mock data successfully!! Create ${mockDataNumber} records `);
-
+  // leave process
   process.exit();
 }
 

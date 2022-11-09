@@ -8,4 +8,12 @@ const getMessages = async (req, res) => {
   res.status(200).json(chats);
 };
 
-module.exports = { getMessages };
+const getChatrooms = async (req, res) => {
+  const { userId } = req.query;
+
+  const chatrooms = await messagesModel.getChatrooms(userId);
+
+  res.status(200).json(chatrooms);
+};
+
+module.exports = { getMessages, getChatrooms };
