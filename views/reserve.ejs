@@ -1,25 +1,103 @@
 <% layout('layout') %>
 <!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<link rel="stylesheet" href="../public/styles/reserve.css" />
 
 <div class="container">
-  <form name="form" enctype="multipart/form-data" id="form-summit">
-    <div>
-      <label>userId： <input name="userId" id="userId" type="text" /></label>
-    </div>
-    <div>
-      <label>商品名稱： <input name="title" id="title" type="text" /></label>
-    </div>
-    <div>
+  <div class="border">
+    <form>
       <label
         >商品關鍵字：
-        <input name="tags" type="text" />
-        <input name="tags" type="text" />
-        <input name="tags" type="text"
-      /></label>
-    </div>
+        <input class="tags" name="tags" type="text" />
+        <input class="tags" name="tags" type="text" />
+        <input class="tags" name="tags" type="text" />
+        <input class="tags" name="tags" type="text" />
+        <input class="tags" name="tags" type="text" />
+      </label>
 
-    <div>
-      <button type="submit" id="btn-submit">確定送出商品</button>
-    </div>
-  </form>
+      <label>商品距離： <input name="distance" id="distance" type="number" /></label>
+
+      <button id="btn-submit" type="button">確定送出預約</button>
+    </form>
+  </div>
+
+  <div class="border" style="height: 700px; overflow-y: scroll">
+    <section>
+      <div class="container">
+        <div id="reserve-area" class="row row-cols-1 row-cols-md-2 row-cols-xl-4 mt-2">
+          <!-- <div class="col mt-2">
+            <div class="card radius-10 border-start border-0 border-3 border-info">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div>
+                    <p class="mb-0 text-secondary">Product Tag</p>
+                    <h4 class="my-1 text-info">Macbook</h4>
+                    <button class="mb-0 font-13">取消</button>
+                  </div>
+                  <div
+                    class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"
+                  >
+                    <i class="fa fa-shopping-cart"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card radius-10 border-start border-0 border-3 border-danger">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div>
+                    <p class="mb-0 text-secondary">Total Revenue</p>
+                    <h4 class="my-1 text-danger">$84,245</h4>
+                    <p class="mb-0 font-13">+5.4% from last week</p>
+                  </div>
+                  <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto">
+                    <i class="fa fa-dollar"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card radius-10 border-start border-0 border-3 border-success">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div>
+                    <p class="mb-0 text-secondary">Bounce Rate</p>
+                    <h4 class="my-1 text-success">34.6%</h4>
+                    <p class="mb-0 font-13">-4.5% from last week</p>
+                  </div>
+                  <div
+                    class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto"
+                  >
+                    <i class="fa fa-bar-chart"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card radius-10 border-start border-0 border-3 border-warning">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div>
+                    <p class="mb-0 text-secondary">Total Customers</p>
+                    <h4 class="my-1 text-warning">8.4K</h4>
+                    <p class="mb-0 font-13">+8.4% from last week</p>
+                  </div>
+                  <div
+                    class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"
+                  >
+                    <i class="fa fa-users"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
+
+<script src="../public/js/reserve.js"></script>

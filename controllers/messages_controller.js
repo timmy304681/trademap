@@ -9,11 +9,15 @@ const getMessages = async (req, res) => {
 };
 
 const getChatrooms = async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.user.id;
 
   const chatrooms = await messagesModel.getChatrooms(userId);
 
-  res.status(200).json(chatrooms);
+  const response = {
+    user: req.user,
+    chatrooms,
+  };
+  res.status(200).json(response);
 };
 
 module.exports = { getMessages, getChatrooms };

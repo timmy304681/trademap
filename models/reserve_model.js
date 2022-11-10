@@ -18,4 +18,14 @@ const createReserve = async (userId, lat, lng, distance, tags) => {
   }
 };
 
-module.exports = { createReserve };
+const getReserve = async (userId) => {
+  try {
+    const [reserves] = await pool.execute('SELECT * FROM reserve WHERE user_id =?', [userId]);
+    return reserves;
+  } catch (err) {
+    console.log(err);
+    return { error: 'get reserve failed' };
+  }
+};
+
+module.exports = { createReserve, getReserve };

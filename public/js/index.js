@@ -73,7 +73,7 @@ function markerClick(e) {
     <div>面交地點： ${place}</div> 
     <div>詳細地址： ${address}</div> 
     <div>商品描述： ${description}</div> 
-    <button>與賣家聯繫</button> 
+    <button onclick="contact()">與賣家聯繫</button> 
     `);
 }
 
@@ -93,9 +93,9 @@ $('#btn-submit').on('click', async (e) => {
     },
   };
   const response = await axios.get('/api/1.0/products/search', params);
+  console.log(response);
   const productArr = response.data;
   console.log(productArr);
-  console.log(marker);
 
   if (marker != undefined) {
     markers.clearLayers();
@@ -127,3 +127,9 @@ const options = {
   placeholder: '請輸入關鍵字', // 預設顯示的字串
 };
 $('#keyword').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
+
+// contact
+
+function contact() {
+  console.log('test');
+}

@@ -1,5 +1,10 @@
 /* body{margin-top:20px;} */
 
+.card, #chatrooms,#chat-messages {
+    background-color: rgb(153,164,188,0.7);
+    height: 800px;
+}
+
 .chat-online {
     color: #34ce57
 }

@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Numans');
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap");
+
+html,body{
+    background-image: url('../src/wallpaper-map.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    /* font-family: 'Numans', sans-serif; */
+    /* font-family: 'Noto Sans TC',sans-serif !important; */
+    font-family: "Helvetica", "Arial","LiHei Pro","Noto Sans TC","黑體-繁","微軟正黑體", sans-serif;
+    }
+
+

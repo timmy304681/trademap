@@ -2,9 +2,27 @@ const CENTER_LOCATION = { lat: 25.038664974857266, lng: 121.53243547090415 };
 const ZOOM_LEVEL = 13;
 const LIMIT = 5;
 const HERE_API_KEY = $('#map-script').attr('HERE_API_KEY');
-// var platform = new H.service.Platform({
-//   apikey: `${HERE_API_KEY}`,
-// });
+
+//此頁面只有會員能看見
+(async () => {
+  // 驗證會員身分
+  try {
+    const authentication = await localStorage.getItem('Authorization');
+    const params = {
+      headers: { 'content-type': 'application/json', authorization: authentication },
+    };
+    const response = await axios.get(`/api/1.0/users`, params);
+  } catch (err) {
+    console.log(err);
+    await Swal.fire({
+      icon: 'warning',
+      title: '請登入會員',
+      text: `此頁面為會員專屬`,
+      footer: `將跳轉至登入註冊頁面`,
+    });
+    location.href = '/profile';
+  }
+})();
 
 // Leaflet
 // 定義一個地圖物件
@@ -96,17 +114,17 @@ $('#btn-submit').on('click', async (e) => {
   //   const postData = { title: $('#title').value ,};
   //   const postData = $('form').serializeArray();
   //   postData.push(productLocation);
+  const Authorization = localStorage.getItem('Authorization');
   const postData = new FormData(form);
-
+  console.log(postData);
   const params = {
     headers: {
-      'content-type': 'multipart/form-data',
-      //   authorization: authorizationToken,
+      authorization: Authorization,
     },
   };
   console.log('before axios');
   try {
-    const response = await axios.post('/api/1.0/products', postData);
+    const response = await axios.post('/api/1.0/products', postData, params);
     console.log(response);
     await Swal.fire({
       icon: 'success',
@@ -116,6 +134,7 @@ $('#btn-submit').on('click', async (e) => {
     });
     location.href = '/order';
   } catch (err) {
+    console.log(err);
     Swal.fire({
       icon: 'error',
       title: '商品上架失敗',

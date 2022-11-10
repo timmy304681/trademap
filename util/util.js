@@ -5,6 +5,11 @@ const path = require('path');
 const multer = require('multer');
 const { S3 } = require('aws-sdk');
 const uuid = require('uuid').v4;
+const jwt = require('jsonwebtoken');
+
+// secret code for JWT
+require('dotenv').config();
+const { JWT_SECRET } = process.env;
 
 // reference: https://thecodebarbarian.com/80-20-guide-to-express-error-handling
 const wrapAsync = (fn) => {
@@ -50,46 +55,25 @@ const s3UploadFiles = async (files) => {
   return Promise.all(params.map((param) => s3.upload(param).promise()));
 };
 
-const authentication = (roleId) => {
-  return async function (req, res, next) {
-    let accessToken = req.get('Authorization');
-    if (!accessToken) {
-      res.status(401).send({ error: 'Unauthorized' });
-      return;
-    }
+const authentication = async (req, res, next) => {
+  let accessToken = req.get('authorization');
+  if (!accessToken) {
+    return res.status(401).send({ error: 'Unauthorized' });
+  }
 
-    accessToken = accessToken.replace('Bearer ', '');
-    if (accessToken == 'null') {
-      res.status(401).send({ error: 'Unauthorized' });
-      return;
-    }
+  accessToken = accessToken.replace('Bearer ', '');
+  if (accessToken === 'null') {
+    return res.status(401).send({ error: 'Unauthorized' });
+  }
 
-    try {
-      const user = await promisify(jwt.verify)(accessToken, TOKEN_SECRET);
-      req.user = user;
-      if (roleId == null) {
-        next();
-      } else {
-        let userDetail;
-        if (roleId == User.USER_ROLE.ALL) {
-          userDetail = await User.getUserDetail(user.email);
-        } else {
-          userDetail = await User.getUserDetail(user.email, roleId);
-        }
-        if (!userDetail) {
-          res.status(403).send({ error: 'Forbidden' });
-        } else {
-          req.user.id = userDetail.id;
-          req.user.role_id = userDetail.role_id;
-          next();
-        }
-      }
-      return;
-    } catch (err) {
-      res.status(403).send({ error: 'Forbidden' });
-      return;
-    }
-  };
+  try {
+    const user = await jwt.verify(accessToken, JWT_SECRET);
+    req.user = user;
+    next();
+  } catch (err) {
+    console.log(err);
+    return res.status(401).send({ error: 'Wrong token' });
+  }
 };
 
 module.exports = {

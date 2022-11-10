@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const { wrapAsync } = require('../util/util');
+const { wrapAsync, authentication } = require('../util/util');
 
 const { getMessages, getChatrooms } = require('../controllers/messages_controller');
 
-router.route('/messages').get(wrapAsync(getMessages));
-router.route('/chatrooms').get(wrapAsync(getChatrooms));
+router.route('/messages').get(authentication, wrapAsync(getMessages));
+router.route('/chatrooms').get(authentication, wrapAsync(getChatrooms));
 
 module.exports = router;
