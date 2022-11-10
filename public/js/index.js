@@ -73,7 +73,7 @@ function markerClick(e) {
     <div>面交地點： ${place}</div> 
     <div>詳細地址： ${address}</div> 
     <div>商品描述： ${description}</div> 
-    <button>與賣家聯繫</button> 
+    <button onclick="contact()">與賣家聯繫</button> 
     `);
 }
 
@@ -127,3 +127,9 @@ const options = {
   placeholder: '請輸入關鍵字', // 預設顯示的字串
 };
 $('#keyword').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
+
+// contact
+
+function contact() {
+  console.log('test');
+}

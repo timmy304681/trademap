@@ -28,14 +28,9 @@
         <li class="nav-item">
           <a class="nav-link" href="/message">Message</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/message_demo">Message_Demo</a>
-        </li>
+
         <li class="nav-item">
           <a class="nav-link" href="/reserve">Reserve</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/test">Test</a>
         </li>
 
         <li class="nav-item dropdown">
@@ -47,13 +42,11 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            API
+            Test
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/api/1.0/products/all?paging=0"
-              >(/api/1.0/products/all?paging=0) Get all products(20)</a
-            >
-            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="/test">Test</a>
+            <a class="dropdown-item" href="/message_demo">Message_Demo</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>
@@ -69,7 +62,9 @@
         />
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form> -->
-      <a class="nav-link text-light" onclick="signOut()">Sign Out</a>
+      <div id="signOut-insert"></div>
+      <div id="image-insert"></div>
+      <div id="name-insert" style="color: wheat"></div>
 
       <a class="nav-link text-light" href="/profile">Profile</a>
     </div>
@@ -77,6 +72,30 @@
 </header>
 
 <script>
+  (async () => {
+    const authentication = await localStorage.getItem('Authorization');
+    // 若無token就不做任何call api驗證
+    if (authentication == null) {
+      return;
+    }
+    // 有token，就call api驗證
+    try {
+      const params = {
+        headers: { 'content-type': 'application/json', authorization: authentication },
+      };
+      const response = await axios.get(`/api/1.0/users`, params);
+      const userProfile = response.data;
+
+      $('#image-insert').html(
+        `<img src= ${userProfile.photo} class="rounded-circle mr-1" width="40" height="40"/>`
+      );
+      $('#name-insert').html(`${userProfile.name}`);
+      $('#signOut-insert').html(`<a class="nav-link text-light" onclick="signOut()">Sign Out</a>`);
+    } catch (err) {
+      console.log(err);
+    }
+  })();
+
   async function signOut() {
     localStorage.removeItem('Authorization');
     await Swal.fire({

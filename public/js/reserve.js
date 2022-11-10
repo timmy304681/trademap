@@ -1,21 +1,11 @@
 //此頁面只有會員能看見
 (async () => {
-  const authentication = await localStorage.getItem('Authorization');
-  // 若無token就不做任何call api驗證
-  if (authentication == null) {
-    await Swal.fire({
-      icon: 'warning',
-      title: '請登入會員',
-      text: `此頁面為會員專屬`,
-      footer: `將跳轉至登入註冊頁面`,
-    });
-    return (location.href = '/profile');
-  }
-  // 有token，就call api驗證
-  const params = {
-    headers: { 'content-type': 'application/json', authorization: authentication },
-  };
+  // 驗證會員身分
   try {
+    const authentication = await localStorage.getItem('Authorization');
+    const params = {
+      headers: { 'content-type': 'application/json', authorization: authentication },
+    };
     const response = await axios.get(`/api/1.0/users`, params);
   } catch (err) {
     console.log(err);
@@ -27,6 +17,36 @@
     });
     location.href = '/profile';
   }
+
+  // 渲染reserve 卡片
+  $('#reserve-area').html('');
+  const response = await axios.get(`/api/1.0/reserve`, params);
+  const reserves = response.data;
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (reserve of reserves) {
+    const tag = reserve.tag;
+    $('#reserve-area').append(
+      `<div class="col-3 mt-2">
+<div class="card radius-10 border-start border-0 border-3 border-info">
+  <div class="card-body">
+    <div class="d-flex align-items-center">
+      <div>
+        <p class="mb-0 text-secondary">Product Tag</p>
+        <h4 class="my-1 text-info">${tag}</h4>
+        <button class="mb-0 font-13">取消</button>
+      </div>
+      <div
+        class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"
+      >
+        <i class="fa fa-shopping-cart"></i>
+      </div>
+    </div>
+  </div>
+</div>
+</div>`
+    );
+  }
 })();
 
 // ask user for the position
@@ -35,7 +55,6 @@ if ('geolocation' in navigator) {
   navigator.geolocation.getCurrentPosition(getPositionSuccess, getPositionError);
 } else {
   // Use a third-party geolocation service
-
   console.log('Browser does not support the Geolocation API');
 }
 
@@ -43,7 +62,6 @@ if ('geolocation' in navigator) {
 function getPositionSuccess(position) {
   const lat = position.coords.latitude;
   const lng = position.coords.longitude;
-  const CENTER_LOCATION = { lat, lng };
 
   // 將lat,lng存在localStorage
   window.localStorage.setItem('lat', lat);
@@ -61,6 +79,7 @@ function getPositionError(err) {
 
 $('#btn-submit').on('click', async (e) => {
   e.preventDefault();
+  console.log('click');
   const tagsElement = $('[name=tags]');
 
   let tags = [];

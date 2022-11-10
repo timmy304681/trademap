@@ -16,4 +16,10 @@ const createReserve = async (req, res) => {
   res.status(200).json(result);
 };
 
-module.exports = { createReserve };
+const getReserve = async (req, res) => {
+  const userId = req.user.id;
+
+  const result = await reserveModel.getReserve(userId);
+  res.status(200).json(result);
+};
+module.exports = { createReserve, getReserve };

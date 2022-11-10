@@ -1,21 +1,11 @@
 //此頁面只有會員能看見
 (async () => {
-  const authentication = await localStorage.getItem('Authorization');
-  // 若無token就不做任何call api驗證
-  if (authentication == null) {
-    await Swal.fire({
-      icon: 'warning',
-      title: '請登入會員',
-      text: `此頁面為會員專屬`,
-      footer: `將跳轉至登入註冊頁面`,
-    });
-    return (location.href = '/profile');
-  }
-  // 有token，就call api驗證
-  const params = {
-    headers: { 'content-type': 'application/json', authorization: authentication },
-  };
+  // 驗證會員身分
   try {
+    const authentication = await localStorage.getItem('Authorization');
+    const params = {
+      headers: { 'content-type': 'application/json', authorization: authentication },
+    };
     const response = await axios.get(`/api/1.0/users`, params);
   } catch (err) {
     console.log(err);

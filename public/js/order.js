@@ -1,11 +1,23 @@
-// $('#btn-submit').on('click', async (e) => {
-//   e.preventDefault();
-//   $(`#order-list`).html('');})
 (async () => {
-  const Authorization = localStorage.getItem('Authorization');
+  // 驗證會員身分
+  const authentication = await localStorage.getItem('Authorization');
   const params = {
-    headers: { authorization: Authorization },
+    headers: { 'content-type': 'application/json', authorization: authentication },
   };
+  try {
+    const response = await axios.get(`/api/1.0/users`, params);
+  } catch (err) {
+    console.log(err);
+    await Swal.fire({
+      icon: 'warning',
+      title: '請登入會員',
+      text: `此頁面為會員專屬`,
+      footer: `將跳轉至登入註冊頁面`,
+    });
+    location.href = '/profile';
+  }
+
+  // order渲染
   const response = await axios.get('/api/1.0/orders', params);
   console.log(response);
   const orderArr = response.data;

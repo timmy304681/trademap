@@ -2,9 +2,27 @@ const CENTER_LOCATION = { lat: 25.038664974857266, lng: 121.53243547090415 };
 const ZOOM_LEVEL = 13;
 const LIMIT = 5;
 const HERE_API_KEY = $('#map-script').attr('HERE_API_KEY');
-// var platform = new H.service.Platform({
-//   apikey: `${HERE_API_KEY}`,
-// });
+
+//此頁面只有會員能看見
+(async () => {
+  // 驗證會員身分
+  try {
+    const authentication = await localStorage.getItem('Authorization');
+    const params = {
+      headers: { 'content-type': 'application/json', authorization: authentication },
+    };
+    const response = await axios.get(`/api/1.0/users`, params);
+  } catch (err) {
+    console.log(err);
+    await Swal.fire({
+      icon: 'warning',
+      title: '請登入會員',
+      text: `此頁面為會員專屬`,
+      footer: `將跳轉至登入註冊頁面`,
+    });
+    location.href = '/profile';
+  }
+})();
 
 // Leaflet
 // 定義一個地圖物件
