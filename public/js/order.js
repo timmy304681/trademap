@@ -1,10 +1,10 @@
-$('#btn-submit').on('click', async (e) => {
-  e.preventDefault();
-  $(`#order-list`).html('');
+// $('#btn-submit').on('click', async (e) => {
+//   e.preventDefault();
+//   $(`#order-list`).html('');})
+(async () => {
+  const Authorization = localStorage.getItem('Authorization');
   const params = {
-    params: {
-      userId: $('#userId')[0].value,
-    },
+    headers: { authorization: Authorization },
   };
   const response = await axios.get('/api/1.0/orders', params);
   console.log(response);
@@ -31,4 +31,4 @@ $('#btn-submit').on('click', async (e) => {
   </div>
 </li>`);
   }
-});
+})();

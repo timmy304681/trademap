@@ -4,10 +4,7 @@
 
 <div class="container">
   <div class="align-items-center">
-    <form name="form" enctype="multipart/form-data" id="form-summit">
-      <div>
-        <label>userId： <input name="userId" id="userId" type="text" /></label>
-      </div>
+    <form name="form" id="form" enctype="multipart/form-data">
       <div>
         <label>商品名稱： <input name="title" id="title" type="text" /></label>
       </div>
@@ -25,7 +22,12 @@
       </div>
       <div>
         <label
-          >商品描述： <textarea name="description" id="description" cols="30" rows="10"></textarea>
+          >商品描述：
+          <textarea
+            name="description"
+            id="description"
+            style="resize: none; width: 400px; height: 100px"
+          ></textarea>
         </label>
       </div>
       <div>

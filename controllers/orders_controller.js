@@ -1,7 +1,7 @@
 const orderModel = require('../models/orders_model');
 
 const getOrders = async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.user.id;
 
   const ordersList = await orderModel.getOrders(userId);
 

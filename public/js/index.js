@@ -93,9 +93,9 @@ $('#btn-submit').on('click', async (e) => {
     },
   };
   const response = await axios.get('/api/1.0/products/search', params);
+  console.log(response);
   const productArr = response.data;
   console.log(productArr);
-  console.log(marker);
 
   if (marker != undefined) {
     markers.clearLayers();

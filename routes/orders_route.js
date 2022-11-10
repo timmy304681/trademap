@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const { wrapAsync } = require('../util/util');
+const { wrapAsync, authentication } = require('../util/util');
 
 const { getOrders } = require('../controllers/orders_controller');
 
-router.route('/orders').get(wrapAsync(getOrders));
+router.route('/orders').get(authentication, wrapAsync(getOrders));
 
 module.exports = router;

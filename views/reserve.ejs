@@ -2,24 +2,22 @@
 <!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
 
 <div class="container">
-  <form name="form" enctype="multipart/form-data" id="form-summit">
-    <div>
-      <label>userId： <input name="userId" id="userId" type="text" /></label>
-    </div>
-    <div>
-      <label>商品名稱： <input name="title" id="title" type="text" /></label>
-    </div>
+  <form name="form" id="form-summit">
     <div>
       <label
         >商品關鍵字：
-        <input name="tags" type="text" />
-        <input name="tags" type="text" />
-        <input name="tags" type="text"
+        <input class="tags" name="tags" type="text" />
+        <input class="tags" name="tags" type="text" />
+        <input class="tags" name="tags" type="text"
       /></label>
+    </div>
+    <div>
+      <label>商品距離： <input name="distance" id="distance" type="number" required /></label>
     </div>
 
     <div>
-      <button type="submit" id="btn-submit">確定送出商品</button>
+      <button type="submit" id="btn-submit">確定送出預約</button>
     </div>
   </form>
 </div>
+<script src="../public/js/reserve.js"></script>

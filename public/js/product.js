@@ -96,17 +96,17 @@ $('#btn-submit').on('click', async (e) => {
   //   const postData = { title: $('#title').value ,};
   //   const postData = $('form').serializeArray();
   //   postData.push(productLocation);
+  const Authorization = localStorage.getItem('Authorization');
   const postData = new FormData(form);
-
+  console.log(postData);
   const params = {
     headers: {
-      'content-type': 'multipart/form-data',
-      //   authorization: authorizationToken,
+      authorization: Authorization,
     },
   };
   console.log('before axios');
   try {
-    const response = await axios.post('/api/1.0/products', postData);
+    const response = await axios.post('/api/1.0/products', postData, params);
     console.log(response);
     await Swal.fire({
       icon: 'success',
@@ -116,6 +116,7 @@ $('#btn-submit').on('click', async (e) => {
     });
     location.href = '/order';
   } catch (err) {
+    console.log(err);
     Swal.fire({
       icon: 'error',
       title: '商品上架失敗',

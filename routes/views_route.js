@@ -29,6 +29,14 @@ router.get('/reserve', (req, res) => {
   res.render('reserve', { title: '商品預約系統' });
 });
 
+router.get('/profile', (req, res) => {
+  res.render('profile', { title: '會員登入系統' });
+});
+
+router.get('/signup', (req, res) => {
+  res.render('signup', { title: '會員註冊' });
+});
+
 router.get('/404', (req, res) => {
   res.render('404', { title: 'Page not found' });
 });

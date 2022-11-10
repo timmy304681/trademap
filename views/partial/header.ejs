@@ -28,16 +28,16 @@
         <li class="nav-item">
           <a class="nav-link" href="/message">Message</a>
         </li>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/message_demo">Message_Demo</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/Reserve">Reserve</a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/message_demo">Message_Demo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/reserve">Reserve</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="/test">Test</a>
         </li>
+
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
@@ -59,7 +59,8 @@
           </div>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
+
+      <!-- <form class="form-inline my-2 my-lg-0">
         <input
           class="form-control mr-sm-2"
           type="search"
@@ -67,7 +68,21 @@
           aria-label="Search"
         />
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
+      </form> -->
+      <a class="nav-link text-light" onclick="signOut()">Sign Out</a>
+
+      <a class="nav-link text-light" href="/profile">Profile</a>
     </div>
   </nav>
 </header>
+
+<script>
+  async function signOut() {
+    localStorage.removeItem('Authorization');
+    await Swal.fire({
+      icon: 'success',
+      title: '已登出',
+    });
+    location.href = '/profile';
+  }
+</script>

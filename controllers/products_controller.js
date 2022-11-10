@@ -49,8 +49,9 @@ const getProducts = async (req, res) => {
 };
 
 const postProduct = async (req, res) => {
-  const { userId } = req.body;
+  const userId = req.user.id;
   const { title, price, description, time, tags } = req.body;
+  console.log(req.body);
   if (
     title === undefined ||
     title === '' ||
