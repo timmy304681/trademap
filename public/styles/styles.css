@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap");
 
 html,body{
-    background-image: url('../src/wallpaper-map.jpg');
+    /* background-image: url('../src/wallpaper-map.jpg'); */
     background-size: cover;
     background-repeat: no-repeat;
     height: 100%;

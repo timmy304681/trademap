@@ -23,6 +23,12 @@ const getProducts = async (req, res) => {
         }
         break;
       }
+      case 'details': {
+        const id = parseInt(req.query.id);
+        if (Number.isInteger(id)) {
+          return await productModel.getProductDetails(id);
+        }
+      }
     }
     return Promise.resolve({});
   }

@@ -8,6 +8,17 @@ const getProducts = async (pageSize, paging = 0) => {
   return products;
 };
 
+const getProductDetails = async (id) => {
+  const [productDetails] = await pool.execute(
+    'SELECT *,NULL AS password FROM product JOIN user ON product.user_id=user.id WHERE product.id=?',
+    [id]
+  );
+  const [images] = await pool.execute('SELECT * FROM image WHERE product_id=?', [id]);
+  const imagesArr = images.map((x) => x.image);
+  productDetails[0].images = imagesArr;
+  return productDetails;
+};
+
 const searchProducts = async (keyword) => {
   try {
     const [products] = await pool.execute('SELECT * FROM product WHERE title like ?', [
@@ -102,4 +113,4 @@ const createProduct = async (product, number, images, tags) => {
   }
 };
 
-module.exports = { getProducts, searchProducts, createProduct, getAutoComplete };
+module.exports = { getProducts, getProductDetails, searchProducts, createProduct, getAutoComplete };

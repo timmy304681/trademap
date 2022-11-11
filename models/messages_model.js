@@ -36,4 +36,45 @@ const getChatrooms = async (userId) => {
   }
 };
 
-module.exports = { getMessages, saveMessages, getChatrooms };
+const createChatroom = async (userId, chatemateId) => {
+  const conn = await pool.getConnection();
+
+  try {
+    // check if chatrooms already exist
+    const [chatrooms1] = await conn.execute(
+      'SELECT * FROM chat_room WHERE user_id=? AND chatmate=?',
+      [userId, chatemateId]
+    );
+    const [chatrooms2] = await conn.execute(
+      'SELECT * FROM chat_room WHERE user_id=? AND chatmate=?',
+      [chatemateId, userId]
+    );
+
+    if (chatrooms1.length != 0 || chatrooms2.length != 0) {
+      return { message: `chatroom already exist` };
+    }
+
+    // insert
+    await conn.query('START TRANSACTION');
+
+    await conn.execute(`INSERT INTO chat_room (user_id, chatmate) VALUES (?,?)`, [
+      userId,
+      chatemateId,
+    ]);
+    await conn.execute(`INSERT INTO chat_room (user_id, chatmate) VALUES (?,?)`, [
+      chatemateId,
+      userId,
+    ]);
+    await conn.query('COMMIT');
+    return { message: `chatroom of user ${userId} & ${chatemateId} create succssefuly` };
+  } catch (err) {
+    console.log(err);
+    await conn.query('ROLLBACK');
+
+    return false;
+  } finally {
+    await conn.release();
+  }
+};
+
+module.exports = { getMessages, saveMessages, getChatrooms, createChatroom };

@@ -14,7 +14,9 @@ const getUser = async (req, res) => {
     return res.status(400).json({ error: 'NO user id ' });
   }
   const [user] = await userModel.getUser(id);
-
+  if (user === undefined) {
+    return res.status(400).json({ error: 'NO user id ' });
+  }
   res.status(200).json(user);
 };
 

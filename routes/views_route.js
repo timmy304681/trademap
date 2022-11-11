@@ -37,6 +37,10 @@ router.get('/signup', (req, res) => {
   res.render('signup', { title: '會員註冊' });
 });
 
+router.get('/product_details', (req, res) => {
+  res.render('product_details', { title: '商品細節頁面' });
+});
+
 router.get('/404', (req, res) => {
   res.render('404', { title: 'Page not found' });
 });
