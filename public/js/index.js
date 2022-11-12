@@ -63,32 +63,32 @@ const options = {
 
 $('#keyword').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
 
-// contact
-$('#btn-contact').on('click', async (e) => {
-  e.preventDefault();
-  try {
-    const sellerId = $('#seller_info').attr('userId');
-    const productId = $('#product_id').attr('productId');
-    const authentication = await localStorage.getItem('Authorization');
+// // contact
+// $('#btn-contact').on('click', async (e) => {
+//   e.preventDefault();
+//   try {
+//     const sellerId = $('#seller_info').attr('userId');
+//     const productId = $('#product_id').attr('productId');
+//     const authentication = await localStorage.getItem('Authorization');
 
-    const postData = { sellerId, productId };
-    const params = {
-      headers: { authorization: authentication },
-    };
-    const response = await axios.post(`/api/1.0/chatrooms`, postData, params);
+//     const postData = { sellerId, productId };
+//     const params = {
+//       headers: { authorization: authentication },
+//     };
+//     const response = await axios.post(`/api/1.0/chatrooms`, postData, params);
 
-    location.href = '/message';
-  } catch (err) {
-    console.log(err);
-    await Swal.fire({
-      icon: 'warning',
-      title: '請登入會員',
-      text: `連絡賣家為會員專屬`,
-      footer: `將跳轉至登入註冊頁面`,
-    });
-    location.href = '/profile';
-  }
-});
+//     location.href = '/message';
+//   } catch (err) {
+//     console.log(err);
+//     await Swal.fire({
+//       icon: 'warning',
+//       title: '請登入會員',
+//       text: `連絡賣家為會員專屬`,
+//       footer: `將跳轉至登入註冊頁面`,
+//     });
+//     location.href = '/profile';
+//   }
+// });
 
 // Functions
 // 調控瀏覽器的地理位置存取資訊cb
@@ -155,19 +155,23 @@ async function markerClick(e) {
     photo,
   } = response.data[0];
   map.flyTo(L.latLng({ lat, lng }), 18);
-  // const imagePath = `${image}`;
-  // <image src=${imagePath} style="height: 200px"></image>
-  $('#product-images').html(`<img src= ${images[0]} class="mr-1"  height="500px"/>`);
-  $('#user-info').append(`
-    <img src= ${photo} class="rounded-circle mr-1" width="40" height="40"/>
-    <div id="seller_info" userId="${user_id}">賣家名稱： ${name}</div>
-    `);
-  $('#product-details').html(` 
-    <div id="product_id" productId="${id}">商品： ${title}</div>
-    <div>商品價錢： ${price}</div>
-    <div>面交地點： ${place}</div> 
-    <div>詳細地址： ${address}</div> 
-    <div>商品描述： ${description}</div> `);
 
-  $('#btn-contact').attr('type', 'button');
+  // $('#iframe-product').attr('src', `/product_details?id=${id}`);
+  $.get(`/product_details?id=${id}`, function (data) {
+    $('#product-page').html(data);
+  });
+
+  // $('#product-images').html(`<img src= ${images[0]} class="mr-1"  height="500px"/>`);
+  // $('#user-info').append(`
+  //   <img src= ${photo} class="rounded-circle mr-1" width="40" height="40"/>
+  //   <div id="seller_info" userId="${user_id}">賣家名稱： ${name}</div>
+  //   `);
+  // $('#product-details').html(`
+  //   <div id="product_id" productId="${id}">商品： ${title}</div>
+  //   <div>商品價錢： ${price}</div>
+  //   <div>面交地點： ${place}</div>
+  //   <div>詳細地址： ${address}</div>
+  //   <div>商品描述： ${description}</div> `);
+
+  // $('#btn-contact').attr('type', 'button');
 }

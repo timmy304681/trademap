@@ -10,7 +10,8 @@ const getProducts = async (pageSize, paging = 0) => {
 
 const getProductDetails = async (id) => {
   const [productDetails] = await pool.execute(
-    'SELECT *,NULL AS password FROM product JOIN user ON product.user_id=user.id WHERE product.id=?',
+    `SELECT product.id AS id, title, number, price, time, description, place, address,lat,lng , user_id, name, email,photo,status
+      FROM product JOIN user ON product.user_id=user.id WHERE product.id=?`,
     [id]
   );
   const [images] = await pool.execute('SELECT * FROM image WHERE product_id=?', [id]);

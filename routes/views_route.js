@@ -38,7 +38,8 @@ router.get('/signup', (req, res) => {
 });
 
 router.get('/product_details', (req, res) => {
-  res.render('product_details', { title: '商品細節頁面' });
+  const id = req.query.id != undefined ? req.query.id : 1;
+  res.render('product_details', { title: '商品細節頁面', id });
 });
 
 router.get('/404', (req, res) => {

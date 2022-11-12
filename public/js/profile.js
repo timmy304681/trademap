@@ -25,12 +25,12 @@
 })();
 
 $('#btn-signin').on('click', async (e) => {
-  console.log('hi');
   e.preventDefault();
   const postData = {
     email: $('#input-email').val(),
     password: $('#input-password').val(),
   };
+  console.log(postData);
 
   try {
     const response = await axios.post(`/api/1.0/users/signin`, postData);

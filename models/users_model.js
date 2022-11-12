@@ -6,10 +6,23 @@ const getUser = async (userId) => {
 };
 
 const getEmail = async (email) => {
-  const [user] = await pool.execute('SELECT * FROM `user` WHERE email=?', [email]);
-  return user;
+  const [userEmailSearch] = await pool.execute('SELECT * FROM `user` WHERE email=?', [email]);
+
+  return userEmailSearch;
 };
 
+const checkAcount = async (email, name) => {
+  const [userEmailSearch] = await pool.execute('SELECT * FROM `user` WHERE email=?', [email]);
+  const [userNameSearch] = await pool.execute('SELECT * FROM `user` WHERE name=?', [name]);
+
+  if (userEmailSearch.length > 0) {
+    return { error: 'Email already exist' };
+  }
+  if (userNameSearch.length > 0) {
+    return { error: 'Name already exist' };
+  }
+  return { message: 'Email & Name available' };
+};
 const signUp = async (name, email, passwordHash, photo) => {
   try {
     const [user] = await pool.execute(
@@ -23,4 +36,4 @@ const signUp = async (name, email, passwordHash, photo) => {
   }
 };
 
-module.exports = { getUser, getEmail, signUp };
+module.exports = { getUser, getEmail, signUp, checkAcount };

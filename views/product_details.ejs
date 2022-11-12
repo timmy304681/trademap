@@ -1,65 +1,84 @@
-<% layout('layout') %>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="../public/src/jquery-3.6.1.js"></script>
+<!-- bootstrap -->
+<link href="../public/styles/bootstrap.css" rel="stylesheet" />
+<script src="../public/js/bootstrap.js"></script>
+<link rel="stylesheet" href="../public/styles/styles.css" />
+<!-- // bootstrap -->
 <link rel="stylesheet" href="../public/styles/product_details.css" />
 
-<div class="container">
+<div id="product-id" productId="<%= id%>" class="container" style="height: 100%">
   <div class="card">
     <div class="container-fliud">
       <div class="wrapper row">
-        <div class="preview col-md-6">
-          <div class="preview-pic tab-content">
-            <div class="tab-pane active" id="pic-1">
-              <img src="http://placekitten.com/400/252" />
-            </div>
-            <div class="tab-pane" id="pic-2"><img src="http://placekitten.com/200/126" /></div>
-            <div class="tab-pane" id="pic-3"><img src="http://placekitten.com/400/252" /></div>
-            <div class="tab-pane" id="pic-4"><img src="http://placekitten.com/400/252" /></div>
-            <div class="tab-pane" id="pic-5"><img src="http://placekitten.com/400/252" /></div>
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+          <div id="product-images-carousel" class="carousel-indicators">
+            <!-- <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="0"
+              class="active"
+              aria-current="true"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="1"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="2"
+            ></button> -->
           </div>
-          <ul class="preview-thumbnail nav nav-tabs">
-            <li class="active">
-              <a data-target="#pic-1" data-toggle="tab"
-                ><img src="http://placekitten.com/400/252"
-              /></a>
-            </li>
-            <li>
-              <a data-target="#pic-2" data-toggle="tab"
-                ><img src="http://placekitten.com/200/126"
-              /></a>
-            </li>
-            <li>
-              <a data-target="#pic-3" data-toggle="tab"
-                ><img src="http://placekitten.com/200/126"
-              /></a>
-            </li>
-            <li>
-              <a data-target="#pic-4" data-toggle="tab"
-                ><img src="http://placekitten.com/200/126"
-              /></a>
-            </li>
-            <li>
-              <a data-target="#pic-5" data-toggle="tab"
-                ><img src="http://placekitten.com/200/126"
-              /></a>
-            </li>
-          </ul>
+          <div id="product-images" class="carousel-inner">
+            <!-- <div class="carousel-item active">
+              <img src="http://placekitten.com/200/126" class="d-block w-100" />
+            </div>
+            <div class="carousel-item">
+              <img src="http://placekitten.com/200/126" class="d-block w-100" />
+            </div>
+            <div class="carousel-item">
+              <img src="http://placekitten.com/200/126" class="d-block w-100" />
+            </div> -->
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
-        <div class="details col-md-6">
-          <h3 class="product-title">iPhone12 Pro 128G 電池88</h3>
 
-          <h4 class="price">價錢: <span>NT$16,000</span></h4>
-          <div>面交地點: <span>台北車站</span></div>
-          <div>詳細地點: <span>台灣100台北市中正區Beiping West Road3號台北車站</span></div>
-          <div>面交時間: <span>2022-11-11T07:46:00.000Z</span></div>
+        <div class="details">
+          <h1 id="product-title" class="product-title mt-3"></h1>
+
+          <h4 class="price">價錢: <span id="product-price"></span></h4>
+          <div>賣家: <span id="user-name"></span></div>
+          <div>
+            <img id="user-photo" src="/" class="rounded-circle mr-1" width="40" height="40" />
+          </div>
+
+          <div>面交地點: <span id="product-place"></span></div>
+          <div>
+            詳細地點:
+            <span id="product-adress"></span>
+          </div>
+          <div>面交時間: <span id="product-time"></span></div>
           <br />
-          <p id="product-description" class="product-description">
-            台中市面交 全配 外觀漂亮 僅僅充電5次 使用次數不超過10次 圖上看到的 全都附贈！！！
-            台中市面交 全配 外觀漂亮 僅僅充電5次 使用次數不超過10次 圖上看到的 全都附贈！！！
-            台中市面交 全配 外觀漂亮 僅僅充電5次 使用次數不超過10次 圖上看到的 全都附贈！！！
-            台中市面交 全配 外觀漂亮 僅僅充電5次 使用次數不超過10次 圖上看到的 全都附贈！！！
-            台中市面交 全配 外觀漂亮 僅僅充電5次 使用次數不超過10次 圖上看到的 全都附贈！！！
-            台中市面交 全配 外觀漂亮 僅僅充電5次 使用次數不超過10次 圖上看到的 全都附贈！！！
-            台中市面交 全配 外觀漂亮 僅僅充電5次 使用次數不超過10次 圖上看到的 全都附贈！！！
-          </p>
+          <p id="product-description" class="product-description"></p>
 
           <!-- <h5 class="sizes">
             sizes:
@@ -79,7 +98,9 @@
             <span class="color blue"></span>
           </h5> -->
           <div class="action">
-            <button class="add-to-cart btn btn-default" type="button">add to cart</button>
+            <button id="btn-contact" class="add-to-cart btn btn-default" type="button">
+              連絡賣家
+            </button>
           </div>
         </div>
       </div>
