@@ -6,6 +6,7 @@ const multer = require('multer');
 const { S3 } = require('aws-sdk');
 const uuid = require('uuid').v4;
 const jwt = require('jsonwebtoken');
+const rolePermission = require('../models/users_model');
 
 // secret code for JWT
 require('dotenv').config();
@@ -76,9 +77,21 @@ const authentication = async (req, res, next) => {
   }
 };
 
+const reserveAuthorization = async (req, res, next) => {
+  try {
+    const user = await jwt.verify(accessToken, JWT_SECRET);
+    req.user = user;
+    next();
+  } catch (err) {
+    console.log(err);
+    return res.status(401).send({ error: 'Wrong token' });
+  }
+};
+
 module.exports = {
   wrapAsync,
   authentication,
+  reserveAuthorization,
   s3UploadFiles,
   upload,
 };
