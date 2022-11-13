@@ -1,7 +1,9 @@
 const pool = require('../util/mysql');
 
 const getUser = async (userId) => {
-  const [user] = await pool.execute('SELECT id,email,name,photo FROM `user`  WHERE id=?', [userId]);
+  const [user] = await pool.execute('SELECT id,email,name,photo,role_id FROM `user`  WHERE id=?', [
+    userId,
+  ]);
   return user;
 };
 
@@ -36,4 +38,9 @@ const signUp = async (name, email, passwordHash, photo) => {
   }
 };
 
-module.exports = { getUser, getEmail, signUp, checkAcount };
+const getRolePermission = async (roleId) => {
+  const [search] = await pool.execute('SELECT * FROM `role-permission` WHERE role_id=?', [roleId]);
+  return search;
+};
+
+module.exports = { getUser, getEmail, signUp, checkAcount, getRolePermission };
