@@ -2,12 +2,6 @@ $('#btn-signup').on('click', async (e) => {
   console.log('hi');
   e.preventDefault();
   const postData = new FormData(form);
-  console.log(postData);
-  // const postData = {
-  //   email: $('#input-email').val(),
-  //   name: $('#input-name').val(),
-  //   password: $('#input-password').val(),
-  // };
 
   try {
     const response = await axios.post(`/api/1.0/users/signup`, postData);

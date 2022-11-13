@@ -1,4 +1,7 @@
 const productModel = require('../models/products_model');
+const userModel = require('../models/users_model');
+const orderModel = require('../models/orders_model');
+
 const pageSize = 20;
 
 const getProducts = async (req, res) => {
@@ -109,6 +112,14 @@ const postProduct = async (req, res) => {
   if (createResult == false) {
     return res.status(400).json({ error: 'Create product failed!' });
   }
+
+  // 如果當會員已經上傳兩次商品，則讓他成為鑽石會員
+  const ordersList = await orderModel.getOrders(userId);
+  const forSale = ordersList.filter((x) => x['user_id'] === userId);
+  if (forSale.length > 1) {
+    const result = await userModel.upgradeMembershipGrade(userId);
+  }
+
   res.status(200).json(createResult);
 };
 

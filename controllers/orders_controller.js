@@ -1,4 +1,5 @@
 const orderModel = require('../models/orders_model');
+const userModel = require('../models/users_model');
 
 const getOrders = async (req, res) => {
   const userId = req.user.id;
