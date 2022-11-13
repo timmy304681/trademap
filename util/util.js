@@ -6,7 +6,7 @@ const multer = require('multer');
 const { S3 } = require('aws-sdk');
 const uuid = require('uuid').v4;
 const jwt = require('jsonwebtoken');
-const rolePermission = require('../models/users_model');
+const userModel = require('../models/users_model');
 
 // secret code for JWT
 require('dotenv').config();
@@ -59,12 +59,12 @@ const s3UploadFiles = async (files) => {
 const authentication = async (req, res, next) => {
   let accessToken = req.get('authorization');
   if (!accessToken) {
-    return res.status(401).send({ error: 'Unauthorized' });
+    return res.status(401).send({ error: 'Wrong token' });
   }
 
   accessToken = accessToken.replace('Bearer ', '');
   if (accessToken === 'null') {
-    return res.status(401).send({ error: 'Unauthorized' });
+    return res.status(401).send({ error: 'Wrong token' });
   }
 
   try {
@@ -73,18 +73,26 @@ const authentication = async (req, res, next) => {
     next();
   } catch (err) {
     console.log(err);
-    return res.status(401).send({ error: 'Wrong token' });
+    return res.status(401).json({ error: 'Wrong token' });
   }
 };
 
 const reserveAuthorization = async (req, res, next) => {
   try {
-    const user = await jwt.verify(accessToken, JWT_SECRET);
-    req.user = user;
+    const id = req.user.id;
+    const user = await userModel.getUser(id);
+    const roleId = user[0]['role_id'];
+    const rolePermission = await userModel.getRolePermission(roleId);
+    const permissionArr = rolePermission.map((x) => x['permission_id']);
+
+    // permission 4 means "reserve" function of trademap
+    if (!permissionArr.includes(4)) {
+      return res.status(403).send({ error: 'Unauthorized' });
+    }
     next();
   } catch (err) {
     console.log(err);
-    return res.status(401).send({ error: 'Wrong token' });
+    return res.status(403).json({ error: 'Unauthorized' });
   }
 };
 

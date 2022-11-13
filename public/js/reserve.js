@@ -18,11 +18,20 @@ const params = {
     location.href = '/profile';
   }
 
-  // 渲染reserve 卡片
+  // 只有鑽石會員才有此功能，渲染reserve 卡片
   $('#reserve-area').html('');
-  const response = await axios.get(`/api/1.0/reserve`, params);
-  const reserves = response.data;
-
+  try {
+    const response = await axios.get(`/api/1.0/reserve`, params);
+    const reserves = response.data;
+  } catch (err) {
+    console.log(err);
+    await Swal.fire({
+      icon: 'warning',
+      title: '會員權限不足',
+      text: `只有鑽石級會員才享有預約功能`,
+      footer: `上架商品達兩次後，可成為鑽石級💎會員`,
+    });
+  }
   // eslint-disable-next-line no-restricted-syntax
   for (reserve of reserves) {
     const tag = reserve.tag;
@@ -113,7 +122,6 @@ $('#btn-submit').on('click', async (e) => {
     Swal.fire({
       icon: 'error',
       title: '商品預約失敗',
-      text: err,
     });
   }
 });

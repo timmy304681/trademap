@@ -58,7 +58,9 @@
 
       <div class="navbar-nav ms-auto me-5 mb-lg-0">
         <div class="me-2" id="image-insert"></div>
-        <div class="me-5" id="name-insert" style="color: wheat"></div>
+        <div class="nav-link" id="name-insert" style="color: wheat"></div>
+        <div class="me-5 nav-link" id="role-insert" style="color: wheat"></div>
+
         <a id="signOut-insert" class="nav-link text-light" href="#" onclick="signOut()"></a>
 
         <a class="nav-link text-light" href="/profile">Profile</a>
@@ -81,11 +83,20 @@
       };
       const response = await axios.get(`/api/1.0/users`, params);
       const userProfile = response.data;
+      console.log(userProfile);
+      let role;
+      if (userProfile['role_id'] === 2) {
+        role = '鑽石級💎';
+      } else {
+        role = '黃金級';
+      }
 
       $('#image-insert').html(
         `<img src= ${userProfile.photo} class="rounded-circle mr-1" width="40" height="40"/>`
       );
       $('#name-insert').html(`${userProfile.name}`);
+      $('#role-insert').html(`${role}`);
+
       $('#signOut-insert').html(`Sign Out`);
     } catch (err) {
       console.log(err);
