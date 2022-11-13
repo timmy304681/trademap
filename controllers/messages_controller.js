@@ -23,6 +23,7 @@ const getChatrooms = async (req, res) => {
 
 const createChatroom = async (req, res) => {
   const userId = Number(req.user.id);
+  console.log(req.body);
   const { sellerId, productId } = req.body;
 
   if (userId == sellerId) {

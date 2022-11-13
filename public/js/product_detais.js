@@ -52,8 +52,16 @@
 // contact
 $('#btn-contact').on('click', async (e) => {
   e.preventDefault();
-  const sellerId = $('#btn-contact').attr('userId');
+  const sellerId = $('#btn-contact').attr('sellerId');
   const productId = $('#btn-contact').attr('productId');
+  const userId = localStorage.getItem('userId');
+  if (sellerId === userId) {
+    return Swal.fire({
+      icon: 'warning',
+      title: '此商品為您上架商品',
+    });
+  }
+
   try {
     const authentication = localStorage.getItem('Authorization');
 
