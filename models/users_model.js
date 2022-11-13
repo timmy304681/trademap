@@ -43,4 +43,16 @@ const getRolePermission = async (roleId) => {
   return search;
 };
 
-module.exports = { getUser, getEmail, signUp, checkAcount, getRolePermission };
+const upgradeMembershipGrade = async (userId) => {
+  await pool.execute('UPDATE `user` SET role_id=2 WHERE id=?', [userId]);
+  return 'upgrade membership grade';
+};
+
+module.exports = {
+  getUser,
+  getEmail,
+  signUp,
+  checkAcount,
+  getRolePermission,
+  upgradeMembershipGrade,
+};
