@@ -1,7 +1,7 @@
 <!-- <link href="../../public/styles/bootstrap.css" rel="stylesheet" /> -->
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/"> TradeMap</a>
+    <a class="navbar-brand ms-5" href="/"> TradeMap</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -14,10 +14,10 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/">Home </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/product">Product Upload</a>
@@ -48,25 +48,21 @@
             <a class="dropdown-item" href="/test">Test</a>
             <a class="dropdown-item" href="/message_demo">Message_Demo</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item" href="/api/1.0/products/details?id=1"
+              >/api/1.0/products/details?id=1</a
+            >
+            <a class="dropdown-item" href="/product_details">Product_details(default: ?id=1)</a>
           </div>
         </li>
       </ul>
 
-      <!-- <form class="form-inline my-2 my-lg-0">
-        <input
-          class="form-control mr-sm-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form> -->
-      <div id="signOut-insert"></div>
-      <div id="image-insert"></div>
-      <div id="name-insert" style="color: wheat"></div>
+      <div class="navbar-nav ms-auto me-5 mb-lg-0">
+        <div class="me-2" id="image-insert"></div>
+        <div class="me-5" id="name-insert" style="color: wheat"></div>
+        <a id="signOut-insert" class="nav-link text-light" href="#" onclick="signOut()"></a>
 
-      <a class="nav-link text-light" href="/profile">Profile</a>
+        <a class="nav-link text-light" href="/profile">Profile</a>
+      </div>
     </div>
   </nav>
 </header>
@@ -90,7 +86,7 @@
         `<img src= ${userProfile.photo} class="rounded-circle mr-1" width="40" height="40"/>`
       );
       $('#name-insert').html(`${userProfile.name}`);
-      $('#signOut-insert').html(`<a class="nav-link text-light" onclick="signOut()">Sign Out</a>`);
+      $('#signOut-insert').html(`Sign Out`);
     } catch (err) {
       console.log(err);
     }

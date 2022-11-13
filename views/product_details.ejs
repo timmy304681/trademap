@@ -1,0 +1,111 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="../public/src/jquery-3.6.1.js"></script>
+<!-- bootstrap -->
+<link href="../public/styles/bootstrap.css" rel="stylesheet" />
+<script src="../public/js/bootstrap.js"></script>
+<link rel="stylesheet" href="../public/styles/styles.css" />
+<!-- // bootstrap -->
+<link rel="stylesheet" href="../public/styles/product_details.css" />
+
+<div id="product-id" productId="<%= id%>" class="container" style="height: 100%">
+  <div class="card">
+    <div class="container-fliud">
+      <div class="wrapper row">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+          <div id="product-images-carousel" class="carousel-indicators">
+            <!-- <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="0"
+              class="active"
+              aria-current="true"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="1"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="2"
+            ></button> -->
+          </div>
+          <div id="product-images" class="carousel-inner">
+            <!-- <div class="carousel-item active">
+              <img src="http://placekitten.com/200/126" class="d-block w-100" />
+            </div>
+            <div class="carousel-item">
+              <img src="http://placekitten.com/200/126" class="d-block w-100" />
+            </div>
+            <div class="carousel-item">
+              <img src="http://placekitten.com/200/126" class="d-block w-100" />
+            </div> -->
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+        <div class="details">
+          <h1 id="product-title" class="product-title mt-3"></h1>
+
+          <h4 class="price">價錢: <span id="product-price"></span></h4>
+          <div>賣家: <span id="user-name"></span></div>
+          <div>
+            <img id="user-photo" src="/" class="rounded-circle mr-1" width="40" height="40" />
+          </div>
+
+          <div>面交地點: <span id="product-place"></span></div>
+          <div>
+            詳細地點:
+            <span id="product-adress"></span>
+          </div>
+          <div>面交時間: <span id="product-time"></span></div>
+          <br />
+          <p id="product-description" class="product-description"></p>
+
+          <!-- <h5 class="sizes">
+            sizes:
+            <span class="size" data-toggle="tooltip" title="small">s</span>
+            <span class="size" data-toggle="tooltip" title="medium">m</span>
+            <span class="size" data-toggle="tooltip" title="large">l</span>
+            <span class="size" data-toggle="tooltip" title="xtra large">xl</span>
+          </h5>
+          <h5 class="colors">
+            colors:
+            <span
+              class="color orange not-available"
+              data-toggle="tooltip"
+              title="Not In store"
+            ></span>
+            <span class="color green"></span>
+            <span class="color blue"></span>
+          </h5> -->
+          <div class="action">
+            <button id="btn-contact" class="add-to-cart btn btn-default" type="button">
+              連絡賣家
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../public/js/product_detais.js"></script>

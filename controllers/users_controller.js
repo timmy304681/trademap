@@ -14,7 +14,9 @@ const getUser = async (req, res) => {
     return res.status(400).json({ error: 'NO user id ' });
   }
   const [user] = await userModel.getUser(id);
-
+  if (user === undefined) {
+    return res.status(400).json({ error: 'NO user id ' });
+  }
   res.status(200).json(user);
 };
 
@@ -49,10 +51,10 @@ const signUp = async (req, res) => {
   // hash password(default hashLength is 32, and the char number is 96)
   const passwordHash = await argon2.hash(password);
 
-  // check if email already in db
-  const search = await userModel.getEmail(email);
-  if (search.length > 0) {
-    return res.status(400).json({ message: 'Email Already Exists' });
+  // check if email or name already in db
+  const search = await userModel.checkAcount(email, name);
+  if (search.error) {
+    return res.status(400).json(search);
   }
 
   // create user profile

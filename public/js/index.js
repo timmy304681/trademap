@@ -12,7 +12,85 @@ if ('geolocation' in navigator) {
 
   console.log('Browser does not support the Geolocation API');
 }
+/// event
+// setup a marker group
+const markers = L.markerClusterGroup();
 
+$('#btn-submit').on('click', async (e) => {
+  // 先清除marker
+  if (marker != undefined) {
+    markers.clearLayers();
+  }
+  e.preventDefault();
+
+  const params = {
+    params: {
+      distance: $('#distance')[0].value,
+      keyword: $('#keyword')[0].value,
+      lat: localStorage.getItem('lat'),
+      lng: localStorage.getItem('lng'),
+    },
+  };
+  const response = await axios.get('/api/1.0/products/search', params);
+  const productArr = response.data;
+
+  productArr.forEach((data) => {
+    marker = L.marker([`${data.lat}`, `${data.lng}`])
+      .bindPopup(`${data.title}`) //彈出窗口顯示
+      .on('click', markerClick); //監控clicks
+
+    marker.myData = data; // 將客製化data加進去marker
+    markers.addLayer(marker);
+    map.addLayer(markers);
+  });
+});
+
+// Auto complete and click
+const options = {
+  // 定義 EasyAutocomplete 的選取項目來源
+  url: (phrase) => {
+    return `/api/1.0/products/autoCompleteSearch?keyword=${phrase}`;
+  },
+  getValue: 'title', // 在選取清單中顯示 title
+  list: {
+    onClickEvent: (e) => {
+      // 按下選取項目之後的動作
+    },
+  },
+  requestDelay: 300, // 延遲 300 毫秒再送出請求,api只允許 5  Requests Per Second (RPS)
+  placeholder: '請輸入關鍵字', // 預設顯示的字串
+};
+
+$('#keyword').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
+
+// // contact
+// $('#btn-contact').on('click', async (e) => {
+//   e.preventDefault();
+//   try {
+//     const sellerId = $('#seller_info').attr('userId');
+//     const productId = $('#product_id').attr('productId');
+//     const authentication = await localStorage.getItem('Authorization');
+
+//     const postData = { sellerId, productId };
+//     const params = {
+//       headers: { authorization: authentication },
+//     };
+//     const response = await axios.post(`/api/1.0/chatrooms`, postData, params);
+
+//     location.href = '/message';
+//   } catch (err) {
+//     console.log(err);
+//     await Swal.fire({
+//       icon: 'warning',
+//       title: '請登入會員',
+//       text: `連絡賣家為會員專屬`,
+//       footer: `將跳轉至登入註冊頁面`,
+//     });
+//     location.href = '/profile';
+//   }
+// });
+
+// Functions
 // 調控瀏覽器的地理位置存取資訊cb
 function getPositionSuccess(position) {
   const lat = position.coords.latitude;
@@ -24,6 +102,7 @@ function getPositionSuccess(position) {
   window.localStorage.setItem('lat', lat);
   window.localStorage.setItem('lng', lng);
 }
+
 function getPositionError(err) {
   Swal.fire({
     icon: 'error',
@@ -49,87 +128,50 @@ function createMap(CENTER_LOCATION) {
     }
   ).addTo(map);
 
-  //add center marker
-  const marker = L.marker([CENTER_LOCATION.lat, CENTER_LOCATION.lng]).addTo(map);
+  // add center marker
+  marker = L.marker([CENTER_LOCATION.lat, CENTER_LOCATION.lng]).addTo(map);
   marker._icon.classList.add('huechange');
-  /*
-<style>
-  img.huechange {
-    filter: hue-rotate(-90deg);
-  }
-</style>
-*/
+  /* <style>img.huechange {filter: hue-rotate(-90deg);}</style> */
 }
 
 // 產生marker
-function markerClick(e) {
-  const { title, price, description, place, address, lat, lng, county, district } = e.target.myData;
+async function markerClick(e) {
+  const { id } = e.target.myData;
+  const response = await axios.get(`/api/1.0/products/details?id=${id}`);
+
+  const {
+    user_id,
+    title,
+    price,
+    place,
+    address,
+    lat,
+    lng,
+    description,
+    images,
+    create_time,
+    name,
+    email,
+    photo,
+  } = response.data[0];
   map.flyTo(L.latLng({ lat, lng }), 18);
-  // const imagePath = `${image}`;
-  // <image src=${imagePath} style="height: 200px"></image>
-  $('#product').html(`
-    <div>商品： ${title}</div>
-    <div>商品價錢： ${price}</div>
-    <div>面交地點： ${place}</div> 
-    <div>詳細地址： ${address}</div> 
-    <div>商品描述： ${description}</div> 
-    <button onclick="contact()">與賣家聯繫</button> 
-    `);
-}
 
-/// event
-// setup a marker group
-const markers = L.markerClusterGroup();
-
-$('#btn-submit').on('click', async (e) => {
-  e.preventDefault();
-
-  const params = {
-    params: {
-      distance: $('#distance')[0].value,
-      keyword: $('#keyword')[0].value,
-      lat: window.localStorage.getItem('lat'),
-      lng: window.localStorage.getItem('lng'),
-    },
-  };
-  const response = await axios.get('/api/1.0/products/search', params);
-  console.log(response);
-  const productArr = response.data;
-  console.log(productArr);
-
-  if (marker != undefined) {
-    markers.clearLayers();
-  }
-  productArr.forEach((data) => {
-    marker = L.marker([`${data.lat}`, `${data.lng}`])
-      .bindPopup(`${data.title}`) //彈出窗口顯示
-      .on('click', markerClick); //監控clicks
-    //   .addTo(map)
-    marker.myData = data; // 將客製化data加進去marker
-    markers.addLayer(marker);
-    map.addLayer(markers);
+  // $('#iframe-product').attr('src', `/product_details?id=${id}`);
+  $.get(`/product_details?id=${id}`, function (data) {
+    $('#product-page').html(data);
   });
-});
 
-// Auto complete and click
-const options = {
-  // 定義 EasyAutocomplete 的選取項目來源
-  url: (phrase) => {
-    return `/api/1.0/products/autoCompleteSearch?keyword=${phrase}`;
-  },
-  getValue: 'title', // 在選取清單中顯示 title
-  list: {
-    onClickEvent: (e) => {
-      // 按下選取項目之後的動作
-    },
-  },
-  requestDelay: 200, // 延遲 300 毫秒再送出請求,api只允許 5  Requests Per Second (RPS)
-  placeholder: '請輸入關鍵字', // 預設顯示的字串
-};
-$('#keyword').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
+  // $('#product-images').html(`<img src= ${images[0]} class="mr-1"  height="500px"/>`);
+  // $('#user-info').append(`
+  //   <img src= ${photo} class="rounded-circle mr-1" width="40" height="40"/>
+  //   <div id="seller_info" userId="${user_id}">賣家名稱： ${name}</div>
+  //   `);
+  // $('#product-details').html(`
+  //   <div id="product_id" productId="${id}">商品： ${title}</div>
+  //   <div>商品價錢： ${price}</div>
+  //   <div>面交地點： ${place}</div>
+  //   <div>詳細地址： ${address}</div>
+  //   <div>商品描述： ${description}</div> `);
 
-// contact
-
-function contact() {
-  console.log('test');
+  // $('#btn-contact').attr('type', 'button');
 }

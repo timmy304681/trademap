@@ -19,8 +19,8 @@
 
   // order渲染
   const response = await axios.get('/api/1.0/orders', params);
-  console.log(response);
   const orderArr = response.data;
+  console.log(orderArr);
   // eslint-disable-next-line no-restricted-syntax
   for (order of orderArr) {
     let orderStaus;
@@ -33,14 +33,22 @@
     }
     $('#order-list').append(` 
   <li class="list-group-item" id="${order.id}">
-  <div class="number">訂單編號: ${order.number}</div>
-  <div class="title">${order.title}</div>
-  <div class="place">${order.place}</div>
-  <div class="row">
-    <div class="price col">商品售價：${order.price}</div>
-    <div class="time col-6">${order.time}</div>
-    <div class="status col-2 text-right">${orderStaus}</div>
+  <div productId=${order.product_id} class="number">訂單編號: ${order.number}</div>
+  <div productId=${order.product_id} class="title">${order.title}</div>
+  <div productId=${order.product_id} class="place">${order.place}</div>
+  <div productId=${order.product_id} class="row">
+    <div productId=${order.product_id} class="price col">商品售價：${order.price}</div>
+    <div productId=${order.product_id} class="time col-6">${order.time}</div>
+    <div productId=${order.product_id} class="status col-2 text-right">${orderStaus}</div>
   </div>
 </li>`);
   }
 })();
+
+$('#order-list').click((e) => {
+  const productId = $(e.target).attr('productId');
+
+  $.get(`/product_details?id=${productId}`, (data) => {
+    $('#product-page').html(data);
+  });
+});

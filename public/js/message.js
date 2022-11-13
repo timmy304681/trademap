@@ -133,7 +133,6 @@ $('#btn-message-send').on('click', sendMessage);
 // 接收server訊息
 socket.on('output', (data) => {
   const messages = data[0].messages;
-
   for (let i = 0; i < messages.length; i++) {
     let whoSend;
     if (messages[i].sender === user.name) {

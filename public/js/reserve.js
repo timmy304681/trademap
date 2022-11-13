@@ -1,11 +1,11 @@
+const authentication = localStorage.getItem('Authorization');
+const params = {
+  headers: { 'content-type': 'application/json', authorization: authentication },
+};
 //此頁面只有會員能看見
 (async () => {
   // 驗證會員身分
   try {
-    const authentication = await localStorage.getItem('Authorization');
-    const params = {
-      headers: { 'content-type': 'application/json', authorization: authentication },
-    };
     const response = await axios.get(`/api/1.0/users`, params);
   } catch (err) {
     console.log(err);
