@@ -84,6 +84,10 @@
       const response = await axios.get(`/api/1.0/users`, params);
       const userProfile = response.data;
       console.log(userProfile);
+
+      // 存userId在localStorage
+      localStorage.setItem('userId', userProfile.id);
+
       let role;
       if (userProfile['role_id'] === 2) {
         role = '鑽石級💎';

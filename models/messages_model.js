@@ -40,6 +40,7 @@ const createChatroom = async (userId, chatemateId) => {
   const conn = await pool.getConnection();
 
   try {
+    console.log(userId, chatemateId);
     // check if chatrooms already exist
     const [chatrooms1] = await conn.execute(
       'SELECT * FROM chat_room WHERE user_id=? AND chatmate=?',
@@ -68,6 +69,7 @@ const createChatroom = async (userId, chatemateId) => {
     await conn.query('COMMIT');
     return { message: `chatroom of user ${userId} & ${chatemateId} create succssefuly` };
   } catch (err) {
+    console.log('here err');
     console.log(err);
     await conn.query('ROLLBACK');
 
