@@ -38,6 +38,9 @@ app.use('/api/' + API_VERSION, [
   require('./routes/reserve_route'),
 ]);
 
+// line notify api
+app.use('/login/line_notify', require('./routes/line_route'));
+
 // Page not found
 app.use((req, res, next) => {
   res.status(404).redirect('/404');

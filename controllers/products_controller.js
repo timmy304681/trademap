@@ -1,6 +1,8 @@
 const productModel = require('../models/products_model');
 const userModel = require('../models/users_model');
 const orderModel = require('../models/orders_model');
+const reserveModel = require('../models/reserve_model');
+const axios = require('axios');
 
 const pageSize = 20;
 
@@ -58,9 +60,12 @@ const getProducts = async (req, res) => {
 };
 
 const postProduct = async (req, res) => {
+  // console.log(req.body);
   const userId = req.user.id;
   const { title, price, description, time, tags } = req.body;
-  console.log(req.body);
+  const tagsNotNull = tags.filter((el) => el); //去除array null
+
+  // check if exist
   if (
     title === undefined ||
     title === '' ||
@@ -72,6 +77,10 @@ const postProduct = async (req, res) => {
     time === ''
   ) {
     return res.status(400).json({ error: 'title, price, description or time must not be null !' });
+  }
+  // check price is number
+  if (isNaN(price)) {
+    return res.status(400).json({ error: ' price must  be number !' });
   }
 
   const placeDetail = JSON.parse(req.body['place-result']);
@@ -108,7 +117,7 @@ const postProduct = async (req, res) => {
   const images = req.files.map((x) => x.path);
 
   // create product for sell
-  const createResult = await productModel.createProduct(productData, number, images, tags);
+  const createResult = await productModel.createProduct(productData, number, images, tagsNotNull);
   if (createResult == false) {
     return res.status(400).json({ error: 'Create product failed!' });
   }
@@ -118,6 +127,32 @@ const postProduct = async (req, res) => {
   const forSale = ordersList.filter((x) => x['user_id'] === userId);
   if (forSale.length > 1) {
     const result = await userModel.upgradeMembershipGrade(userId);
+  }
+
+  // 利用上傳的tag去搜尋商品預約
+  const users = await reserveModel.searchReserve(tagsNotNull);
+  console.log('users', !users.err);
+
+  if (!users.err) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (user of users) {
+      if (user['line_token'] == null) {
+        continue;
+      }
+
+      const postData = {
+        message: `您預約的商品：${user.tag}已到貨，請登入網頁確認`,
+        imageThumbnail: 'https://360h.tk/images/98439d38-d38c-4f7c-b455-55606fecc974.jpg',
+        imageFullsize: 'https://360h.tk/images/98439d38-d38c-4f7c-b455-55606fecc974.jpg',
+      };
+      const params = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${user['line_token']}`,
+        },
+      };
+      await axios.post('https://notify-api.line.me/api/notify', postData, params);
+    }
   }
 
   res.status(200).json(createResult);

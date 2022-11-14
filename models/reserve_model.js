@@ -28,4 +28,18 @@ const getReserve = async (userId) => {
   }
 };
 
-module.exports = { createReserve, getReserve };
+const searchReserve = async (tags) => {
+  try {
+    const [users] = await pool.query(
+      'SELECT user_id,tag,name,line_token  FROM reserve JOIN user ON reserve.user_id=user.id WHERE tag IN (?)',
+      [tags]
+    );
+
+    return users;
+  } catch (err) {
+    console.log(err);
+    return { error: 'get reserve tags failed' };
+  }
+};
+
+module.exports = { createReserve, getReserve, searchReserve };
