@@ -26,7 +26,7 @@ const params = {
     const reserves = response.data;
     // eslint-disable-next-line no-restricted-syntax
     for (reserve of reserves) {
-      const { tag } = reserve;
+      const { id, tag } = reserve;
       $('#reserve-area').append(
         `<div class="col-3 mt-2">
   <div class="card radius-10 border-start border-0 border-3 border-info">
@@ -35,10 +35,10 @@ const params = {
         <div>
           <p class="mb-0 text-secondary">Product Tag</p>
           <h4 class="my-1 text-info">${tag}</h4>
-          <button class="mb-0 font-13">取消</button>
+          <button tagId=${id} class="reserve-cancel-btn mb-0 font-13 ">取消</button>
         </div>
         <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto">
-          <i class="fa fa-shopping-cart">123</i>
+          <i class="fa fa-shopping-cart"></i>
         </div>
       </div>
     </div>
@@ -68,6 +68,12 @@ const params = {
     });
 
     console.log('add line token to db');
+
+    await Swal.fire({
+      icon: 'success',
+      title: '建立line通知成功',
+      text: `當有您預約的商品上架時，會以line通知您`,
+    });
   } catch (err) {
     console.log(err);
   }
@@ -139,4 +145,11 @@ $('#btn-submit').on('click', async (e) => {
       title: '商品預約失敗',
     });
   }
+});
+
+$(document).on('click', '.reserve-cancel-btn', async (e) => {
+  const tagId = $(e.target).attr('tagId');
+  console.log(tagId);
+  const response = await axios.delete(`/api/1.0/reserve?id=${tagId}`, params);
+  location.reload();
 });

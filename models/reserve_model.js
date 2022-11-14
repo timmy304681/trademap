@@ -42,4 +42,13 @@ const searchReserve = async (tags) => {
   }
 };
 
-module.exports = { createReserve, getReserve, searchReserve };
+const deleteReserve = async (tagId) => {
+  try {
+    const [users] = await pool.query('DELETE FROM reserve WHERE id=?;', [tagId]);
+  } catch (err) {
+    console.log(err);
+    return { error: 'delete reserve tags failed' };
+  }
+};
+
+module.exports = { createReserve, getReserve, searchReserve, deleteReserve };

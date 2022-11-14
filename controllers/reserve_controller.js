@@ -28,6 +28,13 @@ const getReserve = async (req, res) => {
   res.status(200).json(result);
 };
 
+const deleteReserve = async (req, res) => {
+  const tagId = req.query.id;
+
+  const result = await reserveModel.deleteReserve(tagId);
+  res.status(200).json(result);
+};
+
 const getLineCode = async (req, res) => {
   const state = 'state';
   res.redirect(
@@ -46,4 +53,4 @@ const getLineToken = async (req, res) => {
   res.redirect(`/reserve?lineToken=${lineToken}`);
 };
 
-module.exports = { createReserve, getReserve, getLineCode, getLineToken };
+module.exports = { createReserve, getReserve, getLineCode, getLineToken, deleteReserve };

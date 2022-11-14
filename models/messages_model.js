@@ -27,7 +27,10 @@ const saveMessages = async (user1, user2, sender, message, timeStamp) => {
 const getChatrooms = async (userId) => {
   try {
     const [chatrooms] = await pool.execute(
-      'SELECT user_id,chatmate,name AS chatmateName,photo as chatmatePhoto FROM chat_room JOIN user ON chat_room.chatmate=user.id WHERE chat_room.user_id=?',
+      `SELECT chat_room.user_id,chatmate,name AS chatmateName,photo as chatmatePhoto,product_id,title FROM chat_room 
+        JOIN user ON chat_room.chatmate=user.id
+        JOIN product ON chat_room.product_id=product.id
+        WHERE chat_room.user_id=?`,
       [userId]
     );
     return chatrooms;
