@@ -60,11 +60,14 @@ const getProducts = async (req, res) => {
 };
 
 const postProduct = async (req, res) => {
-  // console.log(req.body);
+  console.log(req.body);
   const userId = req.user.id;
   const { title, price, description, time, tags } = req.body;
-  const tagsNotNull = tags.filter((el) => el); //去除array null
 
+  let tagsNotNull;
+  if (tags.length > 0) {
+    tagsNotNull = tags.filter((el) => el); //去除array null
+  }
   // check if exist
   if (
     title === undefined ||

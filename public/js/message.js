@@ -135,8 +135,7 @@ function renderChatrooms(chatrooms) {
     const chatmateId = chatmate.chatmate;
     const chatmateName = chatmate.chatmateName;
     const chatmatePhoto = chatmate.chatmatePhoto;
-    const productTitle = chatmate.title;
-    const productId = chatmate['product_id'];
+
     $('#chatrooms').append(
       `<a chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="list-group-item list-group-item-action border-0">
         <div chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="d-flex align-items-start">
@@ -150,11 +149,16 @@ function renderChatrooms(chatrooms) {
 
 function renderSelect(chatrooms) {
   // eslint-disable-next-line no-restricted-syntax
-  for (chatmate of chatrooms) {
-    const productTitle = chatmate.title;
-    const productId = chatmate['product_id'];
+  const hashTable = {};
+  chatrooms.map((x) => {
+    hashTable[`${x['product_id']}`] = x.title;
+  });
+
+  Object.keys(hashTable).forEach((key) => {
+    const productTitle = hashTable[key];
+    const productId = key;
     $('#product-select').append(`
     <option value=${productId}>${productTitle}</option>
     `);
-  }
+  });
 }

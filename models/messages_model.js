@@ -39,7 +39,7 @@ const getChatrooms = async (userId) => {
   }
 };
 
-const createChatroom = async (userId, chatemateId) => {
+const createChatroom = async (userId, chatemateId, productId) => {
   const conn = await pool.getConnection();
 
   try {
@@ -55,19 +55,31 @@ const createChatroom = async (userId, chatemateId) => {
     );
 
     if (chatrooms1.length != 0 || chatrooms2.length != 0) {
+      await conn.execute('UPDATE chat_room SET product_id=? WHERE user_id=? AND chatmate=?', [
+        productId,
+        userId,
+        chatemateId,
+      ]);
+      await conn.execute('UPDATE chat_room SET product_id=? WHERE user_id=? AND chatmate=?', [
+        productId,
+        chatemateId,
+        userId,
+      ]);
       return { message: `chatroom already exist` };
     }
 
     // insert
     await conn.query('START TRANSACTION');
 
-    await conn.execute(`INSERT INTO chat_room (user_id, chatmate) VALUES (?,?)`, [
+    await conn.execute(`INSERT INTO chat_room (user_id, chatmate,product_id) VALUES (?,?,?)`, [
       userId,
       chatemateId,
+      productId,
     ]);
-    await conn.execute(`INSERT INTO chat_room (user_id, chatmate) VALUES (?,?)`, [
+    await conn.execute(`INSERT INTO chat_room (user_id, chatmate,product_id) VALUES (?,?,?)`, [
       chatemateId,
       userId,
+      productId,
     ]);
     await conn.query('COMMIT');
     return { message: `chatroom of user ${userId} & ${chatemateId} create succssefuly` };

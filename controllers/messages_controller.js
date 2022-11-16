@@ -31,7 +31,7 @@ const createChatroom = async (req, res) => {
   }
 
   // create chatroom
-  const chatrooms = await messagesModel.createChatroom(userId, sellerId);
+  const chatrooms = await messagesModel.createChatroom(userId, sellerId, productId);
   // 因為買方聯繫了，所以商品狀態要改成洽談中
   await orderModel.changeStatusToContact(userId, productId);
 

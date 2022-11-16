@@ -105,7 +105,7 @@ module.exports = {
       },
       photo: {
         allowNull: false,
-        type: Sequelize.STRING(60),
+        type: Sequelize.STRING(255),
       },
     });
 
