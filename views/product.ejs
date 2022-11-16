@@ -3,62 +3,128 @@
 <!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
 
 <div class="container">
-  <div class="align-items-center">
-    <form name="form" id="form" enctype="multipart/form-data">
-      <div>
-        <label>商品名稱： <input name="title" id="title" type="text" /></label>
-      </div>
-      <div>
-        <label
-          >商品關鍵字：
-          <input name="tags" type="text" />
-          <input name="tags" type="text" />
-          <input name="tags" type="text"
-        /></label>
-      </div>
-
-      <div>
-        <label>商品價錢： <input name="price" id="price" type="text" /></label>
-      </div>
-      <div>
-        <label
-          >商品描述：
-          <textarea
-            name="description"
-            id="description"
-            style="resize: none; width: 400px; height: 100px"
-          ></textarea>
-        </label>
-      </div>
-      <div>
-        <label>交易時間：<input name="time" id="time" type="datetime-local" /></label>
-      </div>
-      <div>
-        <label
-          >地點：
-          <div id="place-select"></div
-        ></label>
-        <div class="position-relative" style="z-index: 10000">
-          <input name="place" id="place" />
-          <input name="place-result" id="place-result" type="hidden" />
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center bg-light mb-3">
+        <div class="col-md-6 text-center mb-5">
+          <h2 class="heading-section">商品上架</h2>
         </div>
-        <div id="map" style="width: 100%; height: 400px"></div>
       </div>
-      <div>
-        <label
-          >商品照片：<input name="images" id="images" type="file" multiple accept="image/*"
-        /></label>
-      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-12">
+          <div class="wrapper">
+            <div class="row no-gutters mb-5">
+              <div class="col-md-5 d-flex align-items-stretch">
+                <div id="map" class="w-100 h-100"></div>
+              </div>
+              <div class="col-md-7">
+                <div class="contact-wrap w-100" style="padding: 0rem 3rem">
+                  <form class="contactForm" name="form" id="form" enctype="multipart/form-data">
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+                        <div class="form-group">
+                          <label class="label" for="name">商品名稱</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="title"
+                            id="title"
+                            placeholder="2022 Macbook pro"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-4">
+                        <div class="form-group">
+                          <label class="label" for="email">商品價錢</label>
+                          <input
+                            type="email"
+                            class="form-control"
+                            name="price"
+                            id="price"
+                            placeholder="30000"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-4">
+                        <div class="form-group">
+                          <label class="label" for="subject">商品關鍵字</label>
+                          <input
+                            type="text"
+                            class="form-control col-md-12"
+                            name="tags"
+                            placeholder="Macbook"
+                          />
+                          <input
+                            type="text"
+                            class="form-control col-md-12"
+                            name="tags"
+                            placeholder="Macbook"
+                          />
+                        </div>
+                      </div>
 
-      <div>
-        <button type="submit" id="btn-submit">確定送出商品</button>
+                      <div class="col-md-12 mb-4">
+                        <div class="form-group">
+                          <label class="label" for="#">商品描述</label>
+                          <textarea
+                            class="form-control"
+                            name="description"
+                            id="description"
+                            placeholder="九成新"
+                            style="resize: none; height: 100px"
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-4">
+                        <div class="form-group">
+                          <label class="label" for="#">交易時間</label>
+                          <input name="time" id="time" type="datetime-local" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-4">
+                        <div class="form-group">
+                          <label class="label" for="#">地點</label>
+                          <input name="place" id="place" class="form-control" />
+                          <input name="place-result" id="place-result" type="hidden" />
+                          <div id="place-select"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-4">
+                        <div class="form-group">
+                          <label class="label" for="#">地點</label>
+                          <input
+                            name="images"
+                            class="form-control"
+                            id="images"
+                            type="file"
+                            multiple
+                            accept="image/*"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <button type="submit" id="btn-submit" class="btn btn-primary">
+                            確定送出商品
+                          </button>
+                          <div class="submitting"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </form>
-  </div>
+    </div>
+  </section>
 </div>
 <script
   id="map-script"
   type="module"
   src="../public/js/product.js"
+  MAPTILER_API_KEY="<%= MAPTILER_API_KEY%>"
   HERE_API_KEY="<%= HERE_API_KEY%>"
 ></script>

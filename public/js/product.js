@@ -1,7 +1,12 @@
 const CENTER_LOCATION = { lat: 25.038664974857266, lng: 121.53243547090415 };
-const ZOOM_LEVEL = 13;
+const ZOOM_LEVEL = 14;
+const MAX_ZOOM_LEVEL = 18;
+const MIN_ZOOM_LEVEL = 12;
 const LIMIT = 5;
 const HERE_API_KEY = $('#map-script').attr('HERE_API_KEY');
+const MAPTILER_API_KEY = $('#map-script').attr('MAPTILER_API_KEY');
+const MAP_TILER_TYPE = 'maptiler'; // maptiler or here
+let map, marker;
 
 //此頁面只有會員能看見
 (async () => {
@@ -24,32 +29,10 @@ const HERE_API_KEY = $('#map-script').attr('HERE_API_KEY');
   }
 })();
 
-// Leaflet
-// 定義一個地圖物件
-const map = L.map('map', {
-  center: [`${CENTER_LOCATION.lat}`, `${CENTER_LOCATION.lng}`],
-  zoom: `${ZOOM_LEVEL}`,
-  zoomControl: false,
-});
-
-// 地圖的左下角加上比例尺
-L.control
-  .scale({
-    position: 'bottomleft',
-  })
-  .addTo(map);
-
-// 設定圖資來源，來源為here
-L.tileLayer(
-  `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
-  {
-    // attribution: '© 2020 HERE',
-    subdomains: [1, 2, 3, 4],
-  }
-).addTo(map);
+// Leaflet create map
+createMap();
 
 // Auto complete and click
-let marker;
 const options = {
   // 定義 EasyAutocomplete 的選取項目來源
   url: (phrase) => {
@@ -111,12 +94,9 @@ const title = $('');
 
 $('#btn-submit').on('click', async (e) => {
   e.preventDefault();
-  //   const postData = { title: $('#title').value ,};
-  //   const postData = $('form').serializeArray();
-  //   postData.push(productLocation);
   const Authorization = localStorage.getItem('Authorization');
   const postData = new FormData(form);
-  console.log(postData);
+
   const params = {
     headers: {
       authorization: Authorization,
@@ -138,7 +118,6 @@ $('#btn-submit').on('click', async (e) => {
     Swal.fire({
       icon: 'error',
       title: '商品上架失敗',
-      text: err,
     });
   }
 });
@@ -150,3 +129,42 @@ $('#images').on('change', (e) => {
     e.preventDefault();
   }
 });
+
+// 定義一個地圖物件
+function createMap() {
+  map = L.map('map', {
+    center: [`${CENTER_LOCATION.lat}`, `${CENTER_LOCATION.lng}`],
+    zoom: `${ZOOM_LEVEL}`,
+    maxZoom: `${MAX_ZOOM_LEVEL}`,
+    minZoom: `${MIN_ZOOM_LEVEL}`,
+  });
+
+  // add Map Tile (here or maptiler)
+  addMapTile(map, MAP_TILER_TYPE);
+
+  // add center marker
+  marker = L.marker([CENTER_LOCATION.lat, CENTER_LOCATION.lng]).addTo(map);
+  marker._icon.classList.add('huechange');
+  /* <style>img.huechange {filter: hue-rotate(-90deg);}</style> */
+}
+
+// choose map tile
+function addMapTile(map, mapType) {
+  if (mapType === 'here') {
+    L.tileLayer(
+      `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day.transit/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
+      {
+        // attribution: '© 2020 HERE',
+        subdomains: [1, 2, 3, 4],
+      }
+    ).addTo(map);
+  } else if (mapType === 'maptiler') {
+    L.maplibreGL({
+      attribution:
+        '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e',
+      style: `https://api.maptiler.com/maps/e095a72d-8a10-4727-9b40-d8230fc0f96b/style.json?key=${MAPTILER_API_KEY}`,
+    }).addTo(map);
+  } else {
+    console.log('map type error, only allow here & maptiler');
+  }
+}

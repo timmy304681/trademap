@@ -1,6 +1,12 @@
-const ZOOM_LEVEL = 13;
+const ZOOM_LEVEL = 14;
+const MAX_ZOOM_LEVEL = 18;
+const MIN_ZOOM_LEVEL = 12;
 const LIMIT = 5;
 const HERE_API_KEY = $('#map-script').attr('HERE_API_KEY');
+const MAPTILER_API_KEY = $('#map-script').attr('MAPTILER_API_KEY');
+const MAP_TILER_TYPE = 'maptiler'; // maptiler or here
+const markers = L.markerClusterGroup(); // setup a marker group
+
 let map, marker;
 
 // ask user for the position
@@ -9,13 +15,10 @@ if ('geolocation' in navigator) {
   navigator.geolocation.getCurrentPosition(getPositionSuccess, getPositionError);
 } else {
   // Use a third-party geolocation service
-
   console.log('Browser does not support the Geolocation API');
 }
-/// event
-// setup a marker group
-const markers = L.markerClusterGroup();
 
+/// event
 $('#btn-submit').on('click', async (e) => {
   // 先清除marker
   if (marker != undefined) {
@@ -60,35 +63,7 @@ const options = {
   requestDelay: 300, // 延遲 300 毫秒再送出請求,api只允許 5  Requests Per Second (RPS)
   placeholder: '請輸入關鍵字', // 預設顯示的字串
 };
-
 $('#keyword').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
-
-// // contact
-// $('#btn-contact').on('click', async (e) => {
-//   e.preventDefault();
-//   try {
-//     const sellerId = $('#seller_info').attr('userId');
-//     const productId = $('#product_id').attr('productId');
-//     const authentication = await localStorage.getItem('Authorization');
-
-//     const postData = { sellerId, productId };
-//     const params = {
-//       headers: { authorization: authentication },
-//     };
-//     const response = await axios.post(`/api/1.0/chatrooms`, postData, params);
-
-//     location.href = '/message';
-//   } catch (err) {
-//     console.log(err);
-//     await Swal.fire({
-//       icon: 'warning',
-//       title: '請登入會員',
-//       text: `連絡賣家為會員專屬`,
-//       footer: `將跳轉至登入註冊頁面`,
-//     });
-//     location.href = '/profile';
-//   }
-// });
 
 // Functions
 // 調控瀏覽器的地理位置存取資訊cb
@@ -118,15 +93,12 @@ function createMap(CENTER_LOCATION) {
   map = L.map('map', {
     center: [`${CENTER_LOCATION.lat}`, `${CENTER_LOCATION.lng}`],
     zoom: `${ZOOM_LEVEL}`,
+    maxZoom: `${MAX_ZOOM_LEVEL}`,
+    minZoom: `${MIN_ZOOM_LEVEL}`,
   });
 
-  L.tileLayer(
-    `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
-    {
-      // attribution: '© 2020 HERE',
-      subdomains: [1, 2, 3, 4],
-    }
-  ).addTo(map);
+  // add Map Tile (here or maptiler)
+  addMapTile(map, CENTER_LOCATION, MAP_TILER_TYPE);
 
   // add center marker
   marker = L.marker([CENTER_LOCATION.lat, CENTER_LOCATION.lng]).addTo(map);
@@ -134,8 +106,30 @@ function createMap(CENTER_LOCATION) {
   /* <style>img.huechange {filter: hue-rotate(-90deg);}</style> */
 }
 
+// choose map tile
+function addMapTile(map, CENTER_LOCATION, mapType) {
+  if (mapType === 'here') {
+    L.tileLayer(
+      `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day.transit/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
+      {
+        // attribution: '© 2020 HERE',
+        subdomains: [1, 2, 3, 4],
+      }
+    ).addTo(map);
+  } else if (mapType === 'maptiler') {
+    L.maplibreGL({
+      attribution:
+        '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e',
+      style: `https://api.maptiler.com/maps/e095a72d-8a10-4727-9b40-d8230fc0f96b/style.json?key=${MAPTILER_API_KEY}`,
+    }).addTo(map);
+  } else {
+    console.log('map type error, only allow here & maptiler');
+  }
+}
+
 // 產生marker
 async function markerClick(e) {
+  console.log(e.target.myData);
   const { id } = e.target.myData;
   const response = await axios.get(`/api/1.0/products/details?id=${id}`);
 
@@ -156,22 +150,12 @@ async function markerClick(e) {
   } = response.data[0];
   map.flyTo(L.latLng({ lat, lng }), 18);
 
-  // $('#iframe-product').attr('src', `/product_details?id=${id}`);
-  $.get(`/product_details?id=${id}`, function (data) {
-    $('#product-page').html(data);
+  $.get(`/product_details?id=${id}`, (data) => {
+    console.log(data);
+    $('#product-modal-body').html(data);
+    const myModal = new bootstrap.Modal(document.getElementById('product-modal'), {
+      keyboard: false,
+    });
+    myModal.show();
   });
-
-  // $('#product-images').html(`<img src= ${images[0]} class="mr-1"  height="500px"/>`);
-  // $('#user-info').append(`
-  //   <img src= ${photo} class="rounded-circle mr-1" width="40" height="40"/>
-  //   <div id="seller_info" userId="${user_id}">賣家名稱： ${name}</div>
-  //   `);
-  // $('#product-details').html(`
-  //   <div id="product_id" productId="${id}">商品： ${title}</div>
-  //   <div>商品價錢： ${price}</div>
-  //   <div>面交地點： ${place}</div>
-  //   <div>詳細地址： ${address}</div>
-  //   <div>商品描述： ${description}</div> `);
-
-  // $('#btn-contact').attr('type', 'button');
 }

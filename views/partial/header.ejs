@@ -1,69 +1,77 @@
 <!-- <link href="../../public/styles/bootstrap.css" rel="stylesheet" /> -->
 <header>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand ms-5" href="/"> TradeMap</a>
+  <nav class="navbar navbar-expand-xxl navbar-light bg-white text-black-50 p-md-0">
+    <div class="container-md">
+      <a class="navbar-brand ms-5" href="/">
+        <img src="../../public/src/trademap.png" width="100%" height="60px"
+      /></a>
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="/">Home </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/product">Product Upload</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/order">Order</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/message">Message</a>
-        </li>
+      <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link h5" href="/">首頁</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link h5" href="/product">商品上傳</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link h5" href="/order">訂單管理</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link h5" href="/message">訊息</a>
+          </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/reserve">Reserve</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link h5" href="/reserve">商品預約</a>
+          </li>
 
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            id="navbarDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Test
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/test">Test</a>
-            <a class="dropdown-item" href="/message_demo">Message_Demo</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/api/1.0/products/details?id=1"
-              >/api/1.0/products/details?id=1</a
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
-            <a class="dropdown-item" href="/product_details">Product_details(default: ?id=1)</a>
-          </div>
-        </li>
-      </ul>
+              Test
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/test">Test</a>
+              <a class="dropdown-item" href="/message_demo">Message_Demo</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/api/1.0/products/details?id=1"
+                >/api/1.0/products/details?id=1</a
+              >
+              <a class="dropdown-item" href="/product_details">Product_details(default: ?id=1)</a>
+            </div>
+          </li>
+        </ul>
 
-      <div class="navbar-nav ms-auto me-5 mb-lg-0">
-        <div class="me-2" id="image-insert"></div>
-        <div class="nav-link" id="name-insert" style="color: wheat"></div>
-        <div class="me-5 nav-link" id="role-insert" style="color: wheat"></div>
+        <div class="navbar-nav ms-auto me-5 mb-lg-0">
+          <div class="me-2" id="image-insert"></div>
+          <div class="nav-link fw-bold h4" id="name-insert" style="color: black"></div>
+          <div class="me-5 nav-link h4" id="role-insert" style="color: black"></div>
 
-        <a id="signOut-insert" class="nav-link text-light" href="#" onclick="signOut()"></a>
+          <a class="nav-link text-light h5" href="#" onclick="signOut()" style="color: black"
+            ><div id="signOut-insert" style="color: black"></div
+          ></a>
 
-        <a class="nav-link text-light" href="/profile">Profile</a>
+          <a class="nav-link text-light h5" href="/profile"
+            ><div style="color: black">會員資訊</div></a
+          >
+        </div>
       </div>
     </div>
   </nav>
@@ -101,7 +109,7 @@
       $('#name-insert').html(`${userProfile.name}`);
       $('#role-insert').html(`${role}`);
 
-      $('#signOut-insert').html(`Sign Out`);
+      $('#signOut-insert').html(`登出`);
     } catch (err) {
       console.log(err);
     }
