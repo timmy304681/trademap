@@ -48,6 +48,11 @@ const upgradeMembershipGrade = async (userId) => {
   return 'upgrade membership grade';
 };
 
+const saveLineToken = async (userId, lineToken) => {
+  await pool.execute('UPDATE `user` SET `line_token`=? WHERE id=?', [lineToken, userId]);
+  return 'add line token';
+};
+
 module.exports = {
   getUser,
   getEmail,
@@ -55,4 +60,5 @@ module.exports = {
   checkAcount,
   getRolePermission,
   upgradeMembershipGrade,
+  saveLineToken,
 };

@@ -1,8 +1,10 @@
-//此頁面只有會員能看見
+const authentication = localStorage.getItem('Authorization');
+let chatrooms, user, chatmateName, chatmateId, chatmatePhoto;
+const socket = io.connect();
+
 (async () => {
-  // 驗證會員身分
+  // 此頁面只有會員能看見，驗證會員身分
   try {
-    const authentication = await localStorage.getItem('Authorization');
     const params = {
       headers: { 'content-type': 'application/json', authorization: authentication },
     };
@@ -17,49 +19,16 @@
     });
     location.href = '/profile';
   }
-})();
 
-// 一進入此頁面就socket連線
-const socket = io.connect();
-console.log(socket);
-let chatrooms, user, chatmateName, chatmateId, chatmatePhoto;
-
-// 一進入此頁面就針對token拿資料
-(async () => {
-  $('#chatrooms').html('');
-
-  const Authorization = localStorage.getItem('Authorization');
   const params = {
-    headers: { authorization: Authorization },
+    headers: { authorization: authentication },
   };
   const response = await axios.get('/api/1.0/chatrooms', params);
   chatrooms = response.data.chatrooms;
   user = response.data.user;
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (chatmate of chatrooms) {
-    const chatmateId = chatmate.chatmate;
-    const chatmateName = chatmate.chatmateName;
-    const chatmatePhoto = chatmate.chatmatePhoto;
-
-    $('#chatrooms').append(
-      `<a  chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="list-group-item list-group-item-action border-0">
-     <div chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="d-flex align-items-start">
-    <img  chatmateId="${chatmateId}" chatmateName="${chatmateName}"
-      src="${chatmatePhoto}"
-      class="rounded-circle mr-1"
-      alt="${chatmateName}"
-      width="40"
-      height="40"
-    />
-    <div  chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="flex-grow-1 ml-3">
-    ${chatmateName}
-      <div  chatmateId="${chatmateId}"  chatmateName="${chatmateName}" class="small"><span class="fas fa-circle chat-online"></span> Online</div>
-    </div>
-  </div>
-</a>`
-    );
-  }
+  renderChatrooms(chatrooms);
+  renderSelect(chatrooms);
 })();
 
 // 點擊聊天室彈出對話視窗
@@ -67,15 +36,6 @@ $('#chatrooms').on('click', async (e) => {
   e.preventDefault();
   // 點入新的聊天室，清除資料
   $('#chat-messages').html('');
-  // const Authorization = localStorage.getItem('Authorization');
-  // const params = {
-  //   headers: { authorization: Authorization },
-  // };
-  // const response = await axios.get('/api/1.0/users', params);
-  // const user = response.data[0];
-  // //將chatmate資料存在localstorage
-  // localStorage.setItem('chatamateId', user.id);
-  // localStorage.setItem('chatamateName', user.name);
 
   chatmateId = e.target.getAttribute('chatmateId');
   const chatmateInfo = chatrooms.filter((x) => x.chatmate == chatmateId);
@@ -97,9 +57,6 @@ $('#chatrooms').on('click', async (e) => {
       <strong>${chatmateName}</strong>
     </div>`);
 
-  // check for connect
-  // const USER_ID = localStorage.getItem('USER_ID');
-  // const USER_NAME = localStorage.getItem('USER_NAME');
   console.log('Connected to socket');
   socket.emit('chatRoom', {
     user1: user.name,
@@ -157,3 +114,47 @@ socket.on('output', (data) => {
     $('#chat-messages').append(html);
   }
 });
+
+$('#product-select').on('change', (e) => {
+  $('#chatrooms').html(``);
+  const productSelect = e.target.value;
+  let productTarget;
+  if (productSelect === 'all') {
+    productTarget = chatrooms;
+  } else {
+    productTarget = chatrooms.filter((x) => x['product_id'] == productSelect);
+  }
+  console.log(productTarget);
+  renderChatrooms(productTarget);
+});
+
+// function
+function renderChatrooms(chatrooms) {
+  // eslint-disable-next-line no-restricted-syntax
+  for (chatmate of chatrooms) {
+    const chatmateId = chatmate.chatmate;
+    const chatmateName = chatmate.chatmateName;
+    const chatmatePhoto = chatmate.chatmatePhoto;
+    const productTitle = chatmate.title;
+    const productId = chatmate['product_id'];
+    $('#chatrooms').append(
+      `<a chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="list-group-item list-group-item-action border-0">
+        <div chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="d-flex align-items-start">
+        <img chatmateId="${chatmateId}" chatmateName="${chatmateName}" src="${chatmatePhoto}" class="rounded-circle mr-1" alt="${chatmateName}" width="40" height="40"/>
+        <div chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="flex-grow-1 ml-3">${chatmateName}<div  chatmateId="${chatmateId}"  chatmateName="${chatmateName}" class="small">
+        <span class="fas fa-circle chat-online"></span> Online</div></div></div>
+       </a>`
+    );
+  }
+}
+
+function renderSelect(chatrooms) {
+  // eslint-disable-next-line no-restricted-syntax
+  for (chatmate of chatrooms) {
+    const productTitle = chatmate.title;
+    const productId = chatmate['product_id'];
+    $('#product-select').append(`
+    <option value=${productId}>${productTitle}</option>
+    `);
+  }
+}

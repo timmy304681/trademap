@@ -111,4 +111,13 @@ const signIn = async (req, res) => {
   res.status(200).json(signInResult);
 };
 
-module.exports = { getUser, signUp, signIn };
+const saveLineToken = async (req, res) => {
+  const userId = req.user.id;
+  const { lineToken } = req.body;
+
+  await userModel.saveLineToken(userId, lineToken);
+
+  res.status(200).json('add user token successfully');
+};
+
+module.exports = { getUser, signUp, signIn, saveLineToken };

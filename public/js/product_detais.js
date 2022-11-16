@@ -19,6 +19,7 @@
     email,
     photo,
     status,
+    localTime,
   } = product;
   const userId = product.user_id;
   // product
@@ -26,7 +27,7 @@
   $('#product-price').html(`NT$${price}`);
   $('#product-place').html(place);
   $('#product-adress').html(address);
-  $('#product-time').html(time);
+  $('#product-time').html(localTime);
   $('#product-description').html(description);
 
   // product images
