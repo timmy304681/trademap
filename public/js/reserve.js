@@ -3,6 +3,7 @@ const params = {
   headers: { 'content-type': 'application/json', authorization: authentication },
 };
 
+$('#reserve-page').addClass('tm-main-color');
 //此頁面只有會員能看見
 (async () => {
   // 驗證會員身分

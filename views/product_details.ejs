@@ -1,14 +1,5 @@
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="../public/src/jquery-3.6.1.js"></script>
-<!-- bootstrap -->
-<link href="../public/styles/bootstrap.css" rel="stylesheet" />
-<script src="../public/js/bootstrap.js"></script>
-<link rel="stylesheet" href="../public/styles/styles.css" />
-<!-- // bootstrap -->
-<link rel="stylesheet" href="../public/styles/product_details.css" />
-
 <div id="product-id" productId="<%= id%>" class="container" style="height: 100%">
-  <div class="card">
+  <div class="card m-1">
     <div class="container-fliud">
       <div class="wrapper row">
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -65,7 +56,9 @@
         <div class="details">
           <h1 id="product-title" class="product-title mt-3"></h1>
 
-          <h4 class="price">價錢: <span id="product-price"></span></h4>
+          <h4 class="price">
+            價錢: <span id="product-price" style="color: orange; font-weight: 1000"></span>
+          </h4>
           <div>賣家: <span id="user-name"></span></div>
           <div>
             <img id="user-photo" src="/" class="rounded-circle mr-1" width="40" height="40" />
@@ -98,7 +91,7 @@
             <span class="color blue"></span>
           </h5> -->
           <div class="action">
-            <button id="btn-contact" class="add-to-cart btn btn-default" type="button">
+            <button id="btn-contact" class="add-to-cart btn trademap-btn" type="button">
               連絡賣家
             </button>
           </div>

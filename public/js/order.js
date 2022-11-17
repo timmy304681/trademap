@@ -1,4 +1,5 @@
 let orderArr;
+$('#order-page').addClass('tm-main-color');
 (async () => {
   // 驗證會員身分
   const authentication = await localStorage.getItem('Authorization');
@@ -25,9 +26,12 @@ let orderArr;
 })();
 
 $('#order-list').click((e) => {
-  const productId = $(e.target).attr('productId');
+  const productId = $(e.target).parents('.list-group-item').attr('productId');
+  if (productId === undefined) {
+    return;
+  }
   $.get(`/product_details?id=${productId}`, (data) => {
-    $('#product-page').html(data);
+    $('#product-details-page').html(data);
   });
 });
 
@@ -47,8 +51,9 @@ $('#order-select').on('change', (e) => {
 
 function renderOrders(orderArr) {
   // 將原本渲染的畫面清掉
-  $('#order-list').html('');
-  $('#product-page').html('');
+  // $('#order-list').html('');
+  $('.clone-item').remove();
+  $('#product-details-page').html('');
   // eslint-disable-next-line no-restricted-syntax
   for (order of orderArr) {
     let orderStaus;
@@ -59,16 +64,17 @@ function renderOrders(orderArr) {
     } else {
       orderStaus = '已販售';
     }
-    $('#order-list').append(` 
-<li class="list-group-item" id="${order.id}">
-<div productId=${order.product_id} class="number">訂單編號: ${order.number}</div>
-<div productId=${order.product_id} class="title">${order.title}</div>
-<div productId=${order.product_id} class="place">${order.place}</div>
-<div productId=${order.product_id} class="row">
-  <div productId=${order.product_id} class="price col">商品售價：${order.price}</div>
-  <div productId=${order.product_id} class="time col-6">${order.localTime}</div>
-  <div productId=${order.product_id} class="status col-2 text-right">${orderStaus}</div>
-</div>
-</li>`);
+    const newDom = $('.list-group-item').first().clone();
+    newDom.removeAttr('hidden');
+    newDom.addClass('clone-item');
+    newDom.attr('productId', `${order.product_id}`);
+    newDom.children('.number').html(`訂單編號: ${order.number}`);
+    newDom.children('.title').html(`${order.title}`);
+    newDom.children('.place').html(`${order.place}`);
+    newDom.children('.row').children('.price').html(`商品售價：${order.price}`);
+    newDom.children('.row').children('.time').html(`${order.localTime}`);
+    newDom.children('.row').children('.status').html(`${orderStaus}`);
+    newDom.show();
+    $('#order-list').append(newDom);
   }
 }

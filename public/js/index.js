@@ -4,11 +4,11 @@ const MIN_ZOOM_LEVEL = 12;
 const LIMIT = 5;
 const HERE_API_KEY = $('#map-script').attr('HERE_API_KEY');
 const MAPTILER_API_KEY = $('#map-script').attr('MAPTILER_API_KEY');
-const MAP_TILER_TYPE = 'maptiler'; // maptiler or here
+const MAP_TILER_TYPE = 'maptiler'; // maptiler,here or google
 const markers = L.markerClusterGroup(); // setup a marker group
 
 let map, marker;
-
+$('#index-page').addClass('tm-main-color');
 // ask user for the position
 if ('geolocation' in navigator) {
   // get position from browser
@@ -60,8 +60,10 @@ const options = {
       // 按下選取項目之後的動作
     },
   },
+  adjustWidth: false,
   requestDelay: 300, // 延遲 300 毫秒再送出請求,api只允許 5  Requests Per Second (RPS)
   placeholder: '請輸入關鍵字', // 預設顯示的字串
+  theme: 'round',
 };
 $('#keyword').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
 
@@ -121,6 +123,11 @@ function addMapTile(map, CENTER_LOCATION, mapType) {
       attribution:
         '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e',
       style: `https://api.maptiler.com/maps/e095a72d-8a10-4727-9b40-d8230fc0f96b/style.json?key=${MAPTILER_API_KEY}`,
+    }).addTo(map);
+  } else if (mapType === 'google') {
+    L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+      maxZoom: 20,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
     }).addTo(map);
   } else {
     console.log('map type error, only allow here & maptiler');

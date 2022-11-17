@@ -1,12 +1,12 @@
 <!-- <link href="../../public/styles/bootstrap.css" rel="stylesheet" /> -->
 <header>
-  <nav class="navbar navbar-expand-xxl navbar-light bg-white text-black-50 p-md-0">
-    <div class="container-md">
+  <nav class="navbar navbar-expand-md tm-nav text-black-50 p-0 m-0">
+    <div class="container-xxl">
       <a class="navbar-brand ms-5" href="/">
         <img src="../../public/src/trademap.png" width="100%" height="60px"
       /></a>
 
-      <button
+      <!-- <button
         class="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
@@ -16,61 +16,70 @@
         aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
-      </button>
+      </button> -->
 
-      <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link h5" href="/">首頁</a>
+            <a id="index-page" class="nav-link h5" href="/">首頁</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link h5" href="/product">商品上傳</a>
+            <a id="product-page" class="nav-link h5" href="/product">商品上傳</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link h5" href="/order">訂單管理</a>
+            <a id="order-page" class="nav-link h5" href="/order">訂單管理</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link h5" href="/message">訊息</a>
+            <a id="message-page" class="nav-link h5" href="/message">訊息</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link h5" href="/reserve">商品預約</a>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Test
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/test">Test</a>
-              <a class="dropdown-item" href="/message_demo">Message_Demo</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/api/1.0/products/details?id=1"
-                >/api/1.0/products/details?id=1</a
-              >
-              <a class="dropdown-item" href="/product_details">Product_details(default: ?id=1)</a>
-            </div>
+            <a id="reserve-page" class="nav-link h5" href="/reserve">商品預約</a>
           </li>
         </ul>
 
         <div class="navbar-nav ms-auto me-5 mb-lg-0">
-          <div class="me-2" id="image-insert"></div>
-          <div class="nav-link fw-bold h4" id="name-insert" style="color: black"></div>
-          <div class="me-5 nav-link h4" id="role-insert" style="color: black"></div>
+          <div class="me-2"></div>
+          <div class="nav-link fw-bold h4" style="color: black"></div>
 
-          <a class="nav-link text-light h5" href="#" onclick="signOut()" style="color: black"
-            ><div id="signOut-insert" style="color: black"></div
-          ></a>
-
-          <a class="nav-link text-light h5" href="/profile"
-            ><div style="color: black">會員資訊</div></a
-          >
+          <section id="tm-profile-box" class="nav-item dropdown pe-3" hidden>
+            <a
+              class="nav-link nav-profile d-flex align-items-center pe-0"
+              href="#"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              ><img
+                id="image-insert"
+                class="rounded-circle mr-1"
+                alt="Profile"
+                width="40"
+                height="40" /><span
+                id="name-insert"
+                class="d-none d-md-block dropdown-toggle ps-2"
+              ></span
+            ></a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+              <li class="dropdown-header">
+                <h6>Amy</h6>
+                <span>Amy@</span>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" href="/profile"
+                  ><i class="bi bi-person"></i><span>個人資訊</span></a
+                >
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  id="logout-btn"
+                  style="cursor: pointer"
+                  ><i class="bi bi-box-arrow-right"></i><span onclick="signOut()">登出</span></a
+                >
+              </li>
+            </ul>
+          </section>
         </div>
       </div>
     </div>
@@ -102,14 +111,11 @@
       } else {
         role = '黃金級';
       }
-
-      $('#image-insert').html(
-        `<img src= ${userProfile.photo} class="rounded-circle mr-1" width="40" height="40"/>`
-      );
-      $('#name-insert').html(`${userProfile.name}`);
-      $('#role-insert').html(`${role}`);
-
-      $('#signOut-insert').html(`登出`);
+      $('#tm-profile-box').removeAttr('hidden');
+      $('#image-insert').attr('src', `${userProfile.photo}`);
+      $('#name-insert').html(`${userProfile.name} ${role}`);
+      $('.dropdown-header').children('h6').html(`${userProfile.name}`);
+      $('.dropdown-header').children('span').html(`${userProfile.email}`);
     } catch (err) {
       console.log(err);
     }

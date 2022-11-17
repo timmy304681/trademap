@@ -1,7 +1,7 @@
 const authentication = localStorage.getItem('Authorization');
 let chatrooms, user, chatmateName, chatmateId, chatmatePhoto;
 const socket = io.connect();
-
+$('#message-page').addClass('tm-main-color');
 (async () => {
   // 此頁面只有會員能看見，驗證會員身分
   try {
