@@ -32,15 +32,19 @@
 
   // product images
   for (let i = 0; i < images.length; i++) {
-    $('#product-images-carousel').append(
-      `<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${i}"></button>`
-    );
-    $('#product-images').append(
-      `<div class="carousel-item"><img src="${images[i]}" class="d-block w-auto" style="max-height:500px" /> </div>`
-    );
-    if (i === 0) {
-      $('#product-images-carousel button').addClass('active');
-      $('#product-images div').addClass('active');
+    const btnDom = $('.tm-carousel-btn').first().clone();
+    const imageDom = $('.carousel-item').first().clone();
+
+    if (i > 0) {
+      btnDom.attr('data-bs-slide-to', i);
+      btnDom.removeAttr('aria-current');
+      $('#product-images-carousel').append(btnDom);
+
+      imageDom.removeClass('active');
+      imageDom.children('img').attr('src', images[i]);
+      $('#product-images').append(imageDom);
+    } else {
+      $('.carousel-item').children('img').attr('src', images[i]);
     }
   }
 

@@ -8,6 +8,7 @@ const MAPTILER_API_KEY = $('#map-script').attr('MAPTILER_API_KEY');
 const MAP_TILER_TYPE = 'maptiler'; // maptiler or here
 let map, marker;
 
+$('#product-page').addClass('tm-main-color');
 //此頁面只有會員能看見
 (async () => {
   // 驗證會員身分
@@ -130,6 +131,17 @@ $('#images').on('change', (e) => {
   }
 });
 
+let count = 1;
+$('#btn-add-tags').click(() => {
+  if (count > 4) {
+    return;
+  }
+  const newDom = $('.tm-tags-item').first().clone();
+  $('#tags-insert-body').append(newDom);
+  count++;
+});
+
+// functions
 // 定義一個地圖物件
 function createMap() {
   map = L.map('map', {

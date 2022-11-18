@@ -1,7 +1,7 @@
 const authentication = localStorage.getItem('Authorization');
 let chatrooms, user, chatmateName, chatmateId, chatmatePhoto;
 const socket = io.connect();
-
+$('#message-page').addClass('tm-main-color');
 (async () => {
   // 此頁面只有會員能看見，驗證會員身分
   try {
@@ -35,27 +35,16 @@ const socket = io.connect();
 $('#chatrooms').on('click', async (e) => {
   e.preventDefault();
   // 點入新的聊天室，清除資料
-  $('#chat-messages').html('');
-
-  chatmateId = e.target.getAttribute('chatmateId');
+  $('#chateroom-box').removeAttr('hidden');
+  $('.clone-item').remove();
+  console.log(e.target);
+  chatmateId = $(e.target).parents('a').attr('chatmateId');
   const chatmateInfo = chatrooms.filter((x) => x.chatmate == chatmateId);
   chatmatePhoto = chatmateInfo[0].chatmatePhoto;
   chatmateName = chatmateInfo[0].chatmateName;
   // 改變聊天室對話窗title
-  $('#chatmate-title').html(`
-     <div class="position-relative">
-      <img
-        src="${chatmatePhoto}"
-        class="rounded-circle mr-1"
-        alt="${chatmateName}"
-        width="40"
-        height="40"
-      />
-    </div>
-    <div class="flex-grow-1 pl-3">
-      <div class="text-muted small"><em>Typing...</em></div>
-      <strong>${chatmateName}</strong>
-    </div>`);
+  $('#chateroom-title-img').attr('src', chatmatePhoto);
+  $('#chateroom-title-name').html(chatmateName);
 
   console.log('Connected to socket');
   socket.emit('chatRoom', {
@@ -93,30 +82,29 @@ socket.on('output', (data) => {
   for (let i = 0; i < messages.length; i++) {
     let whoSend;
     if (messages[i].sender === user.name) {
-      whoSend = 'chat-message-right pb-4';
+      whoSend = 'chat-message-right';
     } else {
-      whoSend = 'chat-message-left pb-4';
+      whoSend = 'chat-message-left';
     }
     //處理時間
     const date = new Date(messages[i].timeStamp);
 
-    const html = `
-  <div class=${whoSend}>
-    <div>
-      <div class="text-muted small text-nowrap mt-2">${date.toLocaleString()}</div>
-    </div>
-    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3 mb-2">
-      <div class="font-weight-bold mb-1">${messages[i].sender}</div>
-      ${messages[i].message}
-    </div>
-  </div>`;
-
-    $('#chat-messages').append(html);
+    const newDom = $('.chat-message-clone').first().clone();
+    newDom.removeAttr('hidden');
+    newDom.addClass('clone-item');
+    newDom.addClass(whoSend);
+    newDom.children('.message-time').html(date.toLocaleString());
+    newDom.children('.message-details').children('.message-sender').html(messages[i].sender);
+    newDom.children('.message-details').children('.message-content').html(messages[i].message);
+    $('#chat-messages').append(newDom);
   }
+  // 渲染訊息永遠會讓scroll到最底
+  $('#chat-messages').animate({ scrollTop: $('#chat-messages').prop('scrollHeight') }, 1000);
 });
 
 $('#product-select').on('change', (e) => {
-  $('#chatrooms').html(``);
+  $('.chatroom-clone-item').remove();
+
   const productSelect = e.target.value;
   let productTarget;
   if (productSelect === 'all') {
@@ -133,17 +121,15 @@ function renderChatrooms(chatrooms) {
   // eslint-disable-next-line no-restricted-syntax
   for (chatmate of chatrooms) {
     const chatmateId = chatmate.chatmate;
-    const chatmateName = chatmate.chatmateName;
-    const chatmatePhoto = chatmate.chatmatePhoto;
+    const { chatmateName, chatmatePhoto } = chatmate;
 
-    $('#chatrooms').append(
-      `<a chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="list-group-item list-group-item-action border-0">
-        <div chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="d-flex align-items-start">
-        <img chatmateId="${chatmateId}" chatmateName="${chatmateName}" src="${chatmatePhoto}" class="rounded-circle mr-1" alt="${chatmateName}" width="40" height="40"/>
-        <div chatmateId="${chatmateId}" chatmateName="${chatmateName}" class="flex-grow-1 ml-3">${chatmateName}<div  chatmateId="${chatmateId}"  chatmateName="${chatmateName}" class="small">
-        <span class="fas fa-circle chat-online"></span> Online</div></div></div>
-       </a>`
-    );
+    const newDom = $('.tm-chatroom-item').first().clone();
+    newDom.removeAttr('hidden');
+    newDom.addClass('chatroom-clone-item');
+    newDom.attr('chatmateId', chatmateId).attr('chatmateName', chatmateName);
+    newDom.children('div').children('img').attr('src', chatmatePhoto);
+    newDom.children('div').children('div').html(chatmateName);
+    $('#chatrooms').append(newDom);
   }
 }
 
@@ -157,8 +143,8 @@ function renderSelect(chatrooms) {
   Object.keys(hashTable).forEach((key) => {
     const productTitle = hashTable[key];
     const productId = key;
-    $('#product-select').append(`
-    <option value=${productId}>${productTitle}</option>
-    `);
+    const newDom = $('.option-clone').first().clone();
+    newDom.val(productId).html(productTitle);
+    $('#product-select').append(newDom);
   });
 }
