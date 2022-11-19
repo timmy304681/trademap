@@ -1,12 +1,12 @@
 const pool = require('../util/mysql');
 
-const createReserve = async (userId, lat, lng, distance, tags) => {
+const createReserve = async (userId, lat, lng, place, tags) => {
   try {
     tags.map(async (x) => {
       if (x != '') {
         await pool.execute(
-          'INSERT INTO reserve (user_id, lat, lng, distance, tag) VALUES (?,?,?,?,?)',
-          [userId, lat, lng, distance, x]
+          'INSERT INTO reserve (user_id, lat, lng, place,tag) VALUES (?,?,?,?,?)',
+          [userId, lat, lng, place, x]
         );
       }
     });
@@ -14,6 +14,8 @@ const createReserve = async (userId, lat, lng, distance, tags) => {
     return { message: 'create reserve successfully' };
   } catch (err) {
     console.log(err);
+    console.log('err');
+
     return { error: 'create reserve failed' };
   }
 };

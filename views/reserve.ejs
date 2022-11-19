@@ -1,102 +1,81 @@
 <% layout('layout') %>
 <!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<!-- <link href="../public/styles/styles.css" rel="stylesheet" /> -->
 
-<div class="container">
-  <div class="border">
+<div class="container mt-5">
+  <div class="form-area">
     <form>
-      <label
-        >商品關鍵字：
-        <input class="tags" name="tags" type="text" />
-        <input class="tags" name="tags" type="text" />
-        <input class="tags" name="tags" type="text" />
-        <input class="tags" name="tags" type="text" />
-        <input class="tags" name="tags" type="text" />
-      </label>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="form-group">
+            <label class="tm-label" for="subject">商品關鍵字</label>
+            <button type="button" id="btn-add-tags" class="btn tm-btn" style="border-radius: 20px">
+              新增
+            </button>
+            <div id="tags-insert-body" class="row">
+              <div class="col-3 tm-tags-item">
+                <input type="text" class="form-control mb-2 tm-input" name="tags" />
+              </div>
 
-      <label>商品距離： <input name="distance" id="distance" type="number" /></label>
+              <div class="col-3 tm-tags-item">
+                <input type="text" class="form-control mb-2 tm-input" name="tags" />
+              </div>
+              <div class="col-3 tm-tags-item">
+                <input type="text" class="form-control mb-2 tm-input" name="tags" />
+              </div>
+              <div class="col-3 tm-tags-item">
+                <input type="text" class="form-control mb-2 tm-input" name="tags" />
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="form-group">
+              <label class="tm-label" for="#">地點</label>
+              <input name="place" id="place" class="form-control tm-input" />
+              <input id="place-result" name="place-result" type="hidden" />
+              <div id="place-select"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" id="btn-submit" class="btn tm-btn">確定送出商品</button>
+            <div class="submitting"></div>
+          </div>
+        </div>
 
-      <button id="btn-submit" type="button">確定送出預約</button>
+        <div class="col-md-6 mb-4">
+          <div id="map" class="w-100 h-100"></div>
+        </div>
+      </div>
     </form>
   </div>
 
   <div class="border" style="height: 700px; overflow-y: scroll">
-    <section>
-      <div class="container">
-        <div id="reserve-area" class="row row-cols-1 row-cols-md-2 row-cols-xl-4 mt-2">
-          <!-- <div class="col mt-2">
-            <div class="card radius-10 border-start border-0 border-3 border-info">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div>
-                    <p class="mb-0 text-secondary">Product Tag</p>
-                    <h4 class="my-1 text-info">Macbook</h4>
-                    <button class="mb-0 font-13">取消</button>
-                  </div>
-                  <div
-                    class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"
-                  >
-                    <i class="fa fa-shopping-cart"></i>
-                  </div>
-                </div>
+    <div class="container">
+      <div id="reserve-area" class="row row-cols-1 row-cols-md-2 row-cols-xl-4 mt-2">
+        <div class="tm-tag-item col-3 mt-2" hidden>
+          <div class="tm-card">
+            <div class="card-body radius-20">
+              <div class="d-flex flex-column">
+                <p class="mb-0 text-secondary">商品關鍵字</p>
+                <div class="produtct-tag my-1 tm-font h2">Tag</div>
+                <div class="produtct-place my-1 tm-font h6">PlacePlacePlacePlacePlace</div>
+                <button tagId="1" class="produtct-tag-id tm-btn reserve-cancel-btn mb-0">
+                  取消
+                </button>
               </div>
             </div>
           </div>
-          <div class="col">
-            <div class="card radius-10 border-start border-0 border-3 border-danger">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div>
-                    <p class="mb-0 text-secondary">Total Revenue</p>
-                    <h4 class="my-1 text-danger">$84,245</h4>
-                    <p class="mb-0 font-13">+5.4% from last week</p>
-                  </div>
-                  <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto">
-                    <i class="fa fa-dollar"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card radius-10 border-start border-0 border-3 border-success">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div>
-                    <p class="mb-0 text-secondary">Bounce Rate</p>
-                    <h4 class="my-1 text-success">34.6%</h4>
-                    <p class="mb-0 font-13">-4.5% from last week</p>
-                  </div>
-                  <div
-                    class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto"
-                  >
-                    <i class="fa fa-bar-chart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card radius-10 border-start border-0 border-3 border-warning">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div>
-                    <p class="mb-0 text-secondary">Total Customers</p>
-                    <h4 class="my-1 text-warning">8.4K</h4>
-                    <p class="mb-0 font-13">+8.4% from last week</p>
-                  </div>
-                  <div
-                    class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"
-                  >
-                    <i class="fa fa-users"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </div>
 
+<script
+  id="map-script"
+  type="module"
+  src="../public/js/map.js"
+  MAPTILER_API_KEY="<%= MAPTILER_API_KEY%>"
+  HERE_API_KEY="<%= HERE_API_KEY%>"
+></script>
 <script src="../public/js/reserve.js"></script>

@@ -7,12 +7,10 @@ const { LINE_NOTIFY_CLIENT_ID, LINE_NOTIFY_CALLBACK_URL, LINE_NOTIFY_CLIENT_SECR
 
 const createReserve = async (req, res) => {
   const userId = req.user.id;
-  const { lat, lng, distance, tags } = req.body;
-  if (distance > 255) {
-    return res.status(400).json({ error: 'distance must be < 255' });
-  }
+  const { lat, lng, place, tags } = req.body;
+  console.log('lat, lng, place, tags: ', lat, lng, place, tags);
 
-  const result = await reserveModel.createReserve(userId, lat, lng, distance, tags);
+  const result = await reserveModel.createReserve(userId, lat, lng, place, tags);
 
   if (result.error) {
     return res.status(400).json(result);
