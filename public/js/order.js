@@ -36,12 +36,13 @@ $('#order-list').click((e) => {
 });
 
 $('#order-select').on('change', (e) => {
+  const userId = localStorage.getItem('userId');
   const orderSelect = e.target.value;
   let orderTarget;
   if (orderSelect === 'sell') {
-    orderTarget = orderArr.filter((x) => x['user_id'] == localStorage.getItem('userId'));
+    orderTarget = orderArr.filter((x) => x['user_id'] == userId);
   } else if (orderSelect === 'buy') {
-    orderTarget = orderArr.filter((x) => x['user_id'] != localStorage.getItem('userId'));
+    orderTarget = orderArr.filter((x) => x['user_id'] != userId);
   } else if (orderSelect === 'all') {
     orderTarget = orderArr;
   }
@@ -50,8 +51,7 @@ $('#order-select').on('change', (e) => {
 });
 
 function renderOrders(orderArr) {
-  // 將原本渲染的畫面清掉
-  // $('#order-list').html('');
+  const userId = localStorage.getItem('userId');
   $('.clone-item').remove();
   $('#product-details-page').html('');
   // eslint-disable-next-line no-restricted-syntax
@@ -61,7 +61,7 @@ function renderOrders(orderArr) {
       orderStaus = '販售中';
     } else if (order.status === 1) {
       orderStaus = '洽談中';
-    } else {
+    } else if (order.status === 2) {
       orderStaus = '已販售';
     }
     const newDom = $('.list-group-item').first().clone();
@@ -71,10 +71,42 @@ function renderOrders(orderArr) {
     newDom.children('.number').html(`訂單編號: ${order.number}`);
     newDom.children('.title').html(`${order.title}`);
     newDom.children('.place').html(`${order.place}`);
-    newDom.children('.row').children('.price').html(`商品售價：${order.price}`);
-    newDom.children('.row').children('.time').html(`${order.localTime}`);
-    newDom.children('.row').children('.status').html(`${orderStaus}`);
-    newDom.show();
+    newDom.find('.price').html(`商品售價：${order.price}`);
+    newDom.find('.time').html(`${order.localTime}`);
+    newDom.find('.status').html(`${orderStaus}`);
+    newDom.find('.btn-sold').attr('sellerId', order.user_id).attr('productId', order.product_id);
+    if (userId == order.user_id && order.status != 2) {
+      newDom.find('.btn-sold').removeAttr('hidden');
+    }
     $('#order-list').append(newDom);
   }
 }
+
+//
+$(document).on('click', '.btn-sold', async (e) => {
+  Swal.fire({
+    title: '是否確定更改訂單狀態為成交',
+    text: '更改狀態是無法還原的！',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    confirmButtonText: '確認',
+    cancelButtonColor: '#3085d6',
+    cancelButtonText: '取消',
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const authentication = localStorage.getItem('Authorization');
+      const sellerId = $(e.target).attr('sellerId');
+      const productId = $(e.target).attr('productId');
+      const status = 2; // status 2 means sold out
+      const postData = { sellerId, productId, status };
+      const params = {
+        headers: { authorization: authentication },
+      };
+      const response = await axios.put(`/api/1.0/orders`, postData, params);
+      console.log(response);
+      Swal.fire('恭喜成交', '此訂單狀態會變成已成交', 'success');
+      location.reload();
+    }
+  });
+});

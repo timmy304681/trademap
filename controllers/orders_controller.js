@@ -9,4 +9,14 @@ const getOrders = async (req, res) => {
   res.status(200).json(ordersList);
 };
 
-module.exports = { getOrders };
+const changeOrderStatus = async (req, res) => {
+  const { productId, status } = req.body;
+  const result = await orderModel.changeOrderStatus(productId, status);
+  if (result.error) {
+    return res.status(400).json(result);
+  }
+
+  res.status(200).json(result);
+};
+
+module.exports = { getOrders, changeOrderStatus };

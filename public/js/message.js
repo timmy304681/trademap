@@ -32,13 +32,17 @@ $('#message-page').addClass('tm-main-color');
 })();
 
 // 點擊聊天室彈出對話視窗
-$('#chatrooms').on('click', async (e) => {
+$(document).on('click', '.tm-chatroom-item', async (e) => {
   e.preventDefault();
   // 點入新的聊天室，清除資料
   $('#chateroom-box').removeAttr('hidden');
   $('.clone-item').remove();
   console.log(e.target);
-  chatmateId = $(e.target).parents('a').attr('chatmateId');
+  let chatmateId;
+  chatmateId = $(e.target).attr('chatmateId');
+  if (chatmateId === undefined) {
+    chatmateId = $(e.target).parents('a').attr('chatmateId');
+  }
   const chatmateInfo = chatrooms.filter((x) => x.chatmate == chatmateId);
   chatmatePhoto = chatmateInfo[0].chatmatePhoto;
   chatmateName = chatmateInfo[0].chatmateName;

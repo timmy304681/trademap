@@ -42,10 +42,12 @@
                 class="rounded-circle mr-1"
                 alt="Profile"
                 width="40"
-                height="40" /><span
-                id="name-insert"
-                class="d-none d-md-block dropdown-toggle ps-2 tm-main-color fw-bold h5"
-              ></span
+                height="40" />
+              <div id="name-insert" class="d-none d-md-block ps-2 fw-bold h5"></div>
+              <div
+                id="role-insert"
+                class="d-none d-md-block dropdown-toggle ps-2 tm-main-color fw-bold h6"
+              ></div
             ></a>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
               <li class="dropdown-header">
@@ -103,7 +105,9 @@
       }
       $('#tm-profile-box').removeAttr('hidden');
       $('#image-insert').attr('src', `${userProfile.photo}`);
-      $('#name-insert').html(`${userProfile.name} ${role}`);
+      $('#name-insert').html(userProfile.name);
+      $('#role-insert').html(role);
+
       $('.dropdown-header').children('h6').html(`${userProfile.name}`);
       $('.dropdown-header').children('span').html(`${userProfile.email}`);
     } catch (err) {

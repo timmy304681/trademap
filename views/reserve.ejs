@@ -56,16 +56,43 @@
           <div class="tm-card">
             <div class="card-body radius-20">
               <div class="d-flex flex-column">
-                <p class="mb-0 text-secondary">商品關鍵字</p>
+                <div class="d-flex justify-content-between">
+                  <p class="mb-0 text-secondary">商品關鍵字</p>
+                  <button
+                    tagId="1"
+                    class="produtct-tag-id reserve-cancel-btn tm-btn btn-close"
+                    aria-label="Close"
+                  ></button>
+                </div>
                 <div class="produtct-tag my-1 tm-font h2">Tag</div>
                 <div class="produtct-place my-1 tm-font h6">PlacePlacePlacePlacePlace</div>
-                <button tagId="1" class="produtct-tag-id tm-btn reserve-cancel-btn mb-0">
-                  取消
-                </button>
+                <button class="reserve-forsale-btn tm-btn radius-10">商品到貨</button>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="product-modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+        <h5 class="modal-title" id="exampleModalLabel">商品細節頁面</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="product-modal-body" class="modal-body p-0">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

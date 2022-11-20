@@ -68,29 +68,32 @@ $('#reserve-page').addClass('tm-main-color');
 })();
 
 $('#btn-submit').on('click', async (e) => {
-  e.preventDefault();
-  console.log('click');
-  const tagsElement = $('[name=tags]');
-
-  let tags = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (tag of tagsElement) {
-    tags.push(tag.value);
-  }
-  const Authorization = localStorage.getItem('Authorization');
-  const params = {
-    headers: { authorization: Authorization },
-  };
-
-  const postData = {
-    tags: tags,
-    lat: localStorage.getItem('lat'),
-    lng: localStorage.getItem('lng'),
-    place: JSON.parse($('#place-result').val()).title,
-  };
-  console.log(postData);
-  console.log('before axios');
   try {
+    e.preventDefault();
+    console.log('click');
+    const tagsElement = $('[name=tags]');
+
+    let tags = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (tag of tagsElement) {
+      tags.push(tag.value);
+    }
+
+    const params = {
+      headers: { authorization: authentication },
+    };
+
+    const placeInfo = JSON.parse($('#place-result').val());
+
+    const postData = {
+      tags: tags,
+      lat: placeInfo.position.lat,
+      lng: placeInfo.position.lng,
+      place: placeInfo.title,
+    };
+    console.log(postData);
+    console.log('before axios');
+
     const response = await axios.post('/api/1.0/reserve', postData, params);
     console.log(response);
     await Swal.fire({
@@ -137,4 +140,17 @@ $('#btn-add-tags').click(() => {
   const newDom = $('.tm-tags-item').first().clone();
   $('#tags-insert-body').append(newDom);
   count++;
+});
+
+// 商品到貨
+$(document).on('click', '.reserve-forsale-btn', (e) => {
+  const id = 2;
+  $.get(`/product_details?id=${id}`, (data) => {
+    console.log(data);
+    $('#product-modal-body').html(data);
+    const myModal = new bootstrap.Modal(document.getElementById('product-modal'), {
+      keyboard: false,
+    });
+    myModal.show();
+  });
 });
