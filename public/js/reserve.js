@@ -45,8 +45,8 @@ $('#reserve-page').addClass('tm-main-color');
     await Swal.fire({
       icon: 'warning',
       title: '會員權限不足',
-      text: `只有鑽石級會員才享有預約功能`,
-      footer: `上架商品達兩次後，可成為鑽石級💎會員`,
+      text: `只有金級會員才享有預約功能`,
+      footer: `上架商品達兩次後，可成為金級會員`,
     });
   }
 

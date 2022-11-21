@@ -1,4 +1,3 @@
-const MAP_TILER_TYPE = 'maptiler'; // maptiler, here or google
 const HERE_API_KEY = $('#map-script').attr('HERE_API_KEY');
 const MAPTILER_API_KEY = $('#map-script').attr('MAPTILER_API_KEY');
 const ZOOM_LEVEL = 14;
@@ -157,7 +156,7 @@ function createMap(CENTER_LOCATION) {
   });
 
   // add Map Tile (here or maptiler)
-  addMapTile(map, CENTER_LOCATION, MAP_TILER_TYPE);
+  addMapTile(map, CENTER_LOCATION);
 
   // add center marker
   marker = L.marker([CENTER_LOCATION.lat, CENTER_LOCATION.lng]).addTo(map);
@@ -166,29 +165,36 @@ function createMap(CENTER_LOCATION) {
 }
 
 // choose map tile
-function addMapTile(map, CENTER_LOCATION, mapType) {
-  if (mapType === 'here') {
-    L.tileLayer(
-      `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day.transit/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
-      {
-        // attribution: '© 2020 HERE',
-        subdomains: [1, 2, 3, 4],
-      }
-    ).addTo(map);
-  } else if (mapType === 'maptiler') {
-    L.maplibreGL({
-      attribution:
-        '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e',
-      style: `https://api.maptiler.com/maps/e095a72d-8a10-4727-9b40-d8230fc0f96b/style.json?key=${MAPTILER_API_KEY}`,
-    }).addTo(map);
-  } else if (mapType === 'google') {
-    L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-      maxZoom: 20,
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-    }).addTo(map);
-  } else {
-    console.log('map type error, only allow here & maptiler');
-  }
+function addMapTile(map, CENTER_LOCATION) {
+  const maptilerMap = L.maplibreGL({
+    attribution:
+      '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e',
+    style: `https://api.maptiler.com/maps/e095a72d-8a10-4727-9b40-d8230fc0f96b/style.json?key=${MAPTILER_API_KEY}`,
+  });
+
+  const hereMap = L.tileLayer(
+    `https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day.transit/{z}/{x}/{y}/256/png8?lg=cht&ppi=72&pois&apiKey=${HERE_API_KEY}`,
+    {
+      // attribution: '© 2020 HERE',
+      subdomains: [1, 2, 3, 4],
+    }
+  );
+
+  const googleMap = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+    maxZoom: 20,
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+  });
+
+  const baseLayers = {
+    '<img src="/public/src/images/maptiler.png" height=30px/><span class="tm-font h4 ms-2"> MapTiler</span>':
+      maptilerMap,
+    '<img src="/public/src/images/here.png" height=30px/><span class="tm-font h4 ms-2"> HERE</span>':
+      hereMap,
+    '<img src="/public/src/images/googlemap.png" height=30px/><span class="tm-font h4 ms-2"> Google Map</span>':
+      googleMap,
+  };
+  maptilerMap.addTo(map);
+  L.control.layers(baseLayers, null, { collapsed: false }).addTo(map);
 }
 
 // 產生marker
