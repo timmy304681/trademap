@@ -23,15 +23,21 @@ $('#reserve-page').addClass('tm-main-color');
   // 只有鑽石會員才有此功能，渲染reserve 卡片
   try {
     const response = await axios.get(`/api/1.0/reserve`, params);
+    console.log(response);
     const reserves = response.data;
     // eslint-disable-next-line no-restricted-syntax
     for (reserve of reserves) {
-      const { id, tag, place } = reserve;
+      const { id, tag, place, product_id, distance } = reserve;
       const newDom = $('.tm-tag-item').first().clone();
       newDom.removeAttr('hidden');
       newDom.find('.produtct-tag').html(tag);
       newDom.find('.produtct-place').html(place);
       newDom.find('.produtct-tag-id').attr('tagId', id);
+      if (product_id != null) {
+        newDom.find('.reserve-forsale-area').removeAttr('hidden');
+        newDom.find('.reserve-forsale-btn').attr('productId', product_id);
+        newDom.find('.reserve-distance').html(distance);
+      }
       $('#reserve-area').append(newDom);
     }
   } catch (err) {
@@ -101,7 +107,7 @@ $('#btn-submit').on('click', async (e) => {
       title: '商品預約成功',
       text: `若有商品上架會使用line notify通知您`,
     });
-    // location.href = '/login/line_notify';
+    location.href = '/login/line_notify';
   } catch (err) {
     console.log(err);
     Swal.fire({
@@ -144,7 +150,7 @@ $('#btn-add-tags').click(() => {
 
 // 商品到貨
 $(document).on('click', '.reserve-forsale-btn', (e) => {
-  const id = 2;
+  const id = $(e.target).attr('productId');
   $.get(`/product_details?id=${id}`, (data) => {
     console.log(data);
     $('#product-modal-body').html(data);

@@ -50,8 +50,8 @@ const createProduct = async (product, number, images, tags) => {
   const conn = await pool.getConnection();
   try {
     await conn.query('START TRANSACTION');
-    const { userId, title, price, description, time, place, address, lat, lng, county, district } =
-      product;
+    const { userId, title, price, description, time, place, address, lat, lng, county } = product;
+    const district = product.district === undefined ? null : product.district;
     const productSql = `INSERT INTO product ( number,
         user_id,
         title,

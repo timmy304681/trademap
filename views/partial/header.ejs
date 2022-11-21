@@ -31,22 +31,22 @@
           <div class="me-2"></div>
           <div class="nav-link fw-bold h4" style="color: black"></div>
 
-          <section id="tm-profile-box" class="nav-item dropdown pe-3" hidden>
+          <section id="tm-profile-box" class="nav-item dropdown" hidden>
             <a
-              class="nav-link nav-profile d-flex align-items-center pe-0"
+              class="nav-link nav-profile d-flex"
               href="#"
               data-bs-toggle="dropdown"
               aria-expanded="false"
               ><img
                 id="image-insert"
-                class="rounded-circle mr-1"
+                class="rounded-circle me-3"
                 alt="Profile"
                 width="40"
                 height="40" />
-              <div id="name-insert" class="d-none d-md-block ps-2 fw-bold h5"></div>
+              <div id="name-insert" class="d-md-block tm-font m-auto me-3 h4"></div>
               <div
                 id="role-insert"
-                class="d-none d-md-block dropdown-toggle ps-2 tm-main-color fw-bold h6"
+                class="d-none d-md-block dropdown-toggle tm-main-color fw-bold m-auto h6"
               ></div
             ></a>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -99,9 +99,9 @@
 
       let role;
       if (userProfile['role_id'] === 2) {
-        role = '鑽石級💎';
+        role = '金級會員';
       } else {
-        role = '黃金級';
+        role = '銀級會員';
       }
       $('#tm-profile-box').removeAttr('hidden');
       $('#image-insert').attr('src', `${userProfile.photo}`);

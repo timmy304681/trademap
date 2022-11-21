@@ -23,6 +23,7 @@ const getReserve = async (req, res) => {
   const userId = req.user.id;
 
   const result = await reserveModel.getReserve(userId);
+
   res.status(200).json(result);
 };
 

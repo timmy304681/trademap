@@ -2,9 +2,12 @@ const productModel = require('../models/products_model');
 const userModel = require('../models/users_model');
 const orderModel = require('../models/orders_model');
 const reserveModel = require('../models/reserve_model');
+const { getDistance } = require('../util/util');
 const axios = require('axios');
-
 const pageSize = 20;
+
+require('dotenv').config();
+const { WEBSITE_URL } = process.env;
 
 const getProducts = async (req, res) => {
   // console.log(req.body);
@@ -46,7 +49,7 @@ const getProducts = async (req, res) => {
     return;
   }
 
-  // if search mode, caculate distance
+  // if search mode, calculate distance
   if (category === 'search' && req.query.distance) {
     const { distance, lat, lng } = req.query;
     productsList = productsList.filter((x) => {
@@ -121,6 +124,7 @@ const postProduct = async (req, res) => {
 
   // create product for sell
   const createResult = await productModel.createProduct(productData, number, images, tagsNotNull);
+
   if (createResult == false) {
     return res.status(400).json({ error: 'Create product failed!' });
   }
@@ -132,66 +136,39 @@ const postProduct = async (req, res) => {
     const result = await userModel.upgradeMembershipGrade(userId);
   }
 
-  // 利用上傳的tag去搜尋商品預約
-  const users = await reserveModel.searchReserve(tagsNotNull);
-  console.log('users', !users.err);
+  // 利用上傳的tag去搜尋商品預約，然後將搜尋到商品作距離運算
+  const userReserves = await reserveModel.searchReserve(tagsNotNull);
+  userReserves.map((x) => {
+    const relativeDistance = getDistance(x.lat, x.lng, productData.lat, productData.lng, 'K');
+    x.distance = relativeDistance;
+  });
+  const updateResult = await reserveModel.updateProduct(userReserves, createResult.id);
 
-  if (!users.err) {
+  // 利用line notify 通知所有符合的user
+  if (!userReserves.err) {
     // eslint-disable-next-line no-restricted-syntax
-    for (user of users) {
-      if (user['line_token'] == null) {
+    for (userReserve of userReserves) {
+      if (userReserve['line_token'] == null) {
         continue;
       }
 
       const postData = {
-        message: `您預約的商品：${user.tag}已到貨，請登入網頁確認`,
-        imageThumbnail: 'https://360h.tk/images/98439d38-d38c-4f7c-b455-55606fecc974.jpg',
-        imageFullsize: 'https://360h.tk/images/98439d38-d38c-4f7c-b455-55606fecc974.jpg',
+        message: `您預約的商品：${userReserve.tag}已到貨，請登入網頁確認`,
+        imageThumbnail: `${WEBSITE_URL}/${images[0]}`,
+        imageFullsize: `${WEBSITE_URL}/${images[0]}`,
       };
       const params = {
         headers: {
           'Content-Type': 'multipart/form-data',
-          authorization: `Bearer ${user['line_token']}`,
+          authorization: `Bearer ${userReserve['line_token']}`,
         },
       };
-      await axios.post('https://notify-api.line.me/api/notify', postData, params);
+
+      axios.post('https://notify-api.line.me/api/notify', postData, params);
     }
   }
 
   res.status(200).json(createResult);
-};
-
-// Reference from  https://www.geodatasource.com/developers/javascript
-const getDistance = (lat1, lng1, lat2, lng2, unit) => {
-  /* Unit
-      'M' is statute miles (default)
-      'K' is kilometers
-      'N' is nautical miles
-   */
-  if (lat1 === lat2 && lng1 === lng2) {
-    return 0;
-  }
-
-  const radlat1 = (Math.PI * lat1) / 180;
-  const radlat2 = (Math.PI * lat2) / 180;
-  const theta = lng1 - lng2;
-  const radtheta = (Math.PI * theta) / 180;
-  let dist =
-    Math.sin(radlat1) * Math.sin(radlat2) +
-    Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-  if (dist > 1) {
-    dist = 1;
-  }
-  dist = Math.acos(dist);
-  dist = (dist * 180) / Math.PI;
-  dist = dist * 60 * 1.1515;
-  if (unit === 'K') {
-    dist *= 1.609344;
-  }
-  if (unit === 'N') {
-    dist *= 0.8684;
-  }
-  return dist;
 };
 
 module.exports = { getProducts, postProduct };
