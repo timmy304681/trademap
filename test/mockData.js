@@ -34,12 +34,10 @@ const data = [
   },
 ];
 
-const product = {
-  number: '202211031111111111',
-  user_id: '1',
-  title: '9成新Macbook',
-  price: '25500',
-  description: `2018出廠購買2017款式 MacBook Pro retina 13 no Touch Bar
+const product = [
+  {
+    title: '9成新Macbook',
+    description: `2018出廠購買2017款式 MacBook Pro retina 13 no Touch Bar
   2017 MacBook Pro retina 13 no touch bar 
   銀 MacBook Pro (13-inch, 2017, Two Thunderbolt 3 ports)
   處理器2.3 GHz Intel Core i5
@@ -49,14 +47,38 @@ const product = {
   保固到：過保固
   配件：充電器
   螢幕下方會有一些黑色斜線不影響整體使用`,
-  time: '2022-11-03 13:00:00',
-  place: '忠孝新生',
-  address: '106台北市大安區新生南路一段67號10652',
-  lat: 25.04251,
-  lng: 121.53286,
-  county: '台北市',
-  district: '大安區',
-};
+    image: [
+      'images/apple_macbook_air_m1_1668103589_45d6eaa3_progressive.jpg',
+      'images/apple_macbook_air_m1_1668103589_62fece01_progressive.jpg',
+      'images/apple_macbook_air_m1_1668103589_501f84a4_progressive.jpg',
+    ],
+  },
+  {
+    title: 'iPhone12 Pro 128G 電池88',
+    description: `全配 外觀漂亮`,
+    image: ['iphone12_pro_128g_88_1668153963_bbef88da_progressive.jpg'],
+  },
+  {
+    title: 'SAMSUNG三星 32型 C32F391FWE VA曲面零閃屏低藍光液晶螢幕',
+    description: `VA面板
+    最佳曲率 1800R
+    178度 超廣視角 寬廣不失真
+    1920x1080 FHD高解析
+    對比度3000:1
+    亮度：250cd/m2、反應時間4ms
+    支援HDMI/DP輸入介面
+    低藍光、零閃屏技術的貼心保護
+    Game Mode電競模式
+    環保節能科技 輕鬆省下 50% 耗電
+    面板不漏光 暗部表現更具層次
+    
+    輕微使用痕跡已過保 可議價 有實體店面可看機 `,
+    image: [
+      'samsung_32_c32f391fwe_va_1668341560_5ec50fe2_progressive.jpg',
+      `samsung_32_c32f391fwe_va_1668341560_de1ea2c1_progressive.jpg`,
+    ],
+  },
+];
 const users = [
   {
     email: 'timmy@test.com',

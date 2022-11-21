@@ -30,10 +30,10 @@ async function insertProducts(num, userNum) {
   const parsedResult = await parseCSV(inputFile);
 
   // get product and  image from pexels
-  const productArr = await createProductsArr(num, 'electronics');
+  // const productArr = await createProductsArr(num, 'electronics');
   // get product and image from
-  // const response = await axios.get('https://api.escuelajs.co/api/v1/products');
-  // const productArr = response.data;
+  const response = await axios.get('https://fakestoreapi.com/products');
+  const productArr = response.data;
   console.log('productArr: ', productArr.length);
 
   const conn = await pool.getConnection();
@@ -41,12 +41,41 @@ async function insertProducts(num, userNum) {
   for (let i = 0; i < num; i++) {
     await conn.query('START TRANSACTION');
 
+    const date = new Date();
+    const dataValues = [
+      date.getFullYear(),
+      (date.getMonth() + 1).toString().padStart(2, '0'),
+      date.getDate().toString().padStart(2, '0'),
+      date.getHours().toString().padStart(2, '0'),
+      date.getMinutes().toString().padStart(2, '0'),
+      date.getSeconds().toString().padStart(2, '0'),
+      date.getMilliseconds().toString().padStart(4, '0'),
+    ];
+
+    const number = dataValues.join('');
+
+    // const product = {
+    //   number,
+    //   user_id: Math.floor(Math.random() * userNum) + 1,
+    //   title: productArr[i].alt.substr(0, 100),
+    //   price: Math.floor(Math.random() * 10000) + 1000,
+    //   description: productArr[i].alt,
+    //   time: new Date(),
+    //   place: parsedResult[i].place,
+    //   address: parsedResult[i].place,
+    //   lat: parsedResult[i].lat,
+    //   lng: parsedResult[i].lng,
+    //   county: '台北市',
+    //   district: '運輸',
+    // };
+    // const images = productArr[i].src.medium;
+
     const product = {
-      number: i,
+      number,
       user_id: Math.floor(Math.random() * userNum) + 1,
-      title: productArr[i].alt.substr(0, 100),
+      title: productArr[i].title.substr(0, 100),
       price: Math.floor(Math.random() * 10000) + 1000,
-      description: productArr[i].alt,
+      description: productArr[i].description,
       time: new Date(),
       place: parsedResult[i].place,
       address: parsedResult[i].place,
@@ -55,7 +84,7 @@ async function insertProducts(num, userNum) {
       county: '台北市',
       district: '運輸',
     };
-    const images = productArr[i].src.medium;
+    const images = productArr[i].image;
 
     const productSql = `INSERT INTO product ( number,
       user_id,
