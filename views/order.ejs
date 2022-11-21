@@ -2,7 +2,7 @@
 <!-- 使用vscode 插件 HTML CSS support 以下路徑去抓css -->
 <!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
 <!-- <link href="../public/styles/styles.css" rel="stylesheet" /> -->
-<div class="container-xxl h-75 mt-5">
+<div class="container h-75 mt-5">
   <div class="row h-100">
     <div class="col-6 border tm-order-area h-100">
       <div class="tm-label text-center">商品列表</div>
@@ -20,7 +20,12 @@
           <div class="row">
             <div class="price col tm-main-color"></div>
             <div class="time col-5"></div>
-            <div class="status col-2 text-right"></div>
+          </div>
+          <div class="d-flex justify-content-end align-content-center">
+            <div class="status me-3 m-auto tm-main-color tm-sold-status"></div>
+            <button class="btn-sold add-to-cart btn tm-sold-btn" type="button" hidden>
+              完成交易
+            </button>
           </div>
         </li>
       </ul>

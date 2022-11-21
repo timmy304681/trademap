@@ -31,21 +31,23 @@
           <div class="me-2"></div>
           <div class="nav-link fw-bold h4" style="color: black"></div>
 
-          <section id="tm-profile-box" class="nav-item dropdown pe-3" hidden>
+          <section id="tm-profile-box" class="nav-item dropdown" hidden>
             <a
-              class="nav-link nav-profile d-flex align-items-center pe-0"
+              class="nav-link nav-profile d-flex"
               href="#"
               data-bs-toggle="dropdown"
               aria-expanded="false"
               ><img
                 id="image-insert"
-                class="rounded-circle mr-1"
+                class="rounded-circle me-3"
                 alt="Profile"
                 width="40"
-                height="40" /><span
-                id="name-insert"
-                class="d-none d-md-block dropdown-toggle ps-2 tm-main-color fw-bold h5"
-              ></span
+                height="40" />
+              <div id="name-insert" class="d-md-block tm-font m-auto me-3 h4"></div>
+              <div
+                id="role-insert"
+                class="d-none d-md-block dropdown-toggle tm-main-color fw-bold m-auto h6"
+              ></div
             ></a>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
               <li class="dropdown-header">
@@ -64,7 +66,8 @@
                   class="dropdown-item d-flex align-items-center"
                   id="logout-btn"
                   style="cursor: pointer"
-                  ><i class="bi bi-box-arrow-right"></i><span onclick="signOut()">登出</span></a
+                  onclick="signOut()"
+                  ><i class="bi bi-box-arrow-right"></i><span>登出</span></a
                 >
               </li>
             </ul>
@@ -96,13 +99,15 @@
 
       let role;
       if (userProfile['role_id'] === 2) {
-        role = '鑽石級💎';
+        role = '金級會員';
       } else {
-        role = '黃金級';
+        role = '銀級會員';
       }
       $('#tm-profile-box').removeAttr('hidden');
       $('#image-insert').attr('src', `${userProfile.photo}`);
-      $('#name-insert').html(`${userProfile.name} ${role}`);
+      $('#name-insert').html(userProfile.name);
+      $('#role-insert').html(role);
+
       $('.dropdown-header').children('h6').html(`${userProfile.name}`);
       $('.dropdown-header').children('span').html(`${userProfile.email}`);
     } catch (err) {

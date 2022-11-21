@@ -47,4 +47,23 @@ const changeStatusToContact = async (userId, productId) => {
   }
 };
 
-module.exports = { getOrders, changeStatusToContact };
+const changeOrderStatus = async (productId, status) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query('START TRANSACTION');
+
+    await conn.execute('UPDATE `order` SET status=? WHERE product_id=?', [status, productId]);
+    await conn.execute('UPDATE `product` SET status=? WHERE id=?', [status, productId]);
+
+    await conn.query('COMMIT');
+    return { message: 'change order status successfully' };
+  } catch (error) {
+    await conn.query('ROLLBACK');
+    console.log(error);
+    return { error: 'change order status failed' };
+  } finally {
+    await conn.release();
+  }
+};
+
+module.exports = { getOrders, changeStatusToContact, changeOrderStatus };

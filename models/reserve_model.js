@@ -1,12 +1,13 @@
 const pool = require('../util/mysql');
+const { getDistance } = require('../util/util');
 
-const createReserve = async (userId, lat, lng, distance, tags) => {
+const createReserve = async (userId, lat, lng, place, tags) => {
   try {
     tags.map(async (x) => {
       if (x != '') {
         await pool.execute(
-          'INSERT INTO reserve (user_id, lat, lng, distance, tag) VALUES (?,?,?,?,?)',
-          [userId, lat, lng, distance, x]
+          'INSERT INTO reserve (user_id, lat, lng, place,tag) VALUES (?,?,?,?,?)',
+          [userId, lat, lng, place, x]
         );
       }
     });
@@ -14,6 +15,8 @@ const createReserve = async (userId, lat, lng, distance, tags) => {
     return { message: 'create reserve successfully' };
   } catch (err) {
     console.log(err);
+    console.log('err');
+
     return { error: 'create reserve failed' };
   }
 };
@@ -31,7 +34,7 @@ const getReserve = async (userId) => {
 const searchReserve = async (tags) => {
   try {
     const [users] = await pool.query(
-      'SELECT user_id,tag,name,line_token  FROM reserve JOIN user ON reserve.user_id=user.id WHERE tag IN (?)',
+      'SELECT reserve.id as reserve_id, lat, lng, place,user_id,tag,name,line_token FROM reserve JOIN user ON reserve.user_id=user.id WHERE tag IN (?)',
       [tags]
     );
 
@@ -51,4 +54,23 @@ const deleteReserve = async (tagId) => {
   }
 };
 
-module.exports = { createReserve, getReserve, searchReserve, deleteReserve };
+const updateProduct = async (userReserves, productId) => {
+  try {
+    for (let i = 0; i < userReserves.length; i++) {
+      const { distance } = userReserves[i];
+      const reserveId = userReserves[i].reserve_id;
+
+      await pool.query('UPDATE reserve SET product_id=?, distance=? WHERE id=?', [
+        productId,
+        distance,
+        reserveId,
+      ]);
+    }
+    return { message: 'update success' };
+  } catch (err) {
+    console.log(err);
+    return { error: 'update product_id failed' };
+  }
+};
+
+module.exports = { createReserve, getReserve, searchReserve, deleteReserve, updateProduct };

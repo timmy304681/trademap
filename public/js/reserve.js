@@ -21,31 +21,24 @@ $('#reserve-page').addClass('tm-main-color');
   }
 
   // 只有鑽石會員才有此功能，渲染reserve 卡片
-  $('#reserve-area').html('');
   try {
     const response = await axios.get(`/api/1.0/reserve`, params);
+    console.log(response);
     const reserves = response.data;
     // eslint-disable-next-line no-restricted-syntax
     for (reserve of reserves) {
-      const { id, tag } = reserve;
-      $('#reserve-area').append(
-        `<div class="col-3 mt-2">
-  <div class="card radius-10 border-start border-0 border-3 border-info">
-    <div class="card-body">
-      <div class="d-flex align-items-center">
-        <div>
-          <p class="mb-0 text-secondary">Product Tag</p>
-          <h4 class="my-1 text-info">${tag}</h4>
-          <button tagId=${id} class="reserve-cancel-btn mb-0 font-13 ">取消</button>
-        </div>
-        <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto">
-          <i class="fa fa-shopping-cart"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>`
-      );
+      const { id, tag, place, product_id, distance } = reserve;
+      const newDom = $('.tm-tag-item').first().clone();
+      newDom.removeAttr('hidden');
+      newDom.find('.produtct-tag').html(tag);
+      newDom.find('.produtct-place').html(place);
+      newDom.find('.produtct-tag-id').attr('tagId', id);
+      if (product_id != null) {
+        newDom.find('.reserve-forsale-area').removeAttr('hidden');
+        newDom.find('.reserve-forsale-btn').attr('productId', product_id);
+        newDom.find('.reserve-distance').html(distance);
+      }
+      $('#reserve-area').append(newDom);
     }
   } catch (err) {
     console.log(err);
@@ -80,57 +73,33 @@ $('#reserve-page').addClass('tm-main-color');
   }
 })();
 
-// ask user for the position
-if ('geolocation' in navigator) {
-  // get position from browser
-  navigator.geolocation.getCurrentPosition(getPositionSuccess, getPositionError);
-} else {
-  // Use a third-party geolocation service
-  console.log('Browser does not support the Geolocation API');
-}
-
-// 調控瀏覽器的地理位置存取資訊cb
-function getPositionSuccess(position) {
-  const lat = position.coords.latitude;
-  const lng = position.coords.longitude;
-
-  // 將lat,lng存在localStorage
-  window.localStorage.setItem('lat', lat);
-  window.localStorage.setItem('lng', lng);
-}
-function getPositionError(err) {
-  Swal.fire({
-    icon: 'error',
-    title: '地理位置錯誤',
-    text: '無法取得您的地理位置!！ 請嘗試開啟瀏覽器地理位置存取權',
-    footer:
-      '<a href="https://support.google.com/chrome/answer/142065?hl=zh-Hant&co=GENIE.Platform%3DDesktop">Why do I have this issue?</a>',
-  });
-}
-
 $('#btn-submit').on('click', async (e) => {
-  e.preventDefault();
-  console.log('click');
-  const tagsElement = $('[name=tags]');
-
-  let tags = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (tag of tagsElement) {
-    tags.push(tag.value);
-  }
-  const Authorization = localStorage.getItem('Authorization');
-  const params = {
-    headers: { authorization: Authorization },
-  };
-  const postData = {
-    tags: tags,
-    lat: localStorage.getItem('lat'),
-    lng: localStorage.getItem('lng'),
-    distance: $('#distance').val(),
-  };
-  console.log(postData);
-  console.log('before axios');
   try {
+    e.preventDefault();
+    console.log('click');
+    const tagsElement = $('[name=tags]');
+
+    let tags = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (tag of tagsElement) {
+      tags.push(tag.value);
+    }
+
+    const params = {
+      headers: { authorization: authentication },
+    };
+
+    const placeInfo = JSON.parse($('#place-result').val());
+
+    const postData = {
+      tags: tags,
+      lat: placeInfo.position.lat,
+      lng: placeInfo.position.lng,
+      place: placeInfo.title,
+    };
+    console.log(postData);
+    console.log('before axios');
+
     const response = await axios.post('/api/1.0/reserve', postData, params);
     console.log(response);
     await Swal.fire({
@@ -148,9 +117,46 @@ $('#btn-submit').on('click', async (e) => {
   }
 });
 
-$(document).on('click', '.reserve-cancel-btn', async (e) => {
-  const tagId = $(e.target).attr('tagId');
-  console.log(tagId);
-  const response = await axios.delete(`/api/1.0/reserve?id=${tagId}`, params);
-  location.reload();
+$(document).on('click', '.reserve-cancel-btn', (e) => {
+  Swal.fire({
+    title: '是否確定要刪除此關鍵字',
+    text: '刪除後是無法還原的！',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    confirmButtonText: '刪除確認',
+    cancelButtonColor: '#3085d6',
+    cancelButtonText: '取消',
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const tagId = $(e.target).attr('tagId');
+      console.log(tagId);
+      const response = await axios.delete(`/api/1.0/reserve?id=${tagId}`, params);
+      $(e.target).parents('.tm-tag-item').remove();
+      Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+    }
+  });
+});
+
+let count = 1;
+$('#btn-add-tags').click(() => {
+  if (count > 4) {
+    return;
+  }
+  const newDom = $('.tm-tags-item').first().clone();
+  $('#tags-insert-body').append(newDom);
+  count++;
+});
+
+// 商品到貨
+$(document).on('click', '.reserve-forsale-btn', (e) => {
+  const id = $(e.target).attr('productId');
+  $.get(`/product_details?id=${id}`, (data) => {
+    console.log(data);
+    $('#product-modal-body').html(data);
+    const myModal = new bootstrap.Modal(document.getElementById('product-modal'), {
+      keyboard: false,
+    });
+    myModal.show();
+  });
 });
