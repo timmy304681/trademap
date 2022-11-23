@@ -18,6 +18,7 @@
     "neat-csv": "^7.0.0",
     "nodejieba": "^2.6.0",
     "pexels": "^1.4.0",
+    "redis": "^4.5.0",
     "sequelize": "^6.25.3",
     "sequelize-cli": "^6.5.2",
     "socket.io": "^4.5.3",
