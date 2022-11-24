@@ -3,7 +3,8 @@ const app = express();
 const engine = require('ejs-locals');
 const http = require('http');
 const server = http.createServer(app);
-const io = require('./util/message');
+const io = require('./util/socket_io');
+const rateLimiter = require('./util/rate_limiter');
 const morganBody = require('morgan-body');
 
 // socket set up
@@ -30,7 +31,7 @@ app.set('view engine', 'ejs');
 app.use(require('./routes/views_route'));
 
 // API route
-app.use('/api/' + API_VERSION, [
+app.use('/api/' + API_VERSION, rateLimiter, [
   require('./routes/products_route'),
   require('./routes/orders_route'),
   require('./routes/messages_route'),

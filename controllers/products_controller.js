@@ -2,6 +2,7 @@ const productModel = require('../models/products_model');
 const userModel = require('../models/users_model');
 const orderModel = require('../models/orders_model');
 const reserveModel = require('../models/reserve_model');
+const cache = require('../util/redis');
 const { getDistance } = require('../util/util');
 const axios = require('axios');
 const pageSize = 20;
@@ -21,9 +22,10 @@ const getProducts = async (req, res) => {
     switch (category) {
       case 'all':
         return productModel.getProducts(pageSize, paging);
-      case 'autoCompleteSearch':
+      case 'autoCompleteSearch': {
         const { keyword } = req.query;
         return productModel.getAutoComplete(keyword);
+      }
       case 'search': {
         const { keyword } = req.query;
         if (keyword) {
@@ -32,10 +34,30 @@ const getProducts = async (req, res) => {
         break;
       }
       case 'details': {
-        const id = parseInt(req.query.id);
-        if (Number.isInteger(id)) {
-          return await productModel.getProductDetails(id);
+        const id = req.query.id;
+
+        if (isNaN(id)) {
+          return false;
         }
+        let cacheProductDetails;
+
+        if (cache.ready) {
+          cacheProductDetails = await cache.get(`product:${id}`);
+        }
+
+        if (cacheProductDetails) {
+          // console.log(`Get product details ${id} from cache`);
+          return [JSON.parse(cacheProductDetails)];
+        }
+
+        // console.log(`Search product details  ${id} from  mysql`);
+        const productDetails = await productModel.getProductDetails(id);
+        if (cache.ready) {
+          // console.log(`Save product details ${id}  in cache`);
+          await cache.set(`product:${id}`, JSON.stringify(productDetails[0]), { EX: 60 * 60 }); // expire in one hour
+        }
+
+        return productDetails;
       }
     }
     return Promise.resolve({});
@@ -45,7 +67,7 @@ const getProducts = async (req, res) => {
   productsList = await findProduct(category);
 
   if (productsList.length === undefined) {
-    res.status(400).send({ error: 'Wrong Request' });
+    res.status(400).json({ error: 'Wrong Request' });
     return;
   }
 
