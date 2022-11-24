@@ -1,6 +1,9 @@
 <% layout('layout') %>
 <!-- 使用vscode 插件 HTML CSS support 以下路徑去抓css -->
 <!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<!--Import Google Icon Font-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
 <div class="row justify-content-center mb-3">
   <div class="col-md-6 text-center mt-3"></div>
 </div>
@@ -16,13 +19,7 @@
                   <div class="col-md-6 mb-4">
                     <div class="form-group">
                       <label class="tm-label" for="name">商品名稱</label>
-                      <input
-                        type="text"
-                        class="form-control tm-input"
-                        name="title"
-                        id="title"
-                        placeholder="2022 Macbook pro"
-                      />
+                      <input type="text" class="form-control tm-input" name="title" id="title" />
                     </div>
                   </div>
                   <div class="col-md-6 mb-4">
@@ -33,7 +30,6 @@
                         class="form-control tm-input"
                         name="price"
                         id="price"
-                        placeholder="30000"
                         required
                       />
                     </div>
@@ -41,7 +37,10 @@
                   <div class="col-md-12 mb-4">
                     <div class="form-group">
                       <label class="tm-label" for="subject">商品關鍵字</label>
-                      <button
+                      <div class="chips chips-initial">
+                        <input class="input" />
+                      </div>
+                      <!-- <button
                         type="button"
                         id="btn-add-tags"
                         class="btn tm-btn"
@@ -63,7 +62,7 @@
                         <div class="col-3 tm-tags-item">
                           <input type="text" class="form-control mb-2 tm-input" name="tags" />
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
 
@@ -76,7 +75,6 @@
                             class="form-control tm-input"
                             name="description"
                             id="description"
-                            placeholder="九成新"
                             style="resize: none; height: 100px"
                           ></textarea>
                         </div>
@@ -133,6 +131,8 @@
     </div>
   </section>
 </div>
+
+<script type="text/javascript" src="../public/src/materialize/js/materialize.js"></script>
 
 <script
   id="map-script"
