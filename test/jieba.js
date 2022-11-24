@@ -14,9 +14,9 @@ const inputArr = [
 ];
 
 for (input of inputArr) {
-  const result = nodejieba.textRankExtract(input, 5);
-  const tags = nodejieba.tag(input);
-  console.log('tags: ', tags);
+  const result = nodejieba.textRankExtract(input, 10);
+  // const tags = nodejieba.tag(input);
+  // console.log('tags: ', tags);
 
   console.log('input: ', input);
   console.log(result);

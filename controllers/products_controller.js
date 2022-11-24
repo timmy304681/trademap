@@ -5,6 +5,7 @@ const reserveModel = require('../models/reserve_model');
 const cache = require('../util/redis');
 const { getDistance } = require('../util/util');
 const axios = require('axios');
+const jieba = require('nodejieba');
 const pageSize = 20;
 
 require('dotenv').config();
@@ -193,4 +194,12 @@ const postProduct = async (req, res) => {
   res.status(200).json(createResult);
 };
 
-module.exports = { getProducts, postProduct };
+const segmentTitles = async (req, res) => {
+  const { title } = req.query;
+  const segments = jieba.textRankExtract(title, 10);
+  const result = segments.map((x) => x.word);
+
+  res.status(200).json(result);
+};
+
+module.exports = { getProducts, postProduct, segmentTitles };

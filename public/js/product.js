@@ -21,12 +21,17 @@ $('#product-page').addClass('tm-main-color');
 })();
 
 // submit form
-
 $('#btn-submit').on('click', async (e) => {
   e.preventDefault();
   const Authorization = localStorage.getItem('Authorization');
   const postData = new FormData(form);
 
+  $('.chip').each((index, domEle) => {
+    const tag = $(domEle).html().split('<i')[0];
+    postData.append('tags', tag);
+  });
+
+  console.log(postData);
   const params = {
     headers: {
       authorization: Authorization,
@@ -68,4 +73,27 @@ $('#btn-add-tags').click(() => {
   const newDom = $('.tm-tags-item').first().clone();
   $('#tags-insert-body').append(newDom);
   count++;
+});
+
+// 防止按enter提交form
+$(document).on('keypress', 'form', (e) => {
+  return e.keyCode != 13;
+});
+
+// chips & tags
+$('.chips').chips();
+
+$('#title').keydown(async (e) => {
+  const input = $(e.target).val();
+  const response = await axios.get(`/api/1.0/products/tags?title=${input}`);
+  const tags = response.data;
+  let tagsData = [];
+  tags.forEach((e) => {
+    tagsData.push({ tag: e });
+  });
+  console.log(tagsData);
+  $('.chips-initial').chips({
+    data: tagsData,
+    limit: 20,
+  });
 });
