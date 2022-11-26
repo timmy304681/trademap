@@ -29,6 +29,10 @@ router.get('/reserve', (req, res) => {
   res.render('reserve', { title: '商品預約系統', HERE_API_KEY, MAPTILER_API_KEY });
 });
 
+router.get('/suggest', (req, res) => {
+  res.render('suggest', { title: '商品推薦' });
+});
+
 router.get('/profile', (req, res) => {
   res.render('profile', { title: '會員登入系統' });
 });

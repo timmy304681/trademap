@@ -1,17 +1,31 @@
 <!-- <link href="../../public/styles/bootstrap.css" rel="stylesheet" /> -->
 <!-- <link href="../../public/styles/styles.css" rel="stylesheet" /> -->
 <header>
-  <nav class="navbar navbar-expand-md tm-nav text-black-50 p-0 m-0">
+  <nav class="tm-nav navbar navbar-expand-md navbar-light text-black-50 p-0 m-0">
     <div class="container-xxl">
       <a class="navbar-brand ms-5" href="/">
         <img src="../../public/src/trademap.png" width="100%" height="60px"
       /></a>
-
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
             <a id="index-page" class="nav-link h5" href="/">首頁</a>
           </li>
+          <li class="nav-item">
+            <a id="suggest-page" class="nav-link h5" href="/suggest">商品推薦</a>
+          </li>
+
           <li class="nav-item">
             <a id="product-page" class="nav-link h5" href="/product">商品上傳</a>
           </li>
