@@ -113,6 +113,12 @@ html,body{
   object-fit: cover;
 }
 
+.tm-ellipsis{
+  overflow:hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;}
+
+
 /* cutstom scroll bar */
 ::-webkit-scrollbar {
   width: 5px;

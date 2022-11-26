@@ -105,6 +105,7 @@ dist
 
 # images
 images
+!public/src/images # 可接受此資料夾
 
 # sequelize config
 config/config.json
