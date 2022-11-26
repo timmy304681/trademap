@@ -1,0 +1,32 @@
+name: CI-CD
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  CI-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: CI 
+        run: echo CI Test Developing ...
+
+
+  CD-deploy-to-EC2:
+    needs: CI-Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master  # https://github.com/appleboy/ssh-action
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          script: |
+            cd trademap
+            git pull
+            npm i
+            pm2 reload 0

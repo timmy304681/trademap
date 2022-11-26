@@ -6,7 +6,7 @@ const cache = require('../util/redis');
 const { getDistance } = require('../util/util');
 const axios = require('axios');
 const jieba = require('nodejieba');
-const pageSize = 20;
+const pageSize = 6;
 
 require('dotenv').config();
 const { WEBSITE_URL } = process.env;
@@ -16,13 +16,15 @@ const getProducts = async (req, res) => {
   // console.log(req.params);
   // console.log(req.query);
   const { category } = req.params;
-  const paging = parseInt(req.query.paging) || 0;
+  const paging = parseInt(req.query.paging) || 1;
 
   async function findProduct(category) {
     // eslint-disable-next-line default-case
     switch (category) {
       case 'all':
-        return productModel.getProducts(pageSize, paging);
+        return productModel.getProductsByPaging(pageSize, paging);
+      case 'suggest':
+        return productModel.getProducts();
       case 'autoCompleteSearch': {
         const { keyword } = req.query;
         return productModel.getAutoComplete(keyword);
@@ -80,6 +82,18 @@ const getProducts = async (req, res) => {
       x.distance = relativeDistance;
       return relativeDistance < distance;
     });
+  }
+
+  // if suggest mode, calculate distance and return paging
+  if (category === 'suggest') {
+    const { lat, lng } = req.query;
+
+    productsList.forEach((x) => {
+      const relativeDistance = getDistance(x.lat, x.lng, lat, lng, 'K');
+      x.distance = relativeDistance;
+    });
+    productsList.sort((a, b) => a.distance - b.distance); // sort data by distance
+    productsList = productsList.slice(pageSize * (paging - 1), pageSize * (paging - 1) + pageSize);
   }
 
   res.status(200).json(productsList);

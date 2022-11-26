@@ -1,10 +1,20 @@
 const pool = require('../util/mysql');
 
-const getProducts = async (pageSize, paging = 0) => {
+const getProductsByPaging = async (pageSize, paging = 0) => {
   const [products] = await pool.execute('SELECT * FROM product ORDER by id LIMIT ?,?', [
-    (pageSize * paging).toString(),
+    (pageSize * (paging - 1)).toString(),
     pageSize.toString(),
   ]);
+  return products;
+};
+
+const getProducts = async () => {
+  const [products] = await pool.execute(
+    `SELECT * FROM product  
+     JOIN image ON product.id=image.product_id 
+     JOIN user ON product.user_id=user.id 
+     ORDER by product.id`
+  );
   return products;
 };
 
@@ -114,4 +124,11 @@ const createProduct = async (product, number, images, tags) => {
   }
 };
 
-module.exports = { getProducts, getProductDetails, searchProducts, createProduct, getAutoComplete };
+module.exports = {
+  getProducts,
+  getProductDetails,
+  searchProducts,
+  createProduct,
+  getAutoComplete,
+  getProductsByPaging,
+};
