@@ -105,7 +105,12 @@ dist
 
 # images
 images
-!public/src/images # 可接受此資料夾
+
+# 可接受此資料夾
+!public/src/images 
 
 # sequelize config
 config/config.json
+
+# redis
+dump.rdb

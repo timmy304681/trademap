@@ -3,20 +3,20 @@ const userModel = require('../models/users_model');
 const orderModel = require('../models/orders_model');
 const reserveModel = require('../models/reserve_model');
 const cache = require('../util/redis');
-const { getDistance } = require('../util/util');
+const { getDistance, s3UploadFiles, getImagePath } = require('../util/util');
 const axios = require('axios');
 const jieba = require('nodejieba');
 const pageSize = 6;
 
 require('dotenv').config();
-const { WEBSITE_URL } = process.env;
+const { REDIS_EXPIRE } = process.env;
 
 const getProducts = async (req, res) => {
   // console.log(req.body);
   // console.log(req.params);
   // console.log(req.query);
   const { category } = req.params;
-  const paging = parseInt(req.query.paging) || 1;
+  const paging = parseInt(req.query.paging, 10) || 1;
 
   async function findProduct(category) {
     // eslint-disable-next-line default-case
@@ -37,11 +37,12 @@ const getProducts = async (req, res) => {
         break;
       }
       case 'details': {
-        const id = req.query.id;
+        const { id } = req.query;
 
         if (isNaN(id)) {
           return false;
         }
+
         let cacheProductDetails;
 
         if (cache.ready) {
@@ -49,15 +50,18 @@ const getProducts = async (req, res) => {
         }
 
         if (cacheProductDetails) {
-          // console.log(`Get product details ${id} from cache`);
+          // Get product details from cache
           return [JSON.parse(cacheProductDetails)];
         }
 
-        // console.log(`Search product details  ${id} from  mysql`);
+        // Search product details  from  mysql
         const productDetails = await productModel.getProductDetails(id);
+        productDetails[0].photo = getImagePath(productDetails[0].photo);
+        productDetails[0].images = productDetails[0].images.map((x) => getImagePath(x));
+
         if (cache.ready) {
-          // console.log(`Save product details ${id}  in cache`);
-          await cache.set(`product:${id}`, JSON.stringify(productDetails[0]), { EX: 60 * 60 }); // expire in one hour
+          // Save product details in cache
+          await cache.set(`product:${id}`, JSON.stringify(productDetails[0]), { EX: REDIS_EXPIRE });
         }
 
         return productDetails;
@@ -94,6 +98,13 @@ const getProducts = async (req, res) => {
     });
     productsList.sort((a, b) => a.distance - b.distance); // sort data by distance
     productsList = productsList.slice(pageSize * (paging - 1), pageSize * (paging - 1) + pageSize);
+  }
+
+  if (category != 'details') {
+    productsList.forEach((x) => {
+      x.photo = getImagePath(x.photo);
+      x.image = getImagePath(x.image);
+    });
   }
 
   res.status(200).json(productsList);
@@ -157,7 +168,13 @@ const postProduct = async (req, res) => {
     district: placeDetail.address.district,
   };
 
-  const images = req.files.map((x) => x.path);
+  // images
+  console.log(req.files);
+  const s3UploadImgs = await s3UploadFiles(req.files);
+  const images = s3UploadImgs.map((x) => x.key);
+  console.log(s3UploadImgs);
+  console.log('images: ', images);
+  // const images = req.files.map((x) => x.path); // 原本存在server
 
   // create product for sell
   const createResult = await productModel.createProduct(productData, number, images, tagsNotNull);

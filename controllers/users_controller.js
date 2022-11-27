@@ -2,6 +2,7 @@ const userModel = require('../models/users_model');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
+const { s3UploadFiles, getImagePath } = require('../util/util');
 
 // secret code for JWT
 require('dotenv').config();
@@ -17,13 +18,13 @@ const getUser = async (req, res) => {
   if (user === undefined) {
     return res.status(400).json({ error: 'NO user id ' });
   }
+  user.photo = getImagePath(user.photo);
   res.status(200).json(user);
 };
 
 const signUp = async (req, res) => {
   let { name } = req.body;
   const { email, password } = req.body;
-  const photo = req.file.path;
 
   if (!name || !email || !password) {
     res.status(400).send({ error: 'Request Error: name, email and password are required.' });
@@ -56,7 +57,9 @@ const signUp = async (req, res) => {
   if (search.error) {
     return res.status(400).json(search);
   }
-
+  // photo
+  const s3UploadImg = await s3UploadFiles(req.files);
+  const photo = s3UploadImg[0].key;
   // create user profile
   const result = await userModel.signUp(name, email, passwordHash, photo);
 
