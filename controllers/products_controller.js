@@ -100,7 +100,7 @@ const getProducts = async (req, res) => {
     productsList = productsList.slice(pageSize * (paging - 1), pageSize * (paging - 1) + pageSize);
   }
 
-  if (category != 'details') {
+  if (category === 'suggest' || category === 'suggest') {
     productsList.forEach((x) => {
       x.photo = getImagePath(x.photo);
       x.image = getImagePath(x.image);
