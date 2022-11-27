@@ -10,7 +10,7 @@ const getProductsByPaging = async (pageSize, paging = 0) => {
 
 const getProducts = async () => {
   const [products] = await pool.execute(
-    `SELECT  product_id, user_id, title, price, description,lat,lng,image,photo
+    `SELECT  product_id, user_id, title, price, description,lat,lng,image,photo,name
      FROM product  
      JOIN image ON product.id=image.product_id 
      JOIN user ON product.user_id=user.id 
