@@ -10,7 +10,7 @@ const userModel = require('../models/users_model');
 
 // secret code for JWT
 require('dotenv').config();
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, AWS_BUCKET_NAME, IMAGES_URL } = process.env;
 
 // reference: https://thecodebarbarian.com/80-20-guide-to-express-error-handling
 const wrapAsync = (fn) => {
@@ -23,7 +23,7 @@ const wrapAsync = (fn) => {
 
 const upload = multer({
   // multer setting
-  // 原本直接存server路徑
+  // 直接存server路徑
   storage: multer.diskStorage({
     destination: (req, file, callback) => {
       callback(null, 'images');
@@ -34,20 +34,22 @@ const upload = multer({
       // callback(null, `${file.originalname}`);
     },
   }),
-  //S3
-  // return multer({
-  //   storage:  multer.memoryStorage(),
-  // });
+});
+
+const s3upload = multer({
+  // multer setting
+  // 存S3先過此middleware
+  storage: multer.memoryStorage(),
 });
 
 const s3UploadFiles = async (files) => {
   //  automatically detects AWS credentials set as variables in .env
   const s3 = new S3();
-
   const params = files.map((file) => {
+    const fileExtension = file.originalname.split('.').slice(-1)[0];
     return {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: `images/${uuid()}-${file.originalname}`,
+      Bucket: AWS_BUCKET_NAME,
+      Key: `images/${uuid()}.${fileExtension}`,
       Body: file.buffer,
       ContentType: 'image/jpg',
     };
@@ -129,11 +131,20 @@ const getDistance = (lat1, lng1, lat2, lng2, unit) => {
   return dist;
 };
 
+const getImagePath = (imagePath) => {
+  if (!imagePath.includes('https')) {
+    return `${IMAGES_URL}/${imagePath}`;
+  }
+  return imagePath;
+};
+
 module.exports = {
   wrapAsync,
   authentication,
   reserveAuthorization,
   s3UploadFiles,
   upload,
+  s3upload,
   getDistance,
+  getImagePath,
 };
