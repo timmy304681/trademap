@@ -35,6 +35,12 @@ html,body{
 
 .tm-input{
   background-color: #ECECEC;
+
+}
+
+.tm-revise-input{
+  width: 80%;
+  display: inline !important;
 }
 
 .tm-btn{
@@ -51,8 +57,13 @@ html,body{
 .tm-sold-btn{
   color: white;
   background-color: #00477D;
-
 }
+
+.tm-revise-btn{
+  color: white;
+  background-color: #477f;
+}
+
 .tm-sold-label{
   font-size: 40px;
   font-weight: bold;
@@ -111,6 +122,11 @@ html,body{
 .tm-card-img{
   height: 300px; 
   object-fit: cover;
+}
+
+.tm-img-fit{
+  object-fit: cover;
+   width: 100%;
 }
 
 .tm-ellipsis{

@@ -126,6 +126,36 @@ const createProduct = async (product, number, images, tags) => {
   }
 };
 
+const reviseProduct = async (id, property, value) => {
+  try {
+    let result;
+    if (property !== 'place') {
+      const sql = `UPDATE product SET ${property}=? WHERE id=?`;
+      [result] = await pool.execute(sql, [value, id]);
+    }
+
+    if (property === 'place') {
+      const { place, address, lat, lng, county, district } = value;
+
+      [result] = await pool.execute(
+        'UPDATE product SET place=?,address=?,lat=?,lng=?,county=?,district=? WHERE id=?',
+        [place, address, lat, lng, county, district, id]
+      );
+    }
+
+    // 只會有一個row被更改
+    if (result.affectedRows === 1) {
+      const result = { id };
+      result[`${property}`] = value;
+      return result;
+    }
+    return { error: 'Revise title failed' };
+  } catch (error) {
+    console.log(error);
+    return { error: 'Revise title failed' };
+  }
+};
+
 module.exports = {
   getProducts,
   getProductDetails,
@@ -133,4 +163,6 @@ module.exports = {
   createProduct,
   getAutoComplete,
   getProductsByPaging,
+
+  reviseProduct,
 };

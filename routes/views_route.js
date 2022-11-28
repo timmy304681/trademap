@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/order', (req, res) => {
-  res.render('order', { title: '訂單頁面', HERE_API_KEY });
+  res.render('order', { title: '訂單頁面', HERE_API_KEY, MAPTILER_API_KEY });
 });
 
 router.get('/product', (req, res) => {
