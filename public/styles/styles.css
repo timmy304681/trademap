@@ -33,9 +33,13 @@ html,body{
   border-radius: .9rem;
 }
 
+#tm-profile-box:hover{  
+  box-shadow: 0 0 11px rgba(33,33,33,0.3);
+  border-radius: 10px;
+}
+
 .tm-input{
   background-color: #ECECEC;
-
 }
 
 .tm-revise-input{
@@ -49,21 +53,37 @@ html,body{
   border-color: #1D3124;
 }
 
+.tm-btn:hover{  
+  box-shadow: 0 0 11px rgba(33,33,33,0.9);
+}
+
 .tm-contact-btn{
   color: black;
   background-color: orange;
   border-color: orange;
 }
+.tm-contact-btn:hover{
+  box-shadow: 0 0 11px rgba(33,33,33,0.9);
+  color: white; 
+}
+
 .tm-sold-btn{
   color: white;
   background-color: #00477D;
+}
+.tm-sold-btn:hover{
+  box-shadow: 0 0 11px rgba(33,33,33,0.9);
+  color: white; 
 }
 
 .tm-revise-btn{
   color: white;
   background-color: #477f;
 }
-
+.tm-revise-btn:hover{
+  box-shadow: 0 0 11px rgba(33,33,33,0.9); 
+  color: white;
+}
 .tm-sold-label{
   font-size: 40px;
   font-weight: bold;
@@ -95,6 +115,10 @@ html,body{
   margin: 10px 0;
 }
 
+.tm-order-box:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,0.9); 
+}
+
 .tm-order-product-title{
   font-size: 20px;
   font-weight: bold;
@@ -114,6 +138,9 @@ html,body{
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
 }
+.tm-card:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,0.9); 
+}
 
 .radius-10{
   border-radius: 10px;
@@ -132,9 +159,23 @@ html,body{
 .tm-ellipsis{
   overflow:hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;}
+  text-overflow: ellipsis;
+}
 
 
+
+.display-data{
+  font-weight: 900;
+  font-size: large;
+  margin-top: 5px;
+  padding: 5px 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 11px rgba(33,33,33,0.3);
+}
+
+.display-data:hover{
+  box-shadow: 0 0 11px rgba(33,33,33,0.9);
+}
 /* cutstom scroll bar */
 ::-webkit-scrollbar {
   width: 5px;
@@ -229,6 +270,9 @@ html,body{
   text-decoration: none;
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.125);
+}
+.tm-chatroom-style:hover{
+  box-shadow: 0 0 11px rgba(33,33,33,0.9);
 }
 
 .chat-messages {
