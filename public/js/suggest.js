@@ -98,3 +98,19 @@ function getPositionError(err) {
       '<a href="https://support.google.com/chrome/answer/142065?hl=zh-Hant&co=GENIE.Platform%3DDesktop">Why do I have this issue?</a>',
   });
 }
+
+// GO TOP
+
+/* 按下GoTop按鈕時的事件 */
+$('#btn-back-to-top').click(() => {
+  $('html,body').animate({ scrollTop: 0 }, 'fast');
+});
+
+/* 偵測卷軸滑動時，往下滑超過400px就讓GoTop按鈕出現 */
+$(window).scroll(() => {
+  if ($(this).scrollTop() > 400) {
+    $('#btn-back-to-top').fadeIn();
+  } else {
+    $('#btn-back-to-top').fadeOut();
+  }
+});

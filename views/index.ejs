@@ -9,42 +9,30 @@
 
   <!-- search -->
   <div class="search-form mb-5 w-50">
-    <div class="w-100 row">
-      <div class="col-2">
-        <select name="distance" id="distance" class="col tm-label">
-          <option value="1">1 km</option>
-          <option value="3">3 km</option>
-          <option value="5">5 km</option>
-          <option value="10">10 km</option>
-          <option value="20">20 km</option>
-        </select>
-      </div>
-      <div class="col-9">
-        <input name="keyword" id="keyword" type="text" placeholder="商品搜尋" class="tm-input" />
-      </div>
-      <div class="col-1">
-        <button id="btn-map-search" class="col btn btn-base">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="feather feather-search"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-      </div>
+    <div class="w-100 d-flex">
+      <select name="distance" id="distance" class="col tm-label">
+        <option value="1">1 km</option>
+        <option value="3">3 km</option>
+        <option value="5">5 km</option>
+        <option value="10">10 km</option>
+        <option value="20">20 km</option>
+      </select>
+
+      <input
+        name="keyword"
+        id="keyword"
+        type="text"
+        placeholder="商品搜尋"
+        class="tm-input keyword-input w-100"
+      />
+
+      <button id="btn-map-search" class="btn btn-base m-auto">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
     </div>
   </div>
 
-  <!-- search -->
+  <!--// search -->
 
   <div class="h-100">
     <div id="map" class="h-100 ms-3 me-3" style="z-index: 1"></div>
