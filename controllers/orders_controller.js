@@ -11,6 +11,7 @@ const getOrders = async (req, res) => {
 };
 
 const changeOrderStatus = async (req, res) => {
+  // TODO:  這邊要作賣方驗證，確認是他的訂單才可修改
   const { productId, status } = req.body;
   const result = await orderModel.changeOrderStatus(productId, status);
   if (result.error) {

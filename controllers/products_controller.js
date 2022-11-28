@@ -233,4 +233,50 @@ const segmentTitles = async (req, res) => {
   res.status(200).json(result);
 };
 
-module.exports = { getProducts, postProduct, segmentTitles };
+const reviseProduct = async (req, res) => {
+  // TODO:  這邊要作賣方驗證，確認是他的訂單才可修改
+  const { id, title, price, description, time } = req.body;
+  let placeDetail = req.body['place-result'];
+
+  let result;
+  if (title !== undefined) {
+    result = await productModel.reviseProduct(id, 'title', title);
+  }
+
+  if (price !== undefined) {
+    result = await productModel.reviseProduct(id, 'price', price);
+  }
+
+  if (description !== undefined) {
+    result = await productModel.reviseProduct(id, 'description', description);
+  }
+
+  if (time !== undefined) {
+    result = await productModel.reviseProduct(id, 'time', time);
+  }
+  if (placeDetail !== undefined) {
+    placeDetail = JSON.parse(placeDetail);
+    const placeObj = {
+      place: placeDetail.title,
+      address: placeDetail.address.label,
+      lat: placeDetail.position.lat,
+      lng: placeDetail.position.lng,
+      county: placeDetail.address.county,
+      district: placeDetail.address.district,
+    };
+
+    result = await productModel.reviseProduct(id, 'place', placeObj);
+  }
+
+  // result
+  if (result.error) {
+    return res.status(400).json(result);
+  }
+  // 因為有修改過商品資訊，要刪掉cache資料
+  if (cache.ready) {
+    await cache.del(`product:${id}`);
+  }
+  res.status(200).json(result);
+};
+
+module.exports = { getProducts, postProduct, segmentTitles, reviseProduct };
