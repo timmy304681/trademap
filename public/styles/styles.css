@@ -191,8 +191,15 @@ html,body{
 /*  // cutstom scroll bar */
   
   
-
-
+#btn-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+  border-radius:100%;
+  opacity:0.3;
+  z-index: 2;
+}
 
 
 
@@ -251,9 +258,9 @@ html,body{
 
 
 
-.easy-autocomplete{
-  width:100% !important;
-  height: 100% !important
+.easy-autocomplete1{
+  width: 100% !important;
+  /* height: 100% !important */
 }
 
 /* // index */
