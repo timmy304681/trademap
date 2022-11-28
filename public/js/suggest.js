@@ -59,7 +59,7 @@ async function scrollRenderProducts() {
   const products = response.data;
   console.log(products);
   for (product of products) {
-    renderProducts();
+    renderProducts(product);
   }
   // "loading" done -> revert to normal state
   scene.update(); // make sure the scene gets the new start position
@@ -68,11 +68,12 @@ async function scrollRenderProducts() {
 scrollRenderProducts();
 
 // function
-function renderProducts() {
+function renderProducts(product) {
   const newDom = $('.product-card').first().clone();
   newDom.removeAttr('hidden');
   newDom.attr('productId', product.product_id);
   newDom.find('.product-image').attr('src', product.image);
+  newDom.find('.product-price').html(product.price);
   newDom.find('.product-title').html(product.title);
   newDom.find('.product-description').html(product.description);
   newDom.find('.user-photo').attr('src', product.photo);
