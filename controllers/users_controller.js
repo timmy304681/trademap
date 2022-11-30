@@ -27,13 +27,11 @@ const signUp = async (req, res) => {
   const { email, password } = req.body;
 
   if (!name || !email || !password) {
-    res.status(400).send({ error: 'Request Error: name, email and password are required.' });
-    return;
+    return res.status(400).send({ error: 'Request Error: name, email and password are required.' });
   }
   // validate email
   if (!validator.isEmail(email)) {
-    res.status(400).send({ error: 'Request Error: Invalid email format' });
-    return;
+    return res.status(400).send({ error: 'Request Error: Invalid email format' });
   }
   name = validator.escape(name);
 
@@ -53,7 +51,7 @@ const signUp = async (req, res) => {
   const passwordHash = await argon2.hash(password);
 
   // check if email or name already in db
-  const search = await userModel.checkAcount(email, name);
+  const search = await userModel.checkAccount(email, name);
   if (search.error) {
     return res.status(400).json(search);
   }
@@ -64,8 +62,7 @@ const signUp = async (req, res) => {
   const result = await userModel.signUp(name, email, passwordHash, photo);
 
   if (result.err) {
-    res.status(500).json(result);
-    return;
+    return res.status(500).json(result);
   }
 
   // get jwt access token

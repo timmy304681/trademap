@@ -20,9 +20,57 @@ $('#product-page').addClass('tm-main-color');
   }
 })();
 
+$('#form').validate({
+  rules: {
+    title: {
+      required: true,
+      rangelength: [5, 255],
+    },
+    description: {
+      required: true,
+      minlength: 5,
+    },
+    price: {
+      required: true,
+      number: true,
+      max: 16777214,
+      min: 1,
+    },
+  },
+});
+
 // submit form
 $('#btn-submit').on('click', async (e) => {
   e.preventDefault();
+  const titleInput = $('#title').val();
+  const priceInput = $('#price').val();
+  const descriptionInput = $('#description').val();
+  const placeInput = $('#place-result').val();
+  const imageFiles = $('#images').prop('files');
+
+  if (titleInput.trim() === '' || titleInput.length < 5) {
+    return errorAlert('商品名稱輸入錯誤', '最少請輸入5個字');
+  }
+
+  if (priceInput.trim() === '' || priceInput > 16777214 || priceInput.length < 0) {
+    return errorAlert('價錢輸入錯誤', '僅允許大於零的整數且小於16777214');
+  }
+  if (descriptionInput.trim() === '' || descriptionInput.length < 5) {
+    return errorAlert('商品描述輸入錯誤', '最少請輸入5個字');
+  }
+
+  if (placeInput === '') {
+    return errorAlert('地點輸入錯誤', '不可為空');
+  }
+
+  if (imageFiles.length === 0) {
+    return errorAlert('照片上傳錯誤', '請最少上傳一張照片');
+  }
+
+  if ($('#time').val() === '') {
+    return errorAlert('時間輸入錯誤', '不可為空');
+  }
+
   const Authorization = localStorage.getItem('Authorization');
   const postData = new FormData(form);
 
@@ -50,10 +98,7 @@ $('#btn-submit').on('click', async (e) => {
     location.href = '/order';
   } catch (err) {
     console.log(err);
-    Swal.fire({
-      icon: 'error',
-      title: '商品上架失敗',
-    });
+    errorAlert('商品上架失敗', '商品上架失敗');
   }
 });
 
@@ -97,3 +142,12 @@ $('#title').keydown(async (e) => {
     limit: 20,
   });
 });
+
+// functions
+function errorAlert(title, text) {
+  Swal.fire({
+    icon: 'error',
+    title: title,
+    text: text,
+  });
+}

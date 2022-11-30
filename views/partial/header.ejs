@@ -42,8 +42,9 @@
         </ul>
 
         <div class="navbar-nav ms-auto me-5 mb-lg-0">
-          <div class="me-2"></div>
-          <div class="nav-link fw-bold h4" style="color: black"></div>
+          <a id="profile-icon" class="nav-link h2" href="/profile"
+            ><i class="fa-solid fa-address-card"></i
+          ></a>
 
           <section id="tm-profile-box" class="nav-item dropdown" hidden>
             <a
@@ -117,6 +118,7 @@
       } else {
         role = '銀級會員';
       }
+      $('#profile-icon').hide();
       $('#tm-profile-box').removeAttr('hidden');
       $('#image-insert').attr('src', `${userProfile.photo}`);
       $('#name-insert').html(userProfile.name);

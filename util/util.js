@@ -6,6 +6,7 @@ const multer = require('multer');
 const { S3 } = require('aws-sdk');
 const uuid = require('uuid').v4;
 const jwt = require('jsonwebtoken');
+const validator = require('validator');
 const userModel = require('../models/users_model');
 
 // secret code for JWT
@@ -40,6 +41,16 @@ const s3upload = multer({
   // multer setting
   // 存S3先過此middleware
   storage: multer.memoryStorage(),
+  fileFilter: (req, file, callback) => {
+    const ext = path.extname(file.originalname);
+    if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+      return callback(new Error('Only images are allowed'));
+    }
+    callback(null, true);
+  },
+  limits: {
+    fileSize: 10 * 1024 * 1024, // allow 10 MB
+  },
 });
 
 const s3UploadFiles = async (files) => {
@@ -138,6 +149,30 @@ const getImagePath = (imagePath) => {
   return imagePath;
 };
 
+const sanitizeRequest = async (req, res, next) => {
+  // sanitizers 處理惡意輸入
+  const input = req.body;
+
+  if (input.title) {
+    input.title = validator.escape(input.title);
+  }
+
+  if (input.description) {
+    input.description = validator.escape(input.description);
+  }
+
+  if (input.tags) {
+    if (input.length > 0) {
+      input.tags = input.tags.filter((el) => el); //去除array null
+    }
+    input.tags.forEach((x) => {
+      x = validator.escape(x);
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   wrapAsync,
   authentication,
@@ -147,4 +182,5 @@ module.exports = {
   s3upload,
   getDistance,
   getImagePath,
+  sanitizeRequest,
 };

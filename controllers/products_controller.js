@@ -1,15 +1,16 @@
+const cache = require('../util/redis');
+const axios = require('axios');
+const jieba = require('nodejieba');
 const productModel = require('../models/products_model');
 const userModel = require('../models/users_model');
 const orderModel = require('../models/orders_model');
 const reserveModel = require('../models/reserve_model');
-const cache = require('../util/redis');
 const { getDistance, s3UploadFiles, getImagePath } = require('../util/util');
-const axios = require('axios');
-const jieba = require('nodejieba');
+
 const pageSize = 6;
 
 require('dotenv').config();
-const { REDIS_EXPIRE } = process.env;
+const { REDIS_EXPIRE, IMAGES_URL } = process.env;
 
 const getProducts = async (req, res) => {
   // console.log(req.body);
@@ -111,33 +112,31 @@ const getProducts = async (req, res) => {
 };
 
 const postProduct = async (req, res) => {
-  console.log(req.body);
   const userId = req.user.id;
   const { title, price, description, time, tags } = req.body;
+  let placeDetail = req.body['place-result'];
 
-  let tagsNotNull;
-  if (tags.length > 0) {
-    tagsNotNull = tags.filter((el) => el); //去除array null
-  }
   // check if exist
-  if (
-    title === undefined ||
-    title === '' ||
-    price === undefined ||
-    price === '' ||
-    description === undefined ||
-    description === '' ||
-    time === undefined ||
-    time === ''
-  ) {
-    return res.status(400).json({ error: 'title, price, description or time must not be null !' });
-  }
-  // check price is number
-  if (isNaN(price)) {
-    return res.status(400).json({ error: ' price must  be number !' });
+  if (title === undefined || title.trim() === '') {
+    return res.status(400).json({ error: '商品名稱不能留空' });
   }
 
-  const placeDetail = JSON.parse(req.body['place-result']);
+  if (price === undefined || price === '' || price < 0 || isNaN(price)) {
+    return res.status(400).json({ error: '價錢請輸入大於0數字' });
+  }
+
+  if (description === undefined || title.trim() === '') {
+    return res.status(400).json({ error: '商品描述不能留空' });
+  }
+
+  if (time === undefined || time === '') {
+    return res.status(400).json({ error: '面交時間不能留空' });
+  }
+
+  if (placeDetail === undefined) {
+    return res.status(400).json({ error: '面交地點位置資訊錯誤' });
+  }
+  placeDetail = JSON.parse(placeDetail);
 
   //   Set order number by time , total 18 numbers
   const date = new Date();
@@ -168,19 +167,15 @@ const postProduct = async (req, res) => {
     district: placeDetail.address.district,
   };
 
-  // images
-  console.log(req.files);
+  // images 存入s3
   const s3UploadImgs = await s3UploadFiles(req.files);
   const images = s3UploadImgs.map((x) => x.key);
-  console.log(s3UploadImgs);
-  console.log('images: ', images);
-  // const images = req.files.map((x) => x.path); // 原本存在server
 
   // create product for sell
-  const createResult = await productModel.createProduct(productData, number, images, tagsNotNull);
+  const createResult = await productModel.createProduct(productData, number, images, tags);
 
-  if (createResult == false) {
-    return res.status(400).json({ error: 'Create product failed!' });
+  if (createResult.error) {
+    return res.status(400).json({ error: createResult.error });
   }
 
   // 如果當會員已經上傳兩次商品，則讓他成為鑽石會員
@@ -191,7 +186,7 @@ const postProduct = async (req, res) => {
   }
 
   // 利用上傳的tag去搜尋商品預約，然後將搜尋到商品作距離運算
-  const userReserves = await reserveModel.searchReserve(tagsNotNull);
+  const userReserves = await reserveModel.searchReserve(tags);
   userReserves.map((x) => {
     const relativeDistance = getDistance(x.lat, x.lng, productData.lat, productData.lng, 'K');
     x.distance = relativeDistance;
@@ -208,8 +203,8 @@ const postProduct = async (req, res) => {
 
       const postData = {
         message: `您預約的商品：${userReserve.tag}已到貨，請登入網頁確認`,
-        imageThumbnail: `${WEBSITE_URL}/${images[0]}`,
-        imageFullsize: `${WEBSITE_URL}/${images[0]}`,
+        imageThumbnail: `${IMAGES_URL}/${images[0]}`,
+        imageFullsize: `${IMAGES_URL}/${images[0]}`,
       };
       const params = {
         headers: {
@@ -237,23 +232,29 @@ const reviseProduct = async (req, res) => {
   // TODO:  這邊要作賣方驗證，確認是他的訂單才可修改
   const { id, title, price, description, time } = req.body;
   let placeDetail = req.body['place-result'];
-
   let result;
-  if (title !== undefined) {
+  let isRevise = false;
+
+  if (title !== undefined && title !== '' && title.trim() !== '') {
     result = await productModel.reviseProduct(id, 'title', title);
+    isRevise = true;
   }
 
-  if (price !== undefined) {
+  if (price !== undefined && price !== '') {
     result = await productModel.reviseProduct(id, 'price', price);
+    isRevise = true;
   }
 
-  if (description !== undefined) {
+  if (description !== undefined && description !== '' && description.trim() !== '') {
     result = await productModel.reviseProduct(id, 'description', description);
+    isRevise = true;
   }
 
-  if (time !== undefined) {
+  if (time !== undefined && time !== '') {
     result = await productModel.reviseProduct(id, 'time', time);
+    isRevise = true;
   }
+
   if (placeDetail !== undefined) {
     placeDetail = JSON.parse(placeDetail);
     const placeObj = {
@@ -266,8 +267,12 @@ const reviseProduct = async (req, res) => {
     };
 
     result = await productModel.reviseProduct(id, 'place', placeObj);
+    isRevise = true;
   }
 
+  if (!isRevise) {
+    return res.status(400).json({ error: '輸入錯誤，無任何修改' });
+  }
   // result
   if (result.error) {
     return res.status(400).json(result);

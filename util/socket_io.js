@@ -1,6 +1,7 @@
 require('dotenv').config();
 const messagesMoodel = require('../models/messages_model');
 const { Server } = require('socket.io');
+const validator = require('validator');
 
 const io = (server) => {
   const io = new Server(server, {
@@ -33,6 +34,10 @@ const io = (server) => {
     // Hand input events
     socket.on('input', async (data) => {
       console.log('server recieve ');
+
+      // sanitizers 處理惡意輸入
+      data.message = validator.escape(data.message);
+
       const { user1, user2, sender, message, timeStamp } = data;
 
       // 先排序，確保兩個使用者的對話都存在同一個collection

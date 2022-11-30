@@ -13,7 +13,7 @@ const getEmail = async (email) => {
   return userEmailSearch;
 };
 
-const checkAcount = async (email, name) => {
+const checkAccount = async (email, name) => {
   const [userEmailSearch] = await pool.execute('SELECT * FROM `user` WHERE email=?', [email]);
   const [userNameSearch] = await pool.execute('SELECT * FROM `user` WHERE name=?', [name]);
 
@@ -25,6 +25,7 @@ const checkAcount = async (email, name) => {
   }
   return { message: 'Email & Name available' };
 };
+
 const signUp = async (name, email, passwordHash, photo) => {
   try {
     const [user] = await pool.execute(
@@ -57,7 +58,7 @@ module.exports = {
   getUser,
   getEmail,
   signUp,
-  checkAcount,
+  checkAccount,
   getRolePermission,
   upgradeMembershipGrade,
   saveLineToken,

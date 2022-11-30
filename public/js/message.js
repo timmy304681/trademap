@@ -33,6 +33,7 @@ $('#message-page').addClass('tm-main-color');
 
 // 點擊聊天室彈出對話視窗
 $(document).on('click', '.tm-chatroom-item', async (e) => {
+  $('#chateroom-box-area').show();
   e.preventDefault();
   // 點入新的聊天室，清除資料
   $('#chateroom-box').removeAttr('hidden');
@@ -61,6 +62,10 @@ $(document).on('click', '.tm-chatroom-item', async (e) => {
 
 // 傳送訊息
 const sendMessage = async (e) => {
+  if ($('#message-input').val().trim() === '') {
+    // 不接受純空白
+    return;
+  }
   if (e.which === 13 || e.type === 'click') {
     // Emit to server input
 
