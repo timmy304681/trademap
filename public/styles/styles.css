@@ -43,7 +43,7 @@ html,body{
 }
 
 .tm-revise-input{
-  width: 80%;
+  width: 100%;
   display: inline !important;
 }
 
@@ -258,11 +258,14 @@ html,body{
 
 
 
-.easy-autocomplete1{
+.easy-autocomplete {
   width: 100% !important;
-  /* height: 100% !important */
-}
 
+}
+.easy-autocomplete input{
+  width: 100% !important;
+  height: 100% !important
+}
 /* // index */
 
 
@@ -410,3 +413,7 @@ html,body{
   -webkit-transform: translateY(-140%);
           transform: translateY(-140%);
 } 
+
+.error{
+  color:red
+}

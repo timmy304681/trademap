@@ -120,7 +120,7 @@ const createProduct = async (product, number, images, tags) => {
   } catch (error) {
     await conn.query('ROLLBACK');
     console.log(error);
-    return false;
+    return { error: '商品建立失敗' };
   } finally {
     await conn.release();
   }
@@ -128,31 +128,36 @@ const createProduct = async (product, number, images, tags) => {
 
 const reviseProduct = async (id, property, value) => {
   try {
-    let result;
+    // 分兩類，修改資料為place或非place
+    let reviceResult;
     if (property !== 'place') {
       const sql = `UPDATE product SET ${property}=? WHERE id=?`;
-      [result] = await pool.execute(sql, [value, id]);
+      [reviceResult] = await pool.execute(sql, [value, id]);
+      if (reviceResult.affectedRows === 1) {
+        const result = { id };
+        result[`${property}`] = value;
+        return result;
+      }
+      return { error: `修改${property}失敗` };
     }
 
     if (property === 'place') {
       const { place, address, lat, lng, county, district } = value;
-
-      [result] = await pool.execute(
+      [reviceResult] = await pool.execute(
         'UPDATE product SET place=?,address=?,lat=?,lng=?,county=?,district=? WHERE id=?',
         [place, address, lat, lng, county, district, id]
       );
-    }
 
-    // 只會有一個row被更改
-    if (result.affectedRows === 1) {
-      const result = { id };
-      result[`${property}`] = value;
-      return result;
+      if (reviceResult.affectedRows === 1) {
+        const result = { id };
+        result[`${property}`] = value;
+        return result;
+      }
+      return { error: `修改${property}失敗` };
     }
-    return { error: 'Revise title failed' };
   } catch (error) {
     console.log(error);
-    return { error: 'Revise title failed' };
+    return { error: `修改${property}失敗` };
   }
 };
 
@@ -163,6 +168,5 @@ module.exports = {
   createProduct,
   getAutoComplete,
   getProductsByPaging,
-
   reviseProduct,
 };

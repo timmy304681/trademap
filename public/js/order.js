@@ -162,7 +162,11 @@ $('.revise-btn').click(async (e) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       // 送到後端改db
-      const response = await axios.patch('/api/1.0/products/details', data);
+      const authentication = await localStorage.getItem('Authorization');
+      const params = {
+        headers: { 'content-type': 'application/json', authorization: authentication },
+      };
+      const response = await axios.patch('/api/1.0/products/details', data, params);
       Swal.fire({
         icon: 'success',
         title: '資料修改完成',

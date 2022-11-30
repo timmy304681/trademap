@@ -61,7 +61,7 @@
         <div class="container mt-5 mb-5">
           <div class="contact-wrap w-100 pe-5 ps-5">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="col-md-12 mb-4">
                   <div class="form-group">
                     <label class="tm-label">商品名稱</label>
@@ -85,6 +85,8 @@
                       <input
                         id="input-price"
                         type="number"
+                        max="1677214"
+                        min="1"
                         class="form-control tm-input tm-revise-input"
                         name="price"
                       />
@@ -95,7 +97,13 @@
                 <div class="col-md-12 mb-4">
                   <div class="form-group">
                     <label class="tm-label" for="#">商品描述</label>
-                    <div id="display-description" class="display-data">description</div>
+                    <div
+                      id="display-description"
+                      class="display-data"
+                      style="word-break: break-all"
+                    >
+                      description
+                    </div>
                     <div class="edit-data" style="display: none">
                       <textarea
                         id="input-description"
@@ -107,18 +115,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-12 mb-4">
-                  <div class="form-group">
-                    <label class="tm-label" for="#">地點</label>
-                    <div id="display-place" class="display-data">台北車站</div>
-                    <div class="edit-data" style="display: none">
-                      <input id="place" name="input-place" class="form-control tm-revise-input" />
-                      <button class="btn tm-btn revise-btn align-items-center">修改</button>
-                      <input name="place-result" id="place-result" type="hidden" class="tm-input" />
-                      <div id="place-select"></div>
-                    </div>
-                  </div>
-                </div>
+
                 <div class="col-md-12 mb-4">
                   <div class="form-group">
                     <label class="tm-label" for="#">交易時間</label>
@@ -136,6 +133,22 @@
                 </div>
                 <div class="col-md-12 mb-4">
                   <div class="form-group">
+                    <label class="tm-label" for="#">地點</label>
+                    <div id="display-place" class="display-data">台北車站</div>
+                    <div class="edit-data" style="display: none">
+                      <input
+                        id="place"
+                        name="input-place"
+                        class="form-control tm-input tm-revise-input"
+                      />
+                      <button class="btn tm-btn revise-btn align-items-center">修改</button>
+                      <input name="place-result" id="place-result" type="hidden" class="tm-input" />
+                      <div id="place-select"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-4">
+                  <div class="form-group">
                     <label class="tm-label" for="#">照片(最多十張)</label>
                     <input
                       name="images"
@@ -148,9 +161,9 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 mb-4">
+              <!-- <div class="col-md-6 mb-4">
                 <div id="map" class="w-100 h-100"></div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

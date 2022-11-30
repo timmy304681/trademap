@@ -14,6 +14,9 @@ const getMessages = async (user1, user2) => {
 
 const saveMessages = async (user1, user2, sender, message, timeStamp) => {
   try {
+    if (message.trim() == '') {
+      return { error: '內容不可為空白' };
+    }
     mongoCollection.updateOne(
       { user: [user1, user2] },
       { $push: { messages: { sender, message, timeStamp } } },

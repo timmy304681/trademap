@@ -1,6 +1,6 @@
 const HERE_API_KEY = $('#map-script').attr('HERE_API_KEY');
 const MAPTILER_API_KEY = $('#map-script').attr('MAPTILER_API_KEY');
-const ZOOM_LEVEL = 14;
+const ZOOM_LEVEL = 12;
 const MAX_ZOOM_LEVEL = 18;
 const MIN_ZOOM_LEVEL = 12;
 const LIMIT = 5;
@@ -94,7 +94,7 @@ const hereOptions = {
   requestDelay: 300, // 延遲 300 毫秒再送出請求,api只允許 5  Requests Per Second (RPS)
   placeholder: '搜尋地點', // 預設顯示的字串
 };
-$('#place').easyAutocomplete(hereOptions); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
+$('#place').easyAutocomplete(hereOptions); // 啟用 EasyAutocomplete 到 inputbox 這個元件
 
 // keytype enter
 $('#place').on('keypress', (e) => {
@@ -162,6 +162,21 @@ function createMap(CENTER_LOCATION) {
   marker = L.marker([CENTER_LOCATION.lat, CENTER_LOCATION.lng]).addTo(map);
   marker._icon.classList.add('huechange');
   /* <style>img.huechange {filter: hue-rotate(-90deg);}</style> */
+
+  const items = {
+    搜尋結果: marker,
+  };
+  const legend = L.control
+    .featureLegend(items, {
+      position: 'bottomleft',
+      symbolContainerSize: 24,
+      symbolScaling: 'clamped',
+      maxSymbolSize: 24,
+      minSymbolSize: 2,
+      collapsed: true,
+      drawShadows: true,
+    })
+    .addTo(map);
 }
 
 // choose map tile
@@ -186,15 +201,16 @@ function addMapTile(map, CENTER_LOCATION) {
   });
 
   const baseLayers = {
+    '<img src="/public/src/images/googlemap.png" height=30px/><span class="tm-font h4 ms-2"> Google Map</span>':
+      googleMap,
     '<img src="/public/src/images/maptiler.png" height=30px/><span class="tm-font h4 ms-2"> MapTiler</span>':
       maptilerMap,
     '<img src="/public/src/images/here.png" height=30px/><span class="tm-font h4 ms-2"> HERE</span>':
       hereMap,
-    '<img src="/public/src/images/googlemap.png" height=30px/><span class="tm-font h4 ms-2"> Google Map</span>':
-      googleMap,
   };
-  maptilerMap.addTo(map);
-  L.control.layers(baseLayers, null, { collapsed: false }).addTo(map);
+
+  googleMap.addTo(map);
+  L.control.layers(baseLayers, null).addTo(map);
 }
 
 // 產生marker
