@@ -6,7 +6,7 @@
   <div class="row h-100">
     <div class="col-6 border tm-order-area h-100">
       <div class="tm-label text-center">商品列表</div>
-      <select id="order-select" class="form-select h1">
+      <select id="order-select" class="form-select h1 tm-order-box">
         <option value="all">全部</option>
         <option value="sell">販賣</option>
         <option value="buy">購買</option>
@@ -136,11 +136,7 @@
                     <label class="tm-label" for="#">地點</label>
                     <div id="display-place" class="display-data">台北車站</div>
                     <div class="edit-data" style="display: none">
-                      <input
-                        id="place"
-                        name="input-place"
-                        class="form-control tm-input tm-revise-input"
-                      />
+                      <input id="place" name="input-place" class="form-control tm-revise-input" />
                       <button class="btn tm-btn revise-btn align-items-center">修改</button>
                       <input name="place-result" id="place-result" type="hidden" class="tm-input" />
                       <div id="place-select"></div>
@@ -178,10 +174,7 @@
 
 <script
   id="map-script"
-  type="module"
-  src="../public/js/map.js"
   HERE_API_KEY="<%= HERE_API_KEY%>"
-  MAPTILER_API_KEY="<%= MAPTILER_API_KEY%>"
+  src="../public/js/placeSearch.js"
 ></script>
-
 <script src="../public/js/order.js"></script>

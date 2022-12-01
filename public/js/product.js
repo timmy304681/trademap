@@ -79,16 +79,15 @@ $('#btn-submit').on('click', async (e) => {
     postData.append('tags', tag);
   });
 
-  console.log(postData);
   const params = {
     headers: {
       authorization: Authorization,
     },
   };
-  console.log('before axios');
+
   try {
     const response = await axios.post('/api/1.0/products', postData, params);
-    console.log(response);
+
     await Swal.fire({
       icon: 'success',
       title: '商品上架成功',
@@ -110,16 +109,6 @@ $('#images').on('change', (e) => {
   }
 });
 
-let count = 1;
-$('#btn-add-tags').click(() => {
-  if (count > 4) {
-    return;
-  }
-  const newDom = $('.tm-tags-item').first().clone();
-  $('#tags-insert-body').append(newDom);
-  count++;
-});
-
 // 防止按enter提交form
 $(document).on('keypress', 'form', (e) => {
   return e.keyCode != 13;
@@ -128,7 +117,7 @@ $(document).on('keypress', 'form', (e) => {
 // chips & tags
 $('.chips').chips();
 
-$('#title').keydown(async (e) => {
+$('#title').bind('input propertychange', async (e) => {
   const input = $(e.target).val();
   const response = await axios.get(`/api/1.0/products/tags?title=${input}`);
   const tags = response.data;
@@ -136,7 +125,7 @@ $('#title').keydown(async (e) => {
   tags.forEach((e) => {
     tagsData.push({ tag: e });
   });
-  console.log(tagsData);
+
   $('.chips-initial').chips({
     data: tagsData,
     limit: 20,

@@ -18,7 +18,7 @@ $('#suggest-page').addClass('tm-main-color');
     `/api/1.0/products/suggest?lat=${lat}&lng=${lng}&paging=${paging}`
   );
   const products = response.data;
-  console.log(products);
+
   for (product of products) {
     renderProducts();
   }
@@ -46,7 +46,6 @@ const scene = new ScrollMagic.Scene({
 })
   .addTo(controller)
   .on('enter', () => {
-    console.log('loading new items');
     setTimeout(scrollRenderProducts, 100);
   });
 
@@ -57,7 +56,7 @@ async function scrollRenderProducts() {
     `/api/1.0/products/suggest?lat=${lat}&lng=${lng}&paging=${page}`
   );
   const products = response.data;
-  console.log(products);
+
   for (product of products) {
     renderProducts(product);
   }

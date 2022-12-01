@@ -38,7 +38,7 @@ $(document).on('click', '.tm-chatroom-item', async (e) => {
   // 點入新的聊天室，清除資料
   $('#chateroom-box').removeAttr('hidden');
   $('.clone-item').remove();
-  console.log(e.target);
+
   let chatmateId;
   chatmateId = $(e.target).attr('chatmateId');
   if (chatmateId === undefined) {
@@ -51,7 +51,6 @@ $(document).on('click', '.tm-chatroom-item', async (e) => {
   $('#chateroom-title-img').attr('src', chatmatePhoto);
   $('#chateroom-title-name').html(chatmateName);
 
-  console.log('Connected to socket');
   socket.emit('chatRoom', {
     user1: user.name,
     user2: chatmateName,
@@ -121,7 +120,7 @@ $('#product-select').on('change', (e) => {
   } else {
     productTarget = chatrooms.filter((x) => x['product_id'] == productSelect);
   }
-  console.log(productTarget);
+
   renderChatrooms(productTarget);
 });
 

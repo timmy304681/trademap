@@ -1,7 +1,7 @@
 <% layout('layout') %>
 <!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
 <!-- <link href="../public/styles/styles.css" rel="stylesheet" /> -->
-
+<%- include map %>
 <div class="container mt-5">
   <div class="form-area">
     <form>
@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="form-group">
-            <button type="submit" id="btn-submit" class="btn tm-btn">確定送出商品</button>
+            <button type="submit" id="btn-submit" class="btn tm-btn">確定送出預約</button>
             <div class="submitting"></div>
           </div>
         </div>
@@ -102,7 +102,7 @@
       </div>
       <div id="product-modal-body" class="modal-body p-0">...</div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
       </div>
     </div>
   </div>

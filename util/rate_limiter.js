@@ -1,7 +1,7 @@
 // 此演算法的限流非常精確，但會浪費過多記憶體
 const redis = require('./redis');
 const moment = require('moment');
-const reqLimitPerWindowTime = 50; // times
+const reqLimitPerWindowTime = 500; // times
 const windowTime = 1; // seconds
 
 const slidingWindowLogs = async (req, res, next) => {
