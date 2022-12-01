@@ -35,6 +35,9 @@ $('#btn-map-search').click(async (e) => {
   };
   const response = await axios.get('/api/1.0/products/search', params);
   const productArr = response.data;
+  $('#search-result').hide();
+  $('#search-result').show('slow');
+  $('#search-result').find('span').html(productArr.length);
 
   productArr.forEach((data) => {
     marker = L.marker([`${data.lat}`, `${data.lng}`])
@@ -61,7 +64,7 @@ const options = {
   },
   adjustWidth: false,
   requestDelay: 300, // 延遲 300 毫秒再送出請求,api只允許 5  Requests Per Second (RPS)
-  placeholder: '請輸入關鍵字', // 預設顯示的字串
+  placeholder: '請輸入關鍵字，如： short, monitor, jacket', // 預設顯示的字串
   theme: 'round',
 };
 $('#keyword').easyAutocomplete(options); // 啟用 EasyAutocomplete 到 inpupbox 這個元件
@@ -166,7 +169,7 @@ function createMap(CENTER_LOCATION) {
   const items = {
     搜尋結果: marker,
   };
-  const legend = L.control
+  L.control
     .featureLegend(items, {
       position: 'bottomleft',
       symbolContainerSize: 24,

@@ -23,7 +23,6 @@ $('#reserve-page').addClass('tm-main-color');
   // 只有鑽石會員才有此功能，渲染reserve 卡片
   try {
     const response = await axios.get(`/api/1.0/reserve`, params);
-    console.log(response);
     const reserves = response.data;
     // eslint-disable-next-line no-restricted-syntax
     for (reserve of reserves) {

@@ -3,7 +3,10 @@ const pool = require('../util/mysql');
 const getOrders = async (userId) => {
   try {
     const [orders] = await pool.execute(
-      'SELECT * , DATE_FORMAT(time,"%Y/%m/%d %H:%i") AS `localTime` FROM `order` JOIN product ON `order`.product_id=product.id WHERE `order`.user_id=?',
+      `SELECT * , DATE_FORMAT(time,"%Y/%m/%d %H:%i") AS \`localTime\` FROM \`order\` 
+      JOIN product ON \`order\`.product_id=product.id 
+      WHERE \`order\`.user_id=?
+      ORDER BY product.id DESC`,
       [userId]
     );
 

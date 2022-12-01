@@ -4,7 +4,7 @@
 
   const response = await axios.get(`/api/1.0/products/details?id=${id}`);
   const product = response.data[0];
-  console.log(product);
+
   const {
     title,
     number,

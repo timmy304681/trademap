@@ -231,6 +231,7 @@ const segmentTitles = async (req, res) => {
 const reviseProduct = async (req, res) => {
   // TODO:  這邊要作賣方驗證，確認是他的訂單才可修改
   const { id, title, price, description, time } = req.body;
+
   let placeDetail = req.body['place-result'];
   let result;
   let isRevise = false;
