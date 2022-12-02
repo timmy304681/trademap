@@ -132,7 +132,7 @@ $(document).on('click', '.reserve-cancel-btn', (e) => {
       console.log(tagId);
       const response = await axios.delete(`/api/1.0/reserve?id=${tagId}`, params);
       $(e.target).parents('.tm-tag-item').remove();
-      Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+      Swal.fire('刪除成功', '預約已刪除', 'success');
     }
   });
 });

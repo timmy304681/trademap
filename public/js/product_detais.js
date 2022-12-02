@@ -27,7 +27,7 @@
   $('#product-title').html(title);
   $('#product-price').html(`NT$${price}`);
   $('#product-place').html(place);
-  $('#product-adress').html(address);
+  $('#product-address').html(address);
   $('#product-time').html(localTime);
   $('#product-description').html(description);
 

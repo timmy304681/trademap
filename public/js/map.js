@@ -82,7 +82,6 @@ const hereOptions = {
     onClickEvent: (e) => {
       // 按下選取項目之後的動作
       const data = $('#place').getSelectedItemData();
-      console.log(data);
       if (marker != undefined) {
         map.removeLayer(marker);
       }
@@ -218,7 +217,6 @@ function addMapTile(map, CENTER_LOCATION) {
 
 // 產生marker
 async function markerClick(e) {
-  console.log(e.target.myData);
   const { id } = e.target.myData;
   const response = await axios.get(`/api/1.0/products/details?id=${id}`);
 
@@ -240,7 +238,6 @@ async function markerClick(e) {
   map.flyTo(L.latLng({ lat, lng }), 18);
 
   $.get(`/product_details?id=${id}`, (data) => {
-    console.log(data);
     $('#product-modal-body').html(data);
     const myModal = new bootstrap.Modal(document.getElementById('product-modal'), {
       keyboard: false,

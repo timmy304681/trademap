@@ -309,11 +309,25 @@ html,body{
 
 .chat-message-right {
   flex-direction: row-reverse;
-  margin-left: auto
+  margin-left: auto;
+  text-align: end;   
 }
 
+.chat-message-right .d-flex{
+flex-direction: row-reverse;
+}
+
+.chat-message-right .d-flex .message-sender{
+  margin-left: 1rem;
+}
+
+.chat-message-left .d-flex .message-sender{
+  margin-right: 1rem;
+}
+
+
 .message-details{
-  background-color: #FFF;
+
 }
 #message-input{
   border: 1px solid rgba(0, 0, 0, 0.125);

@@ -140,3 +140,5 @@ function errorAlert(title, text) {
     text: text,
   });
 }
+
+// jQuery File Upload
