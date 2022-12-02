@@ -108,6 +108,7 @@ images
 
 # 可接受此資料夾
 !public/src/images 
+!public/src/leaflet/images
 
 # sequelize config
 config/config.json
