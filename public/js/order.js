@@ -46,12 +46,14 @@ $('#order-select').on('change', (e) => {
   } else if (orderSelect === 'all') {
     orderTarget = orderArr;
   }
-  console.log(orderTarget);
+
   renderOrders(orderTarget);
 });
 
 function renderOrders(orderArr) {
   const userId = localStorage.getItem('userId');
+  $('#order-amount-message').removeAttr('hidden');
+  $('#order-amount').html(orderArr.length);
   $('.clone-item').remove();
   $('#product-details-page').html('');
   // eslint-disable-next-line no-restricted-syntax
@@ -71,7 +73,7 @@ function renderOrders(orderArr) {
     newDom.find('.number').html(`訂單編號: ${order.number}`);
     newDom.find('.title').html(`${order.title}`);
     newDom.find('.place').html(`${order.place}`);
-    newDom.find('.price').html(`商品售價：${order.price}`);
+    newDom.find('.price').html(`${order.price}`);
     newDom.find('.time').html(`${order.localTime}`);
     newDom.find('.status').html(`${orderStaus}`);
     newDom.find('.btn-sold').attr('sellerId', order.user_id).attr('productId', order.product_id);

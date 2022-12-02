@@ -1,7 +1,7 @@
 <!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
 <!-- <link href="../public/styles/styles.css" rel="stylesheet" /> -->
 
-<div id="product-id" productId="<%= id%>" class="container ps-5 pe-3 pb-3">
+<div id="product-id" productId="<%= id%>" class="container ps-5 pe-5 pb-3">
   <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
     <div id="product-images-carousel" class="carousel-indicators">
       <button
@@ -38,29 +38,38 @@
   </div>
 
   <div class="details">
-    <div id="product-title" class="product-title mt-3 h2 fw-bold"></div>
-    <div class="price h4 mb-2">價錢: <span id="product-price" class="tm-label"></span></div>
+    <div id="product-title" class="product-title mt-3 h2 fw-bold mb-0">商品title</div>
+    <hr class="mt-0" />
+    <div class="price h4 mb-2">
+      <i class="fa-solid fa-sack-dollar"></i>
+      <span id="product-price" class="tm-label">999</span>
+    </div>
     <div class="mb-4">
+      <i class="fa-solid fa-user me-2"></i>
       <img id="user-photo" src="/" class="rounded-circle me-2" width="40" height="40" /><span
         id="user-name"
       ></span>
+      <div class="action d-inline">
+        <button id="btn-contact" class="add-to-cart btn tm-contact-btn ms-3" type="button" hidden>
+          連絡賣家
+        </button>
+        <div id="status-sold" class="tm-main-color tm-sold-label" hidden>商品已售出</div>
+      </div>
     </div>
 
-    <div class="mb-2">面交地點: <span id="product-place"></span></div>
     <div class="mb-2">
-      詳細地點:
-      <span id="product-adress"></span>
+      <i class="fa-solid fa-location-dot me-2"></i>
+      <span id="product-place">地點</span>
     </div>
-    <div class="mb-2">面交時間: <span id="product-time"></span></div>
+    <div class="mb-2 small">
+      <i class="fa-solid fa-location-crosshairs me-2"></i>
+      <span id="product-address">詳細地址</span>
+    </div>
+    <div class="mb-2">
+      <i class="fa-solid fa-clock me-2"></i> <span id="product-time">9:00pm</span>
+    </div>
     <br />
     <p id="product-description" class="product-description"></p>
-
-    <div class="action">
-      <button id="btn-contact" class="add-to-cart btn tm-contact-btn" type="button" hidden>
-        連絡賣家
-      </button>
-      <div id="status-sold" class="tm-main-color tm-sold-label" hidden>商品已售出</div>
-    </div>
   </div>
 </div>
 

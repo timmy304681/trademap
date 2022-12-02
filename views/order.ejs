@@ -11,19 +11,32 @@
         <option value="sell">販賣</option>
         <option value="buy">購買</option>
       </select>
+      <div id="order-amount-message" hidden>總共<span id="order-amount">5</span>筆訂單</div>
 
       <div id="order-list" class="list-group">
         <div class="list-group-item tm-order-box" hidden>
           <div class="d-flex">
-            <div class="number mb-1">123</div>
+            <div class="number small align-self-center">123</div>
             <div class="status me-3 m-auto tm-main-color tm-sold-status"></div>
           </div>
-          <div class="title mb-1 tm-order-product-title"></div>
-          <div class="place mb-1 tm-ellipsis"></div>
-          <div class="row mb-1">
-            <div class="price col tm-main-color"></div>
-            <div class="time col-5"></div>
+          <div class="title mb-1 tm-order-product-title fs-4">title</div>
+          <div class="mb-2">
+            <i class="fa-solid fa-sack-dollar me-2"></i>
+            <div class="d-inline">
+              NT$
+              <span class="price tm-main-color fs-5">price</span>
+            </div>
           </div>
+          <div>
+            <i class="fa-solid fa-location-dot me-2 text-center" style="width: 16px"></i>
+            <span class="place tm-ellipsis">place</span>
+          </div>
+
+          <div>
+            <i class="fa-solid fa-clock me-2"></i>
+            <span class="time col-5">time</span>
+          </div>
+
           <div class="d-flex justify-content-end align-content-center">
             <button class="btn-sold add-to-cart btn tm-sold-btn me-3" type="button" hidden>
               完成交易
@@ -143,7 +156,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-12 mb-4">
+                <!-- <div class="col-md-12 mb-4">
                   <div class="form-group">
                     <label class="tm-label" for="#">照片(最多十張)</label>
                     <input
@@ -155,7 +168,7 @@
                       accept="image/*"
                     />
                   </div>
-                </div>
+                </div> -->
               </div>
               <!-- <div class="col-md-6 mb-4">
                 <div id="map" class="w-100 h-100"></div>
@@ -166,7 +179,7 @@
         <!-- Modal body  Stop-->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
       </div>
     </div>
   </div>

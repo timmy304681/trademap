@@ -101,9 +101,9 @@ socket.on('output', (data) => {
     newDom.removeAttr('hidden');
     newDom.addClass('clone-item');
     newDom.addClass(whoSend);
-    newDom.children('.message-time').html(date.toLocaleString());
-    newDom.children('.message-details').children('.message-sender').html(messages[i].sender);
-    newDom.children('.message-details').children('.message-content').html(messages[i].message);
+    newDom.find('.message-time').html(date.toLocaleString());
+    newDom.find('.message-sender').html(messages[i].sender);
+    newDom.find('.message-content').html(messages[i].message);
     $('#chat-messages').append(newDom);
   }
   // 渲染訊息永遠會讓scroll到最底
