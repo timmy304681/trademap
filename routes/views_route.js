@@ -56,6 +56,10 @@ router.get('/product_details', (req, res) => {
   res.render('product_details', { title: '商品細節頁面', id, STATIC_FILES_URL });
 });
 
+router.get('/membership', (req, res) => {
+  res.render('membership', { title: '會員分級規則', STATIC_FILES_URL });
+});
+
 router.get('/404', (req, res) => {
   res.render('404', { title: 'Page not found', STATIC_FILES_URL });
 });

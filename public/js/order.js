@@ -23,9 +23,12 @@ $('#order-page').addClass('tm-main-color');
   const response = await axios.get('/api/1.0/orders', params);
   orderArr = response.data;
   renderOrders(orderArr);
+  $('#category-all').addClass('tm-order-category-chose');
 })();
 
 $('#order-list').click((e) => {
+  $('#order-sign').remove();
+  $('#product-details-area').removeAttr('hidden');
   const productId = $(e.target).parents('.list-group-item').attr('productId');
   if (productId === undefined) {
     return;
@@ -35,9 +38,12 @@ $('#order-list').click((e) => {
   });
 });
 
-$('#order-select').on('change', (e) => {
+$('.tm-order-category').on('click', (e) => {
+  $('.tm-order-category').removeClass('tm-order-category-chose');
+  $(e.currentTarget).addClass('tm-order-category-chose');
   const userId = localStorage.getItem('userId');
-  const orderSelect = e.target.value;
+  const orderSelect = $(e.currentTarget).attr('category');
+
   let orderTarget;
   if (orderSelect === 'sell') {
     orderTarget = orderArr.filter((x) => x['user_id'] == userId);
@@ -46,7 +52,6 @@ $('#order-select').on('change', (e) => {
   } else if (orderSelect === 'all') {
     orderTarget = orderArr;
   }
-
   renderOrders(orderTarget);
 });
 

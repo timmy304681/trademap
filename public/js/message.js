@@ -33,6 +33,7 @@ $('#message-page').addClass('tm-main-color');
 
 // 點擊聊天室彈出對話視窗
 $(document).on('click', '.tm-chatroom-item', async (e) => {
+  $('#chatroom-sign').remove();
   $('#chateroom-box-area').show();
   e.preventDefault();
   // 點入新的聊天室，清除資料

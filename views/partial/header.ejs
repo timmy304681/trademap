@@ -3,7 +3,7 @@
 <header>
   <nav class="tm-nav navbar navbar-expand-md navbar-light text-black-50 p-0 m-0">
     <div class="container-xxl">
-      <a class="navbar-brand ms-5" href="/">
+      <a class="navbar-brand ms-5 me-3" href="/">
         <img src="../../public/src/logo/trademap.png" width="100%" height="60px"
       /></a>
       <button
@@ -20,41 +20,47 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a id="index-page" class="nav-link h5" href="/">首頁</a>
+            <a id="index-page" class="nav-link h3 me-3 m-auto" href="/"
+              ><i class="fa-solid fa-house"></i
+            ></a>
           </li>
           <li class="nav-item">
-            <a id="suggest-page" class="nav-link h5" href="/suggest">商品推薦</a>
+            <a id="suggest-page" class="nav-link h3 m-auto" href="/suggest"
+              ><i class="fa-solid fa-compass"></i
+            ></a>
           </li>
 
-          <li class="nav-item">
-            <a id="product-page" class="nav-link h5" href="/product">商品上傳</a>
-          </li>
-          <li class="nav-item">
-            <a id="order-page" class="nav-link h5" href="/order">訂單管理</a>
-          </li>
-          <li class="nav-item">
-            <a id="message-page" class="nav-link h5" href="/message">訊息</a>
-          </li>
-
-          <li class="nav-item">
-            <a id="reserve-page" class="nav-link h5" href="/reserve">商品預約</a>
-          </li>
+          <li class="nav-item"></li>
         </ul>
 
-        <div class="navbar-nav ms-auto me-5 mb-lg-0">
-          <a id="profile-icon" class="nav-link h2" href="/profile"
+        <div class="navbar-nav ms-auto me-5 mb-0">
+          <div id="member-area" class="d-flex" style="visibility: hidden">
+            <a id="reserve-page" class="nav-link h3 m-auto me-3" href="/reserve"
+              ><i class="fa-regular fa-bookmark"></i
+            ></a>
+            <a id="product-page" class="nav-link h3 m-auto me-3" href="/product"
+              ><i class="fa-regular fa-square-caret-up"></i
+            ></a>
+            <a id="order-page" class="nav-link h3 m-auto me-3" href="/order"
+              ><i class="fa-solid fa-list"></i
+            ></a>
+            <a id="message-page" class="nav-link h3 m-auto me-3" href="/message"
+              ><i class="fa-regular fa-comment"></i
+            ></a>
+          </div>
+          <a id="profile-icon" class="nav-link h3 m-auto" href="/profile"
             ><i class="fa-solid fa-address-card"></i
           ></a>
 
-          <section id="tm-profile-box" class="nav-item dropdown" hidden>
+          <section id="tm-profile-box" class="nav-item dropdown h-100" hidden>
             <a
-              class="nav-link nav-profile d-flex"
+              class="nav-link nav-profile d-flex align-items-center"
               href="#"
               data-bs-toggle="dropdown"
               aria-expanded="false"
               ><img
                 id="image-insert"
-                class="rounded-circle me-3"
+                class="rounded-circle me-2"
                 alt="Profile"
                 width="40"
                 height="40" />
@@ -66,16 +72,16 @@
             ></a>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
               <li class="dropdown-header">
-                <h6 class="text-center h5 fw-bold"></h6>
+                <h6 class="fs-5 fw-bold"></h6>
                 <span></span>
               </li>
-              <!-- <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item d-flex align-items-center" href="/profile"
-                  ><i class="bi bi-person"></i><span>個人資訊</span></a
-                >
-              </li> -->
+
               <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a href="/membership" class="dropdown-item d-flex align-items-center"
+                  >會員分級制度</a
+                >
+              </li>
               <li>
                 <a
                   class="dropdown-item d-flex align-items-center"
@@ -111,17 +117,18 @@
       // 存userId在localStorage
       localStorage.setItem('userId', userProfile.id);
 
-      let role;
+      let roleImagePath;
       if (userProfile['role_id'] === 2) {
-        role = '金級會員';
+        roleImagePath = '/public/src/images/vip-gold.png'; //金級會員
       } else {
-        role = '銀級會員';
+        roleImagePath = '/public/src/images/vip.png'; //一般會員
       }
+      $('#member-area').css('visibility', 'visible');
       $('#profile-icon').hide();
       $('#tm-profile-box').removeAttr('hidden');
       $('#image-insert').attr('src', `${userProfile.photo}`);
       $('#name-insert').html(userProfile.name);
-      $('#role-insert').html(role);
+      $('#role-insert').append(`<img src=${roleImagePath} height="50px" />`);
 
       $('.dropdown-header').children('h6').html(`${userProfile.name}`);
       $('.dropdown-header').children('span').html(`${userProfile.email}`);
