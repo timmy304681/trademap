@@ -5,12 +5,21 @@
 <div class="container h-75 mt-5">
   <div class="row h-100">
     <div class="col-6 border tm-order-area h-100">
-      <div class="tm-label text-center">商品列表</div>
-      <select id="order-select" class="form-select h1 tm-order-box">
-        <option value="all">全部</option>
-        <option value="sell">販賣</option>
-        <option value="buy">購買</option>
-      </select>
+      <div class="tm-label text-center mb-3">商品列表</div>
+      <div class="d-flex justify-content-around mt-2 mb-3 fs-5">
+        <div id="category-all" class="tm-order-category px-3" category="all">
+          <i class="fa-solid fa-star"></i>
+          <span> 全部</span>
+        </div>
+        <div class="tm-order-category px-3" category="sell">
+          <i class="fa-solid fa-store"></i>
+          <span> 上架商品</span>
+        </div>
+        <div class="tm-order-category px-3" category="buy">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span>洽談與購買</span>
+        </div>
+      </div>
       <div id="order-amount-message" hidden>總共<span id="order-amount">5</span>筆訂單</div>
 
       <div id="order-list" class="list-group">
@@ -48,8 +57,12 @@
         </div>
       </div>
     </div>
-    <div class="col-6 border tm-order-area h-100">
+    <div id="order-sign" class="col-6 d-flex flex-column justify-content-center fs-3">
+      <div class="text-center">請選擇左側訂單查看細節</div>
+    </div>
+    <div id="product-details-area" class="col-6 border tm-order-area h-100" hidden>
       <div class="tm-label text-center">商品細節</div>
+
       <div id="product-details-page"></div>
     </div>
   </div>

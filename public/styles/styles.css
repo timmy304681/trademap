@@ -52,10 +52,19 @@ html,body{
   background-color: #315258;
   border-color: #1D3124;
 }
+.tm-table-title{
+  color: #ffffff;
+  background-color: #315258;
+  border-color: #1D3124;
+}
 
 .tm-btn:hover{  
   box-shadow: 0 0 11px rgba(33,33,33,0.9);
 }
+
+
+
+
 
 .tm-contact-btn{
   color: black;
@@ -126,6 +135,24 @@ html,body{
   color: #002970
 }
 
+
+.tm-order-category:hover{  
+  box-shadow: 0 0 11px rgba(33,33,33,0.3);
+  border-radius: 10px;
+ cursor: pointer;
+ color: #ffffff;
+  background-color: #315258;
+}
+.tm-order-category-chose{  
+  box-shadow: 0 0 11px rgba(33,33,33,0.3);
+  border-radius: 10px;
+ cursor: pointer;
+ color: #ffffff;
+  background-color: #315258;
+}
+
+
+
 .tm-card {
   position: relative;
   display: flex;
@@ -164,6 +191,7 @@ html,body{
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 
 
 
@@ -270,6 +298,12 @@ html,body{
 .easy-autocomplete input{
   width: 100% !important;
   height: 100% !important
+}
+
+
+a:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,0.3);
+  border-radius: 10px; 
 }
 /* // index */
 
