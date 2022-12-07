@@ -3,8 +3,10 @@ const { wrapAsync, authentication, reserveAuthorization } = require('../util/uti
 
 const { createReserve, getReserve, deleteReserve } = require('../controllers/reserve_controller');
 
-router.route('/reserve').get(authentication, reserveAuthorization, wrapAsync(getReserve));
-router.route('/reserve').post(authentication, reserveAuthorization, wrapAsync(createReserve));
-router.route('/reserve').delete(authentication, reserveAuthorization, wrapAsync(deleteReserve));
+router
+  .route('/reserve')
+  .get(authentication, reserveAuthorization, wrapAsync(getReserve))
+  .post(authentication, reserveAuthorization, wrapAsync(createReserve))
+  .delete(authentication, reserveAuthorization, wrapAsync(deleteReserve));
 
 module.exports = router;

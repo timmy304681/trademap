@@ -4,6 +4,7 @@ const { Server } = require('socket.io');
 const validator = require('validator');
 
 const io = (server) => {
+  // FIXME: 不要開星號
   const io = new Server(server, {
     cors: {
       origin: '*',

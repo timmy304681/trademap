@@ -15,7 +15,6 @@ const createReserve = async (userId, lat, lng, place, tags) => {
     return { message: 'create reserve successfully' };
   } catch (err) {
     console.log(err);
-    console.log('err');
 
     return { error: 'create reserve failed' };
   }
@@ -67,8 +66,7 @@ const updateProduct = async (userReserves, productId) => {
       ]);
     }
     return { message: 'update success' };
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
     return { error: 'update product_id failed' };
   }
 };

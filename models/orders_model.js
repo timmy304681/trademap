@@ -50,13 +50,21 @@ const changeStatusToContact = async (userId, productId) => {
   }
 };
 
-const changeOrderStatus = async (productId, status) => {
+const changeOrderStatus = async (userId, productId, status) => {
   const conn = await pool.getConnection();
   try {
     await conn.query('START TRANSACTION');
 
-    await conn.execute('UPDATE `order` SET status=? WHERE product_id=?', [status, productId]);
-    await conn.execute('UPDATE `product` SET status=? WHERE id=?', [status, productId]);
+    await conn.execute('UPDATE `order` SET status=? WHERE product_id=? AND user_id=?', [
+      status,
+      productId,
+      userId,
+    ]);
+    await conn.execute('UPDATE `product` SET status=? WHERE id=? AND user_id=?', [
+      status,
+      productId,
+      userId,
+    ]);
 
     await conn.query('COMMIT');
     return { message: 'change order status successfully' };

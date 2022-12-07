@@ -2,6 +2,7 @@ const messagesModel = require('../models/messages_model');
 const orderModel = require('../models/orders_model');
 const cache = require('../util/redis');
 const { getImagePath } = require('../util/util');
+
 const getMessages = async (req, res) => {
   const { user1, user2 } = req.query;
 
@@ -15,13 +16,14 @@ const getChatrooms = async (req, res) => {
 
   const chatrooms = await messagesModel.getChatrooms(userId);
 
+  chatrooms.forEach((chatroom) => {
+    chatroom.chatmatePhoto = getImagePath(chatroom.chatmatePhoto);
+  });
+
   const response = {
     user: req.user,
     chatrooms,
   };
-  response.chatrooms.forEach((x) => {
-    x.chatmatePhoto = getImagePath(x.chatmatePhoto);
-  });
 
   res.status(200).json(response);
 };
