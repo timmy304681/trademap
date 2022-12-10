@@ -24,7 +24,7 @@ const webSocket = (server) => {
 };
 
 function wrapSocketAsync(cb, socket, io) {
-  return async function (emitObject) {
+  return async (emitObject) => {
     try {
       await cb(emitObject, socket, io);
     } catch (error) {

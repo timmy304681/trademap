@@ -1,6 +1,6 @@
 const productModel = require('../models/products_model');
 const { getDistance, getImagePath } = require('../util/util');
-const cache = require('../util/redis');
+const cache = require('../util/cache');
 
 const pageSize = 6;
 

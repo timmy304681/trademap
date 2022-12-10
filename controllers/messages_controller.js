@@ -1,6 +1,6 @@
 const messagesModel = require('../models/messages_model');
 const orderModel = require('../models/orders_model');
-const cache = require('../util/redis');
+const cache = require('../util/cache');
 const { getImagePath } = require('../util/util');
 
 const getMessages = async (req, res) => {

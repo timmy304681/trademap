@@ -1,5 +1,5 @@
 const orderModel = require('../models/orders_model');
-const cache = require('../util/redis');
+const cache = require('../util/cache');
 
 const getOrders = async (req, res) => {
   const userId = req.user.id;

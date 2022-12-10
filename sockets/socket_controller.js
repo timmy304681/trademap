@@ -1,5 +1,5 @@
 const validator = require('validator');
-const messagesMoodel = require('../models/messages_model');
+const messagesModel = require('../models/messages_model');
 
 async function getChatrooms(data, socket, io) {
   const { user1, user2, userId1, userId2 } = data;
@@ -7,7 +7,7 @@ async function getChatrooms(data, socket, io) {
   const userList = [user1, user2].sort();
   console.log(userList);
   socket.join(`${userList[0]}_${userList[1]}`);
-  const chats = await messagesMoodel.getMessages(userList[0], userList[1]);
+  const chats = await messagesModel.getMessages(userList[0], userList[1]);
   socket.emit('output', chats);
 }
 

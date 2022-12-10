@@ -1,4 +1,4 @@
-const pool = require('../util/mysql');
+const { pool } = require('../util/db');
 const { SQLError } = require('../util/error_handler');
 
 const getOrders = async (userId) => {

@@ -1,6 +1,6 @@
-const pool = require('../util/mysql');
-const mongoCollection = require('../util/mongodb');
 const { MongoDBError, SQLError } = require('../util/error_handler');
+const { pool } = require('../util/db');
+const mongoCollection = require('../util/db').mongodbCollection;
 
 const getMessages = async (user1, user2) => {
   try {

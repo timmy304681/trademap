@@ -1,5 +1,5 @@
 // 此演算法的限流非常精確，但會浪費過多記憶體
-const redis = require('./redis');
+const redis = require('./cache');
 const moment = require('moment');
 const reqLimitPerWindowTime = 500; // times
 const windowTime = 1; // seconds
