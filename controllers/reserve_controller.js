@@ -17,10 +17,6 @@ const createReserve = async (req, res) => {
 
   const result = await reserveModel.createReserve(userId, lat, lng, place, tags);
 
-  if (result.error) {
-    return res.status(400).json(result);
-  }
-
   res.status(200).json(result);
 };
 

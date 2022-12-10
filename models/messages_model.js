@@ -1,5 +1,6 @@
 const pool = require('../util/mysql');
 const mongoCollection = require('../util/mongodb');
+const { MongoDBError, SQLError } = require('../util/error_handler');
 
 const getMessages = async (user1, user2) => {
   try {
@@ -7,8 +8,8 @@ const getMessages = async (user1, user2) => {
       .find({ $or: [{ user: [user1, user2] }, { user: [user2, user1] }] })
       .toArray();
     return chats;
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    throw new MongoDBError('get messages failed', error);
   }
 };
 
@@ -22,8 +23,8 @@ const saveMessages = async (user1, user2, sender, message, timeStamp) => {
       { $push: { messages: { sender, message, timeStamp } } },
       { upsert: true }
     );
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    throw new MongoDBError('save messages failed', error);
   }
 };
 
@@ -37,8 +38,8 @@ const getChatrooms = async (userId) => {
       [userId]
     );
     return chatrooms;
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    throw new MongoDBError('get chatrooms failed', error);
   }
 };
 
@@ -46,9 +47,8 @@ const createChatroom = async (userId, chatemateId, productId) => {
   const conn = await pool.getConnection();
 
   try {
-    console.log(userId, chatemateId);
     // check if chatrooms already exist
-    const [chatrooms1] = await conn.execute(
+    const [chatrooms1] = await conn.execute1(
       'SELECT * FROM chat_room WHERE user_id=? AND chatmate=?',
       [userId, chatemateId]
     );
@@ -86,12 +86,9 @@ const createChatroom = async (userId, chatemateId, productId) => {
     ]);
     await conn.query('COMMIT');
     return { message: `chatroom of user ${userId} & ${chatemateId} create succssefuly` };
-  } catch (err) {
-    console.log('here err');
-    console.log(err);
+  } catch (error) {
     await conn.query('ROLLBACK');
-
-    return false;
+    throw new SQLError('create chatrooms failed', error);
   } finally {
     await conn.release();
   }

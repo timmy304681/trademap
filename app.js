@@ -3,11 +3,12 @@ const app = express();
 const engine = require('ejs-locals');
 const http = require('http');
 const server = http.createServer(app);
-const io = require('./util/socket_io');
+const webSocket = require('./sockets/socket');
 const rateLimiter = require('./util/rate_limiter');
+const { SQLError } = require('./util/error_handler');
 
-// socket set up
-io(server);
+// webSocket set up
+webSocket(server);
 
 // env
 require('dotenv').config();
@@ -45,25 +46,14 @@ app.use((req, res, next) => {
 
 // Error handling
 
-class Exception extends Error {
-  constructor(msg, log, functionName) {
-    super(msg);
-    this.log = log;
-    this.functionName = functionName;
-  }
-
-  get fullLog() {
-    return JSON.stringify({
-      timestamp: new Date(),
-      log: this.log,
-      function_name: this.functionName,
-    });
-  }
-}
-
 app.use((err, req, res, next) => {
-  console.error(err.fullLog);
-  res.status(500).json(err.stack);
+  if (err instanceof SQLError) {
+    console.error(err.errorLog);
+    return res.status(500).json({ msg: err.message });
+  }
+  console.log('error handler');
+  console.error(err);
+  res.status(500).json({ error: 'Server error' });
 });
 
 server.listen(SERVER_PORT, () => {

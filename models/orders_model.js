@@ -1,4 +1,5 @@
 const pool = require('../util/mysql');
+const { SQLError } = require('../util/error_handler');
 
 const getOrders = async (userId) => {
   try {
@@ -11,9 +12,8 @@ const getOrders = async (userId) => {
     );
 
     return orders;
-  } catch (err) {
-    console.log(err);
-    return { err: 'Database Query Error' };
+  } catch (error) {
+    throw new SQLError('get orders failed', error);
   }
 };
 
@@ -43,8 +43,7 @@ const changeStatusToContact = async (userId, productId) => {
     return { message: ' create order and change order status successfully' };
   } catch (error) {
     await conn.query('ROLLBACK');
-    console.log(error);
-    return false;
+    throw new SQLError('change status to contact', error);
   } finally {
     await conn.release();
   }
@@ -70,8 +69,8 @@ const changeOrderStatus = async (userId, productId, status) => {
     return { message: 'change order status successfully' };
   } catch (error) {
     await conn.query('ROLLBACK');
-    console.log(error);
-    return { error: 'change order status failed' };
+
+    throw new SQLError('change order status', error);
   } finally {
     await conn.release();
   }

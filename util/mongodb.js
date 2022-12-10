@@ -11,8 +11,8 @@ const mongo = new MongoClient(
     await mongo.connect();
     console.log('Mongo db Connected');
   } catch (err) {
-    console.log('Mongodb connected failed!!');
-    console.log(err);
+    console.error('Mongodb connected failed!!');
+    console.error(err);
   }
 })();
 const mongodbCollection = mongo.db(MONGODB_DATABASE).collection(MONGODB_COLLECTION);

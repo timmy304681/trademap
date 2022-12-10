@@ -1,4 +1,5 @@
 const pool = require('../util/mysql');
+const { SQLError } = require('../util/error_handler');
 
 const getProductsByPaging = async (pageSize, paging = 0) => {
   try {
@@ -8,8 +9,7 @@ const getProductsByPaging = async (pageSize, paging = 0) => {
     ]);
     return products;
   } catch (error) {
-    console.error(error);
-    throw new Error(error);
+    throw new SQLError('get products by page failed', error);
   }
 };
 
@@ -25,8 +25,7 @@ const getProducts = async () => {
 
     return products;
   } catch (error) {
-    console.error(error);
-    throw new Error(error);
+    throw new SQLError('get products failed', error);
   }
 };
 
@@ -42,21 +41,23 @@ const getProductDetails = async (id) => {
     productDetails[0].images = imagesArr;
     return productDetails;
   } catch (error) {
-    console.error(error);
-    throw new Error(error);
+    throw new SQLError('get product details failed', error);
   }
 };
 
 const searchProducts = async (keyword) => {
   try {
-    const [products] = await pool.execute('SELECT * FROM product WHERE title like ?', [
-      `%${keyword}%`,
-    ]);
+    const [products] = await pool.execute(
+      `
+    SELECT * 
+    FROM product 
+    WHERE MATCH (title) AGAINST (?) limit 10`,
+      [keyword]
+    );
 
     return products;
   } catch (error) {
-    console.error(error);
-    throw new Error(error);
+    throw new SQLError('search products failed', error);
   }
 };
 
@@ -68,8 +69,7 @@ const getAutoComplete = async (keyword) => {
 
     return products;
   } catch (error) {
-    console.error(error);
-    throw new Error(error);
+    throw new SQLError('get auto complete failed', error);
   }
 };
 
@@ -134,8 +134,7 @@ const createProduct = async (product, number, images, tags) => {
     return { id: createResult.insertId, number };
   } catch (error) {
     await conn.query('ROLLBACK');
-    console.error(error);
-    throw new Error(error);
+    throw new SQLError('create product failed', error);
   } finally {
     await conn.release();
   }
@@ -152,8 +151,7 @@ const revisePropertyOfProduct = async (userId, id, property, value) => {
     }
     return { error: `修改${property}失敗` };
   } catch (error) {
-    console.error(error);
-    throw new Error(error);
+    throw new SQLError('revise property of a product failed', error);
   }
 };
 
@@ -172,8 +170,7 @@ const revisePlaceOfProduct = async (userId, id, value) => {
     }
     return { error: '修改place失敗' };
   } catch (error) {
-    console.error(error);
-    throw new Error(error);
+    throw new SQLError('revise place info of a product failed', error);
   }
 };
 

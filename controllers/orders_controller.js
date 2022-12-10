@@ -13,9 +13,7 @@ const changeOrderStatus = async (req, res) => {
   const userId = req.user.id;
   const { productId, status } = req.body;
   const result = await orderModel.changeOrderStatus(userId, productId, status);
-  if (result.error) {
-    return res.status(400).json(result);
-  }
+
   // change order status, delete product:${productId} from cache
   if (cache.ready) {
     await cache.del(`product:${productId}`);

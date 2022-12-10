@@ -61,10 +61,6 @@ const signUp = async (req, res) => {
   // create user profile
   const result = await userModel.signUp(name, email, passwordHash, photo);
 
-  if (result.err) {
-    return res.status(500).json(result);
-  }
-
   // get jwt access token
 
   const payload = {

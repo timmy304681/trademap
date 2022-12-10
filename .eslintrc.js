@@ -20,5 +20,7 @@ module.exports = {
     'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
     // 允許for-loop裡面有continue
     'no-continue': 0,
+    // 允許一個file有多個class
+    'max-classes-per-file': ['error', 5],
   },
 };
