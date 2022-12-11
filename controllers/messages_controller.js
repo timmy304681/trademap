@@ -1,5 +1,6 @@
 const messagesModel = require('../models/messages_model');
 const orderModel = require('../models/orders_model');
+const productModel = require('../models/products_model');
 const cache = require('../util/cache');
 const { getImagePath } = require('../util/util');
 
@@ -42,8 +43,7 @@ const createChatroom = async (req, res) => {
   // 因為買方聯繫了，所以商品狀態要改成洽談中
   await orderModel.changeStatusToContact(userId, productId);
   if (cache.ready) {
-    await cache.del(`product:${productId}`);
-    // console.log(`change order status, delete product:${productId} from cache`);
+    await productModel.deleteProductCache(productId);
   }
 
   res.status(200).json(chatrooms);

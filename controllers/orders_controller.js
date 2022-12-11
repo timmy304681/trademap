@@ -1,4 +1,5 @@
 const orderModel = require('../models/orders_model');
+const productModel = require('../models/products_model');
 const cache = require('../util/cache');
 
 const getOrders = async (req, res) => {
@@ -16,7 +17,7 @@ const changeOrderStatus = async (req, res) => {
 
   // change order status, delete product:${productId} from cache
   if (cache.ready) {
-    await cache.del(`product:${productId}`);
+    await productModel.deleteProductCache(productId);
   }
   res.status(200).json(result);
 };

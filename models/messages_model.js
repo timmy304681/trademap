@@ -48,7 +48,7 @@ const createChatroom = async (userId, chatemateId, productId) => {
 
   try {
     // check if chatrooms already exist
-    const [chatrooms1] = await conn.execute1(
+    const [chatrooms1] = await conn.execute(
       'SELECT * FROM chat_room WHERE user_id=? AND chatmate=?',
       [userId, chatemateId]
     );

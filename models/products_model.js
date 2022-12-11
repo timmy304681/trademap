@@ -1,5 +1,9 @@
 const { pool } = require('../util/db');
-const { SQLError } = require('../util/error_handler');
+const { SQLError, RedisError } = require('../util/error_handler');
+const cache = require('../util/cache');
+
+require('dotenv').config();
+const { REDIS_EXPIRE } = process.env;
 
 const getProductsByPaging = async (pageSize, paging = 0) => {
   try {
@@ -174,6 +178,29 @@ const revisePlaceOfProduct = async (userId, id, value) => {
   }
 };
 
+const getProductCache = async (id) => {
+  try {
+    return await cache.get(`product:${id}`);
+  } catch (error) {
+    throw new RedisError('get product cache from redis failed', error);
+  }
+};
+const createProductCache = async (id, productDetail) => {
+  try {
+    await cache.set(`product:${id}`, JSON.stringify(productDetail), { EX: REDIS_EXPIRE });
+  } catch (error) {
+    throw new RedisError('create product cache to redis failed', error);
+  }
+};
+
+const deleteProductCache = async (id) => {
+  try {
+    await cache.del(`product:${id}`);
+  } catch (error) {
+    throw new RedisError('delete product cache from redis failed', error);
+  }
+};
+
 module.exports = {
   getProducts,
   getProductDetails,
@@ -183,4 +210,7 @@ module.exports = {
   getProductsByPaging,
   revisePropertyOfProduct,
   revisePlaceOfProduct,
+  getProductCache,
+  createProductCache,
+  deleteProductCache,
 };

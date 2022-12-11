@@ -48,8 +48,25 @@ class MongoDBError extends CustomError {
   }
 }
 
+class RedisError extends CustomError {
+  constructor(msg, log) {
+    super(msg, log);
+    this.type = 'redis error';
+  }
+
+  get errorLog() {
+    return {
+      timestamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+      msg: this.msg,
+      log: this.log,
+      type: this.type,
+    };
+  }
+}
+
 module.exports = {
   CustomError,
   SQLError,
   MongoDBError,
+  RedisError,
 };

@@ -4,9 +4,6 @@ const cache = require('../util/cache');
 
 const pageSize = 6;
 
-require('dotenv').config();
-const { REDIS_EXPIRE } = process.env;
-
 async function findProducts(category, query, paging) {
   const findActions = {
     all: getAllProducts,
@@ -65,13 +62,15 @@ async function getProductDetails(query, paging) {
   let cacheProductDetails;
 
   if (cache.ready) {
-    cacheProductDetails = await cache.get(`product:${id}`);
+    cacheProductDetails = await productModel.getProductCache(id);
   }
 
   if (cacheProductDetails) {
     // Get product details from cache
     return [JSON.parse(cacheProductDetails)];
   }
+
+  console.log(`search form db`);
 
   // Search product details  from  mysql
   const productDetails = await productModel.getProductDetails(id);
@@ -80,7 +79,7 @@ async function getProductDetails(query, paging) {
 
   if (cache.ready) {
     // Save product details in cache
-    await cache.set(`product:${id}`, JSON.stringify(productDetails[0]), { EX: REDIS_EXPIRE });
+    await productModel.createProductCache(id, productDetails[0]);
   }
 
   return productDetails;
