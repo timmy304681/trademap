@@ -1,4 +1,5 @@
-const pool = require('../util/mysql');
+const { pool } = require('../util/db');
+const { SQLError } = require('../util/error_handler');
 
 const getOrders = async (userId) => {
   try {
@@ -11,9 +12,8 @@ const getOrders = async (userId) => {
     );
 
     return orders;
-  } catch (err) {
-    console.log(err);
-    return { err: 'Database Query Error' };
+  } catch (error) {
+    throw new SQLError('get orders failed', error);
   }
 };
 
@@ -43,27 +43,34 @@ const changeStatusToContact = async (userId, productId) => {
     return { message: ' create order and change order status successfully' };
   } catch (error) {
     await conn.query('ROLLBACK');
-    console.log(error);
-    return false;
+    throw new SQLError('change status to contact', error);
   } finally {
     await conn.release();
   }
 };
 
-const changeOrderStatus = async (productId, status) => {
+const changeOrderStatus = async (userId, productId, status) => {
   const conn = await pool.getConnection();
   try {
     await conn.query('START TRANSACTION');
 
-    await conn.execute('UPDATE `order` SET status=? WHERE product_id=?', [status, productId]);
-    await conn.execute('UPDATE `product` SET status=? WHERE id=?', [status, productId]);
+    await conn.execute('UPDATE `order` SET status=? WHERE product_id=? AND user_id=?', [
+      status,
+      productId,
+      userId,
+    ]);
+    await conn.execute('UPDATE `product` SET status=? WHERE id=? AND user_id=?', [
+      status,
+      productId,
+      userId,
+    ]);
 
     await conn.query('COMMIT');
     return { message: 'change order status successfully' };
   } catch (error) {
     await conn.query('ROLLBACK');
-    console.log(error);
-    return { error: 'change order status failed' };
+
+    throw new SQLError('change order status', error);
   } finally {
     await conn.release();
   }

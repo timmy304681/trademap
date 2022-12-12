@@ -16,8 +16,6 @@ const { JWT_SECRET, AWS_BUCKET_NAME, IMAGES_URL } = process.env;
 // reference: https://thecodebarbarian.com/80-20-guide-to-express-error-handling
 const wrapAsync = (fn) => {
   return function (req, res, next) {
-    // Make sure to `.catch()` any errors and pass them along to the `next()`
-    // middleware in the chain, in this case the error handler.
     fn(req, res, next).catch(next);
   };
 };
@@ -81,7 +79,7 @@ const authentication = async (req, res, next) => {
   }
 
   try {
-    const user = await jwt.verify(accessToken, JWT_SECRET);
+    const user = jwt.verify(accessToken, JWT_SECRET);
     req.user = user;
     next();
   } catch (err) {
@@ -161,12 +159,13 @@ const sanitizeRequest = async (req, res, next) => {
     input.description = validator.escape(input.description);
   }
 
+  if (typeof input.tags == 'string') {
+    input.tags = [input.tags];
+  }
   if (input.tags) {
-    if (input.length > 0) {
-      input.tags = input.tags.filter((el) => el); //去除array null
-    }
-    input.tags.forEach((x) => {
-      x = validator.escape(x);
+    input.tags = input.tags.filter((tag) => tag); // 去除array null
+    input.tags.forEach((tag) => {
+      tag = validator.escape(tag);
     });
   }
 

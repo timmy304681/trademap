@@ -1,6 +1,6 @@
 const orderModel = require('../models/orders_model');
-const userModel = require('../models/users_model');
-const cache = require('../util/redis');
+const productModel = require('../models/products_model');
+const cache = require('../util/cache');
 
 const getOrders = async (req, res) => {
   const userId = req.user.id;
@@ -11,16 +11,13 @@ const getOrders = async (req, res) => {
 };
 
 const changeOrderStatus = async (req, res) => {
-  // TODO:  這邊要作賣方驗證，確認是他的訂單才可修改
+  const userId = req.user.id;
   const { productId, status } = req.body;
-  const result = await orderModel.changeOrderStatus(productId, status);
-  if (result.error) {
-    return res.status(400).json(result);
-  }
+  const result = await orderModel.changeOrderStatus(userId, productId, status);
 
+  // change order status, delete product:${productId} from cache
   if (cache.ready) {
-    await cache.del(`product:${productId}`);
-    // console.log(`change order status, delete product:${productId} from cache`);
+    await productModel.deleteProductCache(productId);
   }
   res.status(200).json(result);
 };

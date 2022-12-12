@@ -3,12 +3,12 @@ const app = express();
 const engine = require('ejs-locals');
 const http = require('http');
 const server = http.createServer(app);
-const io = require('./util/socket_io');
+const webSocket = require('./sockets/socket');
 const rateLimiter = require('./util/rate_limiter');
-const morganBody = require('morgan-body');
+const { SQLError } = require('./util/error_handler');
 
-// socket set up
-io(server);
+// webSocket set up
+webSocket(server);
 
 // env
 require('dotenv').config();
@@ -17,13 +17,10 @@ const { SERVER_PORT, API_VERSION } = process.env;
 // static files
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/images', express.static(__dirname + '/images'));
-// app.use('/test', express.static(__dirname + '/test'));
 
-// middileware
+// middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// hook morganBody to express app
-// morganBody(app, { logResponseBody: false });
 
 // views
 app.engine('ejs', engine);
@@ -48,9 +45,15 @@ app.use((req, res, next) => {
 });
 
 // Error handling
+
 app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(500).send('Internal Server Error');
+  if (err instanceof SQLError) {
+    console.error(err.errorLog);
+    return res.status(500).json({ msg: err.message });
+  }
+  console.log('error handler');
+  console.error(err);
+  res.status(500).json({ error: 'Server error' });
 });
 
 server.listen(SERVER_PORT, () => {

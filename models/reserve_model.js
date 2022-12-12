@@ -1,5 +1,5 @@
-const pool = require('../util/mysql');
-const { getDistance } = require('../util/util');
+const { pool } = require('../util/db');
+const { SQLError } = require('../util/error_handler');
 
 const createReserve = async (userId, lat, lng, place, tags) => {
   try {
@@ -13,11 +13,8 @@ const createReserve = async (userId, lat, lng, place, tags) => {
     });
 
     return { message: 'create reserve successfully' };
-  } catch (err) {
-    console.log(err);
-    console.log('err');
-
-    return { error: 'create reserve failed' };
+  } catch (error) {
+    throw new SQLError('create reserve failed', error);
   }
 };
 
@@ -25,9 +22,8 @@ const getReserve = async (userId) => {
   try {
     const [reserves] = await pool.execute('SELECT * FROM reserve WHERE user_id =?', [userId]);
     return reserves;
-  } catch (err) {
-    console.log(err);
-    return { error: 'get reserve failed' };
+  } catch (error) {
+    throw new SQLError('get reserves failed', error);
   }
 };
 
@@ -39,18 +35,16 @@ const searchReserve = async (tags) => {
     );
 
     return users;
-  } catch (err) {
-    console.log(err);
-    return { error: 'get reserve tags failed' };
+  } catch (error) {
+    throw new SQLError('search reserves failed', error);
   }
 };
 
 const deleteReserve = async (tagId) => {
   try {
     const [users] = await pool.query('DELETE FROM reserve WHERE id=?;', [tagId]);
-  } catch (err) {
-    console.log(err);
-    return { error: 'delete reserve tags failed' };
+  } catch (error) {
+    throw new SQLError('delete reserve failed', error);
   }
 };
 
@@ -67,9 +61,8 @@ const updateProduct = async (userReserves, productId) => {
       ]);
     }
     return { message: 'update success' };
-  } catch (err) {
-    console.log(err);
-    return { error: 'update product_id failed' };
+  } catch (error) {
+    throw new SQLError('update reserve failed', error);
   }
 };
 
