@@ -1,13 +1,14 @@
 # Trademap
 
-Trademap is dedicated to offering users a location-based trading platform. Offered consumers a user-friendly and convenient platform for face-to-face appointment reservations.  
-<a href="https://trademap.site/">https://trademap.site/<a>
+Trademap is dedicated to offering users a location-based trading platform. Offered consumers a user-friendly and convenient platform for face-to-face appointment reservations.
+
+- Website: <a href="https://trademap.site/">https://trademap.site</a>
+- docker image: <a href="https://hub.docker.com/r/timmy304681/trademap">https://hub.docker.com/r/timmy304681/trademap</a>
 
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
 - [System Architecture](#system-architecture)
-- [Containerizing](#containerizing)
 - [Database Schema](#database-schema)
 - [Features](#features)
 - [Demo](#demo)
@@ -15,29 +16,28 @@ Trademap is dedicated to offering users a location-based trading platform. Offer
 
 ## System Architecture
 
-###
+### AWS EC2 server
 
-![Architecture](./images/trademap/AppWork%20School%20-%20%E5%80%8B%E4%BA%BA%E5%B0%88%E6%A1%88%E7%B0%A1%E5%A0%B1.png)
+<img src="./docs/architecture.png" width= 500px>
 
 ### Serverless
 
-```
-docker pull timmy304681/trademap:latest
-```
+Build and deploy **Trademap** with the speed and immutability of container. Use **Fargate** with Amazon **ECS** to easily run and scale my containerized data processing workloads.
+<img src="./docs/ecs.png" width= 500px>
 
 ## Tech Stack
 
-**Server**: Node.js, Express, Nginx, MySQL, MongoDB, Redis
-**Client**: JavaScript, jQuery, Bootstrap
-**Cloud Services**: EC2, ECS, RDS, ElastiCache, S3, CloudFront, ELB
-**CI/CD**: GitHub Actions
-**Testing**: Jest
-**Container**: docker
-**Others**: Socket.IO, Google Maps API , HERE API, Maptiler API, LINE Notify API
-
-## Containerizing
+- **Server**: Node.js, Express, Nginx, MySQL, MongoDB, Redis
+- **Client**: JavaScript, jQuery, Bootstrap
+- **Cloud Services**: EC2, ECS, RDS, ElastiCache, S3, CloudFront, ELB
+- **CI/CD**: GitHub Actions
+- **Testing**: Jest
+- **Container**: docker
+- **Others**: Socket.IO, Google Maps API , HERE API, Maptiler API, LINE Notify API
 
 ## Database Schema
+
+<img src="./docs/table_schema.png" width= 500px>
 
 ## Features
 
@@ -56,15 +56,23 @@ docker pull timmy304681/trademap:latest
 
 #### Product Search
 
-#### Product Suggestion
+<img src="./docs/product_search.gif" width= 500px>
+
+#### Product Suggest
+
+<img src="./docs/suggest.gif" width= 500px>
 
 #### Automatic detect tags
 
+<img src="./docs/tags.gif" width= 500px>
+
 #### Arrival notices
 
-## How to use it?
+<img src="./docs/line_notify.png" width= 300px>
 
-####
+<img src="./docs/line.png" width= 300px>
+
+## How to use it?
 
 1. Clone the project
 
