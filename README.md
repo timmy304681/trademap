@@ -2,8 +2,8 @@
 
 Trademap is dedicated to offering users a location-based trading platform. Offered consumers a user-friendly and convenient platform for face-to-face appointment reservations.
 
-- Website: <a href="https://trademap.site/">https://trademap.site</a>
-- docker image: <a href="https://hub.docker.com/r/timmy304681/trademap">https://hub.docker.com/r/timmy304681/trademap</a>
+- Website: <a href="https://trademap.site/" target="_blank">https://trademap.site</a>
+- docker image: <a href="https://hub.docker.com/r/timmy304681/trademap" target="_blank">https://hub.docker.com/r/timmy304681/trademap</a>
 
 ## Table of Contents
 
@@ -18,12 +18,12 @@ Trademap is dedicated to offering users a location-based trading platform. Offer
 
 ### AWS EC2 server
 
-<img src="./docs/architecture.png" width= 500px>
+<img src="./docs/architecture.png" width= 800px>
 
 ### Serverless
 
 Build and deploy **Trademap** with the speed and immutability of container. Use **Fargate** with Amazon **ECS** to easily run and scale my containerized data processing workloads.
-<img src="./docs/ecs.png" width= 500px>
+<img src="./docs/ecs.png" width= 800x>
 
 ## Tech Stack
 
@@ -37,7 +37,7 @@ Build and deploy **Trademap** with the speed and immutability of container. Use 
 
 ## Database Schema
 
-<img src="./docs/table_schema.png" width= 500px>
+<img src="./docs/table_schema.png" width= 800px>
 
 ## Features
 
@@ -56,15 +56,15 @@ Build and deploy **Trademap** with the speed and immutability of container. Use 
 
 #### Product Search
 
-<img src="./docs/product_search.gif" width= 500px>
+<img src="./docs/product_search.gif" width= 800px>
 
 #### Product Suggest
 
-<img src="./docs/suggest.gif" width= 500px>
+<img src="./docs/suggest.gif" width= 800px>
 
 #### Automatic detect tags
 
-<img src="./docs/tags.gif" width= 500px>
+<img src="./docs/tags.gif" width= 800px>
 
 #### Arrival notices
 
