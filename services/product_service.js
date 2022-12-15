@@ -70,8 +70,6 @@ async function getProductDetails(query, paging) {
     return [JSON.parse(cacheProductDetails)];
   }
 
-  console.log(`search form db`);
-
   // Search product details  from  mysql
   const productDetails = await productModel.getProductDetails(id);
   productDetails[0].photo = getImagePath(productDetails[0].photo);
