@@ -155,7 +155,7 @@ const reviseProduct = async (req, res) => {
   let isRevise = false;
 
   if (title !== undefined && title !== '' && title.trim() !== '') {
-    result = await productModel.reviseProduct(userId, id, 'title', title);
+    result = await productModel.revisePropertyOfProduct(userId, id, 'title', title);
     isRevise = true;
   }
 

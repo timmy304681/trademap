@@ -23,7 +23,7 @@ async function saveMessages(data, socket, io) {
   const userList = [user1, user2].sort();
 
   // Insert message
-  await messagesMoodel.saveMessages(userList[0], userList[1], sender, message, timeStamp);
+  await messagesModel.saveMessages(userList[0], userList[1], sender, message, timeStamp);
   // socket.emit('output', [{ messages: [data] }]);
 
   io.to(`${userList[0]}_${userList[1]}`).emit('output', [{ messages: [data] }]);
