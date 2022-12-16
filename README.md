@@ -54,23 +54,21 @@ Build and deploy **Trademap** with the speed and immutability of container. Use 
 
 ## Demo
 
-#### Product Search
+### Product Search
 
 <img src="./docs/product_search.gif" width= 800px>
 
-#### Product Suggest
+### Product Suggest
 
 <img src="./docs/suggest.gif" width= 800px>
 
-#### Automatic detect tags
+### Automatic detect tags
 
 <img src="./docs/tags.gif" width= 800px>
 
-#### Arrival notices
+### Arrival notices
 
-<img src="./docs/line_notify.png" width= 300px>
-
-<img src="./docs/line.png" width= 300px>
+<img src="./docs/line_notify.png" height= 600px> <img src="./docs/line.png" height= 600px>
 
 ## How to use it?
 
