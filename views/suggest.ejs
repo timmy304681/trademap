@@ -1,0 +1,68 @@
+<% layout('layout') %>
+<!-- 使用vscode 插件 HTML CSS support 以下路徑去抓css -->
+<!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<!-- <link href="../public/styles/styles.css" rel="stylesheet" /> -->
+
+<div class="container mt-5">
+  <button type="button" class="btn btn-floating btn-lg tm-btn" id="btn-back-to-top">
+    <i class="fa-solid fa-caret-up"></i>
+  </button>
+
+  <div id="product-cards-area" class="row row-cols-md-3 g-4">
+    <div class="col product-card mt-5" hidden>
+      <div class="card h-100 tm-card">
+        <div class="d-flex m-2">
+          <img class="user-photo rounded-circle me-3" alt="Profile" width="40" height="40" />
+          <p class="mt-auto mb-auto user-name card-text">Timmy</p>
+        </div>
+        <img
+          src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp"
+          class="product-image card-img-top tm-card-img"
+        />
+        <div class="card-body mb-0 pb-0">
+          <h5 class="card-title tm-ellipsis product-title tm-font">Card title</h5>
+          <p class="card-text tm-ellipsis product-description fw-light">Description</p>
+          <div class="fw-bold tm-main-color h5">
+            NT$
+            <span class="product-price">3000</span>
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          <div>
+            面交距離您約：<span class="product-distance tm-main-color fw-bold h4"></span> Km
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="loader" class="active d-flex justify-content-center mt-5 mb-5">
+    <img src="../public/src/images/loading.gif" style="height: 50px" />
+    <!-- <span class="ms-2">LOADING...</span> -->
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="product-modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+        <h5 class="modal-title" id="exampleModalLabel">商品細節頁面</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="product-modal-body" class="modal-body p-0">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../public/src/scrollmagic/ScrollMagic.js"></script>
+<script src="../public/src/scrollmagic/debug.addIndicators.js"></script>
+<script src="../public/js/suggest.js"></script>

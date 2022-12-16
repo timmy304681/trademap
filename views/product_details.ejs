@@ -1,0 +1,76 @@
+<!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<!-- <link href="../public/styles/styles.css" rel="stylesheet" /> -->
+
+<div id="product-id" productId="<%= id%>" class="container ps-5 pe-5 pb-3">
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div id="product-images-carousel" class="carousel-indicators">
+      <button
+        type="button"
+        data-bs-target="#carouselExampleIndicators"
+        data-bs-slide-to="0"
+        class="active tm-carousel-btn"
+        aria-current="true"
+      ></button>
+    </div>
+    <div id="product-images" class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="" class="d-block m-auto" style="height: 500px" />
+      </div>
+    </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <div class="details">
+    <div id="product-title" class="product-title mt-3 h2 fw-bold mb-0">商品title</div>
+    <hr class="mt-0" />
+    <div class="price h4 mb-2">
+      <i class="fa-solid fa-sack-dollar"></i>
+      <span id="product-price" class="tm-label">999</span>
+    </div>
+    <div class="mb-4">
+      <i class="fa-solid fa-user me-2"></i>
+      <img id="user-photo" src="/" class="rounded-circle me-2" width="40" height="40" /><span
+        id="user-name"
+      ></span>
+      <div class="action d-inline">
+        <button id="btn-contact" class="add-to-cart btn tm-contact-btn ms-3" type="button" hidden>
+          連絡賣家
+        </button>
+        <div id="status-sold" class="tm-main-color tm-sold-label" hidden>商品已售出</div>
+      </div>
+    </div>
+
+    <div class="mb-2">
+      <i class="fa-solid fa-location-dot me-2"></i>
+      <span id="product-place">地點</span>
+    </div>
+    <div class="mb-2 small">
+      <i class="fa-solid fa-location-crosshairs me-2"></i>
+      <span id="product-address">詳細地址</span>
+    </div>
+    <div class="mb-2">
+      <i class="fa-solid fa-clock me-2"></i> <span id="product-time">9:00pm</span>
+    </div>
+    <br />
+    <p id="product-description" class="product-description"></p>
+  </div>
+</div>
+
+<script src="../public/js/product_detais.js"></script>

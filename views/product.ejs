@@ -1,0 +1,140 @@
+<% layout('layout') %>
+<!-- 使用vscode 插件 HTML CSS support 以下路徑去抓css -->
+<!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<%- include map %>
+
+<div class="row justify-content-center mb-3">
+  <div class="col-md-6 text-center mt-3"></div>
+</div>
+<div class="container">
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12">
+          <div class="wrapper">
+            <div class="contact-wrap w-100" style="padding: 0rem 3rem">
+              <form class="contactForm" name="form" id="form" enctype="multipart/form-data">
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                      <label class="tm-label" for="name">商品名稱</label>
+                      <input
+                        type="text"
+                        class="form-control tm-input"
+                        name="title"
+                        id="title"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div class="form-group">
+                      <label class="tm-label" for="email">商品價錢</label>
+                      <input
+                        type="number"
+                        class="form-control tm-input"
+                        name="price"
+                        id="price"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12 mb-4">
+                    <div class="form-group">
+                      <label class="tm-label" for="subject"
+                        >商品關鍵字<span class="fs-6 ms-3" style="color: gray"
+                          >自動偵測商品名稱產生關鍵詞，且提供自行新增</span
+                        ></label
+                      >
+                      <div class="chips chips-initial">
+                        <input class="input" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="col-md-12 mb-4">
+                        <div class="form-group">
+                          <label class="tm-label" for="#">商品描述</label>
+                          <textarea
+                            class="form-control tm-input"
+                            name="description"
+                            id="description"
+                            style="resize: none; height: 100px"
+                            required
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-4">
+                        <div class="form-group">
+                          <label class="tm-label" for="#"
+                            >地點<span class="fs-6 ms-3" style="color: gray"
+                              >輸入地點後，會自動搜尋地點，請點擊選單列表，確保地點輸入正確</span
+                            ></label
+                          >
+                          <input name="place" id="place" class="form-control tm-input" />
+                          <input name="place-result" id="place-result" type="hidden" />
+                          <div id="place-select"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-4">
+                        <div class="form-group">
+                          <label class="tm-label" for="#">交易時間</label>
+                          <input
+                            name="time"
+                            id="time"
+                            type="datetime-local"
+                            class="form-control tm-input"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-4">
+                        <div class="form-group">
+                          <label class="tm-label" for="#"
+                            >照片<span class="fs-6 ms-3" style="color: gray"
+                              >(最多十張，僅限 jpg/jpeg/png/gif 檔，總上限 10 MB)</span
+                            ></label
+                          >
+                          <input
+                            name="images"
+                            class="form-control tm-input h-100"
+                            id="images"
+                            type="file"
+                            multiple
+                            accept="image/*"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                      <div id="map" class="w-100 h-100"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <button type="submit" id="btn-submit" class="btn tm-btn">確定送出商品</button>
+                      <div class="submitting"></div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="text/javascript" src="../public/src/materialize/js/materialize.js"></script>
+
+<script
+  id="map-script"
+  type="module"
+  src="../public/js/map.js"
+  HERE_API_KEY="<%= HERE_API_KEY%>"
+  MAPTILER_API_KEY="<%= MAPTILER_API_KEY%>"
+></script>
+
+<script src="../public/js/product.js"></script>

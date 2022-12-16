@@ -1,0 +1,9 @@
+version: '3.3'
+
+services:
+  web:
+    image: 'timmy304681/trademap'
+    container_name: trademap
+    ports:
+      - 3000:3000
+    env_file: ./.env

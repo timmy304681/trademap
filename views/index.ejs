@@ -1,0 +1,79 @@
+<% layout('layout') %>
+<!-- 使用vscode 插件 HTML CSS support 以下路徑去抓css -->
+<!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<%- include map %>
+
+<div class="container-fluid h-75">
+  <div class="">
+    <img
+      class="d-block m-auto"
+      src="https://d2vk83aqnahndu.cloudfront.net/publuc/src/logo/trademap.gif"
+      style="height: 75vh"
+    />
+  </div>
+
+  <!-- search -->
+  <div class="mb-3">
+    <div class="search-form w-50">
+      <div class="w-100 d-flex">
+        <select name="distance" id="distance" class="col tm-label me-3 curser-pointer">
+          <option value="3">3 km</option>
+          <option value="5">5 km</option>
+          <option value="10">10 km</option>
+          <option value="20">20 km</option>
+        </select>
+
+        <input
+          name="keyword"
+          id="keyword"
+          type="text"
+          placeholder="商品搜尋"
+          class="tm-input keyword-input w-100 curser-pointer"
+        />
+
+        <button id="btn-map-search" class="btn btn-base m-auto" style="width: 10vh">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </div>
+    <div id="search-result" style="display: none">
+      <div class="d-flex justify-content-center">搜尋結果為<span>0</span>筆</div>
+    </div>
+  </div>
+  <!--// search -->
+
+  <div class="h-100 pb-3">
+    <div id="map" class="h-100 ms-3 me-3" style="z-index: 1"></div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="product-modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+        <h5 class="modal-title" id="exampleModalLabel">商品細節頁面</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="product-modal-body" class="modal-body p-0">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script
+  id="map-script"
+  type="module"
+  src="../public/js/map.js"
+  HERE_API_KEY="<%= HERE_API_KEY%>"
+  MAPTILER_API_KEY="<%= MAPTILER_API_KEY%>"
+></script>
+<script src="../public/js/index.js"></script>

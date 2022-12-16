@@ -1,0 +1,115 @@
+<% layout('layout') %>
+<!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<!-- <link href="../public/styles/styles.css" rel="stylesheet" /> -->
+<%- include map %>
+<div class="container mt-5">
+  <div class="form-area">
+    <form>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="form-group">
+            <div class="d-flex align-content-center mb-2">
+              <label class="tm-label me-2" for="subject">商品關鍵字</label>
+              <button type="button" class="btn tm-btn" style="border-radius: 90px">
+                <i id="btn-add-tags" class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+            <div id="tags-insert-body" class="row">
+              <div class="col-3 tm-tags-item">
+                <input type="text" class="form-control mb-2 tm-input" name="tags" />
+              </div>
+
+              <div class="col-3 tm-tags-item">
+                <input type="text" class="form-control mb-2 tm-input" name="tags" />
+              </div>
+              <div class="col-3 tm-tags-item">
+                <input type="text" class="form-control mb-2 tm-input" name="tags" />
+              </div>
+              <div class="col-3 tm-tags-item">
+                <input type="text" class="form-control mb-2 tm-input" name="tags" />
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="form-group">
+              <label class="tm-label" for="#">地點</label>
+              <input name="place" id="place" class="form-control tm-input" />
+              <input id="place-result" name="place-result" type="hidden" />
+              <div id="place-select"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" id="btn-submit" class="btn tm-btn">確定送出預約</button>
+            <div class="submitting"></div>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div id="map" class="w-100 h-100"></div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="border radius-10" style="height: 60vh; overflow-y: scroll">
+    <div class="container">
+      <div id="reserve-area" class="row row-cols-1 row-cols-md-2 row-cols-xl-4 mt-2">
+        <div class="tm-tag-item col-3 mt-2" hidden>
+          <div class="tm-card" style="height: 80%">
+            <div class="card-body radius-20">
+              <div class="d-flex flex-column">
+                <div class="d-flex justify-content-between">
+                  <p class="mb-0 text-secondary">商品關鍵字</p>
+                  <button
+                    tagId="1"
+                    class="produtct-tag-id reserve-cancel-btn tm-btn btn-close"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="produtct-tag my-1 tm-font h2">Tag</div>
+                <div class="produtct-place tm-ellipsis my-1 tm-font h6">Place</div>
+                <div class="row reserve-forsale-area" hidden>
+                  <div class="col-7">
+                    距離：<span class="reserve-distance tm-main-color fw-bold"></span> Km
+                  </div>
+                  <button class="col-5 reserve-forsale-btn tm-btn radius-10">商品到貨</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="product-modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+        <h5 class="modal-title" id="exampleModalLabel">商品細節頁面</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="product-modal-body" class="modal-body p-0">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script
+  id="map-script"
+  type="module"
+  src="../public/js/map.js"
+  MAPTILER_API_KEY="<%= MAPTILER_API_KEY%>"
+  HERE_API_KEY="<%= HERE_API_KEY%>"
+></script>
+<script src="../public/js/reserve.js"></script>

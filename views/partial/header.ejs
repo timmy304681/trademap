@@ -1,0 +1,148 @@
+<!-- <link href="../../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<!-- <link href="../../public/styles/styles.css" rel="stylesheet" /> -->
+<header>
+  <nav class="tm-nav navbar navbar-expand-md navbar-light text-black-50 p-0 m-0">
+    <div class="container-xxl">
+      <a class="navbar-brand ms-5 me-3" href="/">
+        <img src="../../public/src/logo/trademap.png" width="100%" height="60px"
+      /></a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a id="index-page" class="nav-link h3 me-3 m-auto" href="/"
+              ><i class="fa-solid fa-house"></i
+            ></a>
+          </li>
+          <li class="nav-item">
+            <a id="suggest-page" class="nav-link h3 m-auto" href="/suggest"
+              ><i class="fa-solid fa-compass"></i
+            ></a>
+          </li>
+
+          <li class="nav-item"></li>
+        </ul>
+
+        <div class="navbar-nav ms-auto me-5 mb-0">
+          <div id="member-area" class="d-flex" style="visibility: hidden">
+            <a id="reserve-page" class="nav-link h3 m-auto me-3" href="/reserve"
+              ><i class="fa-regular fa-bookmark"></i
+            ></a>
+            <a id="product-page" class="nav-link h3 m-auto me-3" href="/product"
+              ><i class="fa-regular fa-square-caret-up"></i
+            ></a>
+            <a id="order-page" class="nav-link h3 m-auto me-3" href="/order"
+              ><i class="fa-solid fa-list"></i
+            ></a>
+            <a id="message-page" class="nav-link h3 m-auto me-3" href="/message"
+              ><i class="fa-regular fa-comment"></i
+            ></a>
+          </div>
+          <a id="profile-icon" class="nav-link h3 m-auto" href="/profile"
+            ><i class="fa-solid fa-address-card"></i
+          ></a>
+
+          <section id="tm-profile-box" class="nav-item dropdown h-100" hidden>
+            <a
+              class="nav-link nav-profile d-flex align-items-center"
+              href="#"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              ><img
+                id="image-insert"
+                class="rounded-circle me-2"
+                alt="Profile"
+                width="40"
+                height="40" />
+              <div id="name-insert" class="d-md-block tm-font m-auto me-3 h4"></div>
+              <div
+                id="role-insert"
+                class="d-none d-md-block dropdown-toggle tm-main-color fw-bold m-auto h6"
+              ></div
+            ></a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+              <li class="dropdown-header">
+                <h6 class="fs-5 fw-bold"></h6>
+                <span></span>
+              </li>
+
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a href="/membership" class="dropdown-item d-flex align-items-center"
+                  >會員分級制度</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item d-flex align-items-center"
+                  id="logout-btn"
+                  style="cursor: pointer"
+                  onclick="signOut()"
+                  ><i class="bi bi-box-arrow-right"></i><span>登出</span></a
+                >
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  (async () => {
+    const authentication = await localStorage.getItem('Authorization');
+    // 若無token就不做任何call api驗證
+    if (authentication == null) {
+      return;
+    }
+    // 有token，就call api驗證
+    try {
+      const params = {
+        headers: { 'content-type': 'application/json', authorization: authentication },
+      };
+      const response = await axios.get(`/api/1.0/users`, params);
+      const userProfile = response.data;
+
+      // 存userId在localStorage
+      localStorage.setItem('userId', userProfile.id);
+
+      let roleImagePath;
+      if (userProfile['role_id'] === 2) {
+        roleImagePath = '/public/src/images/vip-gold.png'; //金級會員
+      } else {
+        roleImagePath = '/public/src/images/vip.png'; //一般會員
+      }
+      $('#member-area').css('visibility', 'visible');
+      $('#profile-icon').hide();
+      $('#tm-profile-box').removeAttr('hidden');
+      $('#image-insert').attr('src', `${userProfile.photo}`);
+      $('#name-insert').html(userProfile.name);
+      $('#role-insert').append(`<img src=${roleImagePath} height="50px" />`);
+
+      $('.dropdown-header').children('h6').html(`${userProfile.name}`);
+      $('.dropdown-header').children('span').html(`${userProfile.email}`);
+    } catch (err) {
+      console.log(err);
+    }
+  })();
+
+  async function signOut() {
+    localStorage.removeItem('Authorization');
+    await Swal.fire({
+      icon: 'success',
+      title: '已登出',
+    });
+    location.href = '/profile';
+  }
+</script>

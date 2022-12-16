@@ -1,0 +1,56 @@
+<% layout('layout') %>
+<!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<!-- <link href="../public/styles/styles.css" rel="stylesheet" /> -->
+
+<div class="container mt-5">
+  <div class="row justify-content-center text-center align-middle">
+    <div class="col-12">
+      <div class="fs-2">會員分級規則</div>
+      <br />
+      <div class="card">
+        <div class="card-body p-0">
+          <div
+            class="table-responsive table-scroll"
+            data-mdb-perfect-scrollbar="true"
+            style="position: relative"
+          >
+            <table class="table table-striped mb-0 align-middle">
+              <thead class="tm-table-title fs-3">
+                <tr>
+                  <th scope="col ">象徵</th>
+                  <th scope="col">會員分級</th>
+                  <th scope="col">專屬權限</th>
+                  <th scope="col">如何享有資格</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="fs-6">
+                  <td><img src="/public/src/images/visitor.png" height="50px" class="ms-2" /></td>
+                  <td>非會員</td>
+                  <td>商品搜尋，商品推薦</td>
+                  <td>非會員</td>
+                </tr>
+                <tr>
+                  <td><img src="/public/src/images/vip.png" height="100px" /></td>
+                  <td class="fs-4">一般會員</td>
+                  <td class="fs-5">商品上架，訂單管理，聯繫賣家及非會員權限</td>
+                  <td class="fs-5">註冊即享一般會員資格</td>
+                </tr>
+                <tr>
+                  <td><img src="/public/src/images/vip-gold.png" height="100px" /></td>
+                  <td class="fs-4">金級會員</td>
+                  <td class="fs-5">
+                    <span class="tm-main-color">商品預約功能</span>及所有一般會員權限
+                  </td>
+                  <td class="fs-5">
+                    上架商品達<span class="tm-main-color">兩次</span>後，可自動成為金級會員
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

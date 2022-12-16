@@ -1,0 +1,206 @@
+<% layout('layout') %>
+<!-- 使用vscode 插件 HTML CSS support 以下路徑去抓css -->
+<!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+<!-- <link href="../public/styles/styles.css" rel="stylesheet" /> -->
+<div class="container h-75 mt-5">
+  <div class="row h-100">
+    <div class="col-6 border tm-order-area h-100">
+      <div class="tm-label text-center mb-3">商品列表</div>
+      <div class="d-flex justify-content-around mt-2 mb-3 fs-5">
+        <div id="category-all" class="tm-order-category px-3" category="all">
+          <i class="fa-solid fa-star"></i>
+          <span> 全部</span>
+        </div>
+        <div class="tm-order-category px-3" category="sell">
+          <i class="fa-solid fa-store"></i>
+          <span> 上架商品</span>
+        </div>
+        <div class="tm-order-category px-3" category="buy">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span>洽談與購買</span>
+        </div>
+      </div>
+      <div id="order-amount-message" hidden>總共<span id="order-amount">5</span>筆訂單</div>
+
+      <div id="order-list" class="list-group">
+        <div class="list-group-item tm-order-box" hidden>
+          <div class="d-flex">
+            <div class="number small align-self-center">123</div>
+            <div class="status me-3 m-auto tm-main-color tm-sold-status text-wrap">販售中</div>
+          </div>
+          <div class="title mb-1 tm-order-product-title fs-4">title</div>
+          <div class="mb-2">
+            <i class="fa-solid fa-sack-dollar me-2"></i>
+            <div class="d-inline">
+              NT$
+              <span class="price tm-main-color fs-5">price</span>
+            </div>
+          </div>
+          <div>
+            <i class="fa-solid fa-location-dot me-2 text-center" style="width: 16px"></i>
+            <span class="place text-wrap">place</span>
+          </div>
+
+          <div>
+            <i class="fa-solid fa-clock me-2"></i>
+            <span class="time col-5">time</span>
+          </div>
+
+          <div class="d-flex justify-content-end align-content-center">
+            <button class="btn-sold add-to-cart btn tm-sold-btn me-3" type="button" hidden>
+              完成交易
+            </button>
+            <button class="btn-sold add-to-cart btn tm-revise-btn" type="button" hidden>
+              修改訂單
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="order-sign" class="col-6 d-flex flex-column justify-content-center fs-3">
+      <div class="text-center">請選擇左側訂單查看細節</div>
+    </div>
+    <div id="product-details-area" class="col-6 border tm-order-area h-100" hidden>
+      <div class="tm-label text-center">商品細節</div>
+
+      <div id="product-details-page"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="product-modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+        <h5 class="modal-title" id="exampleModalLabel">商品修改</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="product-modal-body" class="modal-body p-0">
+        <!-- Modal body  Start-->
+        <div class="container mt-5 mb-5">
+          <div class="contact-wrap w-100 pe-5 ps-5">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="col-md-12 mb-4">
+                  <div class="form-group">
+                    <label class="tm-label">商品名稱</label>
+                    <div id="display-title" class="display-data">macbook</div>
+                    <div class="edit-data" style="display: none">
+                      <input
+                        id="input-title"
+                        type="text"
+                        class="form-control tm-input tm-revise-input"
+                        name="title"
+                      />
+                      <button class="btn tm-btn revise-btn">修改</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-4">
+                  <div class="form-group">
+                    <label class="tm-label">商品價錢</label>
+                    <div id="display-price" class="display-data">50000</div>
+                    <div class="edit-data" style="display: none">
+                      <input
+                        id="input-price"
+                        type="number"
+                        max="1677214"
+                        min="1"
+                        class="form-control tm-input tm-revise-input"
+                        name="price"
+                      />
+                      <button class="btn tm-btn revise-btn d-inline">修改</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-4">
+                  <div class="form-group">
+                    <label class="tm-label" for="#">商品描述</label>
+                    <div
+                      id="display-description"
+                      class="display-data"
+                      style="word-break: break-all"
+                    >
+                      description
+                    </div>
+                    <div class="edit-data" style="display: none">
+                      <textarea
+                        id="input-description"
+                        class="form-control tm-input tm-revise-input"
+                        name="description"
+                        style="resize: none"
+                      ></textarea>
+                      <button class="btn tm-btn revise-btn align-items-center">修改</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                  <div class="form-group">
+                    <label class="tm-label" for="#">交易時間</label>
+                    <div id="display-time" class="display-data">2022-01-01</div>
+                    <div class="edit-data" style="display: none">
+                      <input
+                        name="time"
+                        id="time"
+                        type="datetime-local"
+                        class="form-control tm-input tm-revise-input"
+                      />
+                      <button class="btn tm-btn revise-btn align-items-center">修改</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-4">
+                  <div class="form-group">
+                    <label class="tm-label" for="#">地點</label>
+                    <div id="display-place" class="display-data">台北車站</div>
+                    <div class="edit-data" style="display: none">
+                      <input id="place" name="input-place" class="form-control tm-revise-input" />
+                      <button class="btn tm-btn revise-btn align-items-center">修改</button>
+                      <input name="place-result" id="place-result" type="hidden" class="tm-input" />
+                      <div id="place-select"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-md-12 mb-4">
+                  <div class="form-group">
+                    <label class="tm-label" for="#">照片(最多十張)</label>
+                    <input
+                      name="images"
+                      class="form-control tm-input tm-revise-input"
+                      id="images"
+                      type="file"
+                      multiple
+                      accept="image/*"
+                    />
+                  </div>
+                </div> -->
+              </div>
+              <!-- <div class="col-md-6 mb-4">
+                <div id="map" class="w-100 h-100"></div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <!-- Modal body  Stop-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script
+  id="map-script"
+  HERE_API_KEY="<%= HERE_API_KEY%>"
+  src="../public/js/placeSearch.js"
+></script>
+<script src="../public/js/order.js"></script>

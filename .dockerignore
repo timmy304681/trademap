@@ -1,0 +1,15 @@
+**/.git
+**/.DS_Store
+**/node_modules
+**/docs
+*.log
+*.rdb
+*.sql
+Dockerfile*
+docker-compose*
+.dockerignore
+.git
+.gitignore
+.vscode
+.sequelizerc
+.env

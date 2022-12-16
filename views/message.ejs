@@ -1,0 +1,71 @@
+<% layout('layout') %>
+<!-- 使用vscode 插件 HTML CSS support 以下路徑去抓css -->
+<!-- <link href="../public/styles/bootstrap.css" rel="stylesheet" /> -->
+
+<div class="container h-75">
+  <div class="row h-100 mt-5">
+    <div class="col-3 h-100 border radius-10 overflow-scroll">
+      <select id="product-select" class="tm-chatroom-style form-select mb-3 mt-2">
+        <option class="option-clone" value="all">全部</option>
+      </select>
+
+      <div id="chatrooms" class="overflow-scroll">
+        <a class="tm-chatroom-item tm-chatroom-style mb-2" hidden>
+          <div class="d-flex align-items-center fw-bold">
+            <img class="rounded-circle me-3" width="40" height="40" />
+            <div class="">Amy</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div id="chatroom-sign" class="col-9 d-flex flex-column justify-content-center fs-3">
+      <div class="text-center">請選擇左側對話框開啟聊天室</div>
+    </div>
+
+    <div id="chateroom-box-area" class="col-9 h-100 border radius-10" style="display: none">
+      <div id="chateroom-box" class="d-flex h-100 flex-column">
+        <div id="chatmate-title" class="d-flex align-items-center py-1 border-bottom">
+          <div class="position-relative">
+            <img id="chateroom-title-img" class="rounded-circle me-3" width="50" height="50" />
+          </div>
+          <div id="chateroom-title-name" class="flex-grow-1 pl-3 fw-bold">Amy</div>
+        </div>
+
+        <div id="chat-messages" class="chat-messages p-4">
+          <div class="chat-message-clone mt-5" hidden>
+            <div class="message-details">
+              <div class="d-flex mb-1">
+                <div class="message-sender tm-order-product-title fs-6 align-self-end">sender</div>
+                <div class="message-content px-2 py-1 tm-btn radius-10 text-break text-start">
+                  message
+                </div>
+              </div>
+              <div>
+                <div>
+                  <i class="fa-solid fa-clock me-2"></i
+                  ><span class="message-time text-muted small text-nowrap">2:33 am</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="chat-input-btn" class="input-group border-top">
+          <input
+            id="message-input"
+            type="text"
+            class="form-control"
+            placeholder="Type your message"
+          />
+          <button id="btn-message-send" class="btn tm-btn">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script
+  src="https://cdn.socket.io/4.5.3/socket.io.min.js"
+  integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi"
+  crossorigin="anonymous"
+></script>
+<script src="../public/js/message.js"></script>
