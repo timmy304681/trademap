@@ -61,7 +61,7 @@ const searchProducts = async (keyword) => {
       `
     SELECT * 
     FROM product 
-    WHERE MATCH (title) AGAINST (?) limit 10`,
+    WHERE MATCH (title) AGAINST (?)`,
       [keyword]
     );
 
