@@ -1,4 +1,4 @@
-const pool = require('../util/mysql');
+const { pool } = require('../../util/db');
 const yargs = require('yargs');
 
 const { product, users, chatrooms } = require('./mockData');
@@ -55,7 +55,8 @@ async function main() {
   const userSql = `INSERT INTO user (email,name, password,photo) VALUES ?`;
   await pool.query(userSql, [users.map((x) => Object.values(x))]);
 
-  const productSql = `INSERT INTO product ( number,
+  const productSql = `INSERT INTO product ( 
+    number,
     user_id,
     title,
     price,

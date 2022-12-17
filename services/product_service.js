@@ -26,11 +26,11 @@ async function getSuggestProducts(query, paging) {
   let products = await productModel.getProducts();
   const { lat, lng } = query;
 
-  products.forEach((location) => {
-    const relativeDistance = getDistance(location.lat, location.lng, lat, lng, 'K');
-    location.distance = relativeDistance;
-    location.photo = getImagePath(location.photo);
-    location.image = getImagePath(location.image);
+  products.forEach((product) => {
+    const relativeDistance = getDistance(product.lat, product.lng, lat, lng, 'K');
+    product.distance = relativeDistance;
+    product.photo = getImagePath(product.photo);
+    product.image = getImagePath(product.image);
   });
   products.sort((a, b) => a.distance - b.distance); // sort data by distance
   products = products.slice(pageSize * (paging - 1), pageSize * (paging - 1) + pageSize);
