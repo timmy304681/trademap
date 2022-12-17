@@ -34,7 +34,22 @@ const data = [
   },
 ];
 
-const product = [
+const product = {
+  number: 1,
+  user_id: 1,
+  title: '9成新Macbook',
+  price: 1000,
+  description: `測試描述`,
+  time: '2022-12-25T15:30:00.000',
+  place: '測試地點',
+  address: '測試地點',
+  lat: 25.04745,
+  lng: 121.52323,
+  county: '測試地點',
+  district: '測試地點',
+};
+
+const products = [
   {
     title: '9成新Macbook',
     description: `2018出廠購買2017款式 MacBook Pro retina 13 no Touch Bar
@@ -79,6 +94,7 @@ const product = [
     ],
   },
 ];
+
 const users = [
   {
     email: 'timmy@test.com',

@@ -29,16 +29,14 @@ const {
   county,
   district,
 } = product;
+
 const mockProductsList = [];
 
 // create a mock products list
 for (let i = 1; i <= mockDataNumber; i++) {
   (product.lat = lat + (Math.random() - 0.5) * 0.1),
     (product.lng = lng + (Math.random() - 0.5) * 0.1),
-    (product.title = `
-    ${Math.floor(Math.random() * 10)}成新${
-      ['Macbook', 'iphone', 'ipad'][Math.floor(Math.random() * 2)]
-    }`);
+    (product.title = `${Math.floor(Math.random() * 10)}成新Macbook`);
   mockProductsList.push({ ...product });
 }
 
