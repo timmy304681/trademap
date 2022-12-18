@@ -11,6 +11,7 @@ Trademap is dedicated to offering users a location-based trading platform. Offer
 - [System Architecture](#system-architecture)
 - [Database Schema](#database-schema)
 - [Features](#features)
+- [Technical Details](#technical-details)
 - [Demo](#demo)
 - [How to use it?](#how-to-use-it)
 
@@ -51,6 +52,36 @@ Build and deploy **Trademap** with the speed and immutability of container. Use 
 - Rendered the location on the map immediately with **Here** and **Google Map** API.
 - Sent users arrival notices instantly with **Line Notify**.
 - Continually deployed with **GitHub actions**, and performed unit/integration tests with **Jest**.
+
+## Technical Details
+
+### How to improve search performance when there are many results need to be rendered.
+
+For testing purposes, 10,000 mock products with the keyword "Macbook" were produced for searching. With the optimization as below, it only takes less than 5 seconds to render all of them on the map.
+
+##### 1. Enhance searching efficiency - **Full-Text Search**
+
+- Use **Full-Test search** rather than **"LIKE" search**.
+- In the worst case, "LIKE" search will use a full scan to find matches although the column is indexed.
+- When in a huge number of records, **"LIKE" search** is extremely low-efficient. **Full-Test search** performs much better.
+
+Reference: <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html" target="_blank">EXPLAIN Output Format</a>
+
+##### 2. Cluster the markers
+
+- It takes a long time when rendering the markers individually. With the clustered markers, the browser only needs to render the group of markers. It keeps the information clear and improves the user experience.
+
+<img src="./docs/render_markers.gif" width= 800px>
+
+### Why should we utilize 3 different types of databases (MySQL, MongoDB, Redis)?
+
+Why should we persevere on using 3 databases when it seems unnecessary and difficult to manage them?
+
+- Trademap provides consumers with a wide range of services, therefore managing customer, product, order, and other data requires an RDBMS(**MySQL**) in order to ensure data consistency.
+- Chat messages demand intensive real-time readings and writes. Moreover, to lessen the strain on the primary database (mySQL), we use a suitable NoSQL database (**MongoDB**).
+- When a product is posted online for sale, it will be accessed heavily for a short period of time until it is sold out. It is very inefficient to perform the same query on a database over and over again. So we implemented a **Redis** cache of product details. The reasons as below :
+  - It can also lessen the strain on the primary database.
+  - When the product details were saved in memory Redis, they could be retrieved much faster than queries from mySQL database.
 
 ## Demo
 
