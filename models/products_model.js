@@ -59,7 +59,7 @@ const searchProducts = async (keyword) => {
   try {
     const [products] = await pool.execute(
       `
-    SELECT * 
+    SELECT id,title,lat,lng 
     FROM product 
     WHERE MATCH (title) AGAINST (?)`,
       [keyword]
