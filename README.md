@@ -73,6 +73,12 @@ Reference: <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html"
 
 <img src="./docs/render_markers.gif" width= 800px>
 
+##### 3. Haversine formula
+
+- We use haversine formula to calculate the shortest great-circle distance between two points on a sphere given their longitudes and latitudes. The time complexity of haversine formula is O(1).
+
+<img src="./docs/haversine.png" width= 800px>
+
 ### Why should we utilize 3 different types of databases (MySQL, MongoDB, Redis)?
 
 Why should we persevere on using 3 databases when it seems unnecessary and difficult to manage them?
