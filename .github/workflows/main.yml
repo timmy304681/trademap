@@ -19,7 +19,7 @@ jobs:
             cd trademap
             git pull
             npm i
-            npm run test 
+            npm run CI-test 
 
 
   CD-deploy-to-EC2:

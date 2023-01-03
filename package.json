@@ -38,6 +38,7 @@
   },
   "scripts": {
     "test": "jest --watchAll",
+    "CI-test": "jest",
     "coverage": "jest --coverage"
   },
   "repository": {
