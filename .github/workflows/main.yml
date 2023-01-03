@@ -8,9 +8,18 @@ jobs:
   CI-Test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: CI 
-        run: echo CI Test Developing ...
+      - name: unit test & integration test 
+        uses: appleboy/ssh-action@master  # https://github.com/appleboy/ssh-action
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          script: |
+            cd trademap
+            git pull
+            npm i
+            npm run CI-test 
 
 
   CD-deploy-to-EC2:
