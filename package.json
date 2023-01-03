@@ -38,7 +38,7 @@
   },
   "scripts": {
     "test": "jest --watchAll",
-    "CI-test": "jest",
+    "CI-test": "jest --forceExit",
     "coverage": "jest --coverage"
   },
   "repository": {
