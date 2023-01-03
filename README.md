@@ -63,7 +63,7 @@ For testing purposes, 10,000 mock products with the keyword "Macbook" were produ
 
 - Use **Full-Text search** rather than **"LIKE" search**.
 - In the worst case, "LIKE" search will use a full scan to find matches although the column is indexed.
-- When in a huge number of records, **"LIKE" search** is extremely low-efficient. **Full-Test search** performs much better.
+- When in a huge number of records, **"LIKE" search** is extremely low-efficient. **Full-Text search** performs much better.
 
 Reference: <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html" target="_blank">EXPLAIN Output Format</a>
 
