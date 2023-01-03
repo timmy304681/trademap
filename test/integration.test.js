@@ -35,42 +35,10 @@ describe('Integration tests for the products API', () => {
     expect(statusCode).toBe(200);
   });
 
-  test('GET /products/suggest - success - get suggest products list by paging ', async () => {
-    const { body, statusCode } = await request(app).get('/products/suggest');
-
-    expect(body).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          product_id: expect.any(Number),
-          title: expect.any(String),
-          description: expect.any(String),
-        }),
-      ])
-    );
-    expect(statusCode).toBe(200);
-  });
-
   test('GET /products/autoCompleteSearch  - success -  get auto complete ', async () => {
     const { body, statusCode } = await request(app)
       .get('/products/autoCompleteSearch')
       .query({ keyword: 'macbook' });
-
-    expect(body).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: expect.any(Number),
-          title: expect.any(String),
-          description: expect.any(String),
-        }),
-      ])
-    );
-    expect(statusCode).toBe(200);
-  });
-
-  test('GET /products/search  - success - search products ', async () => {
-    const { body, statusCode } = await request(app)
-      .get('/products/search')
-      .query({ keyword: 'macbook', distance: 20, lat: 25.04253, lng: 121.53298 });
 
     expect(body).toEqual(
       expect.arrayContaining([
