@@ -3,9 +3,9 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addIndex('product', ['title'], {
-      type: 'FULLTEXT',
-    });
+    await queryInterface.sequelize.query(
+      'ALTER TABLE product ADD FULLTEXT INDEX `product_title`(title) WITH PARSER NGRAM;'
+    );
     await queryInterface.addIndex('reserve', ['tag']);
     await queryInterface.addIndex('user', ['email']);
     await queryInterface.addIndex('user', ['name']);
