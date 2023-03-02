@@ -13,6 +13,7 @@ Trademap is dedicated to offering users a location-based trading platform. Offer
 - [Features](#features)
 - [Technical Details](#technical-details)
 - [Demo](#demo)
+- [Cost](#cost)
 - [How to use it?](#how-to-use-it)
 
 ## System Architecture
@@ -106,6 +107,13 @@ Why should we persevere on using 3 databases when it seems unnecessary and diffi
 ### Arrival notices
 
 <img src="./docs/line_notify.png" height= 600px> <img src="./docs/line.png" height= 600px>
+
+## Cost
+Asia Pacific (Tokyo)
+||mode|CPU|Memory(G)|Cost/Month|
+|--|--|--|--|--|
+|EC2|t3.medium|2|4|USD 40|
+|ECS|Fargate|1|3|USD 50|
 
 ## How to use it?
 
